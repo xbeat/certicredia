@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Siamo - Certicredia</title>
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <img src="/images/logo.svg" alt="Certicredia Logo">
+                <span>Certicredia</span>
+            </a>
+            <button class="navbar-toggle" id="navbar-toggle"><span></span><span></span><span></span></button>
+            <ul class="navbar-menu" id="navbar-menu">
+                <li><a href="/" class="navbar-link">Home</a></li>
+                <li><a href="/aziende" class="navbar-link">Aziende</a></li>
+                <li><a href="/academy" class="navbar-link">Academy</a></li>
+                <li><a href="/framework" class="navbar-link">Il Framework</a></li>
+                <li><a href="/chi-siamo" class="navbar-link active">Chi Siamo</a></li>
+            </ul>
+            <div class="navbar-actions">
+                <a href="/login" class="btn btn-ghost btn-sm">Accedi</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section" style="margin-top: 80px;">
+        <div class="container container-narrow text-center">
+            <h1>Chi Siamo</h1>
+            <p class="text-xl text-gray-600 mb-8">
+                Certicredia è l'Hub esclusivo di certificazione per il Cybersecurity Psychology Framework.
+            </p>
+        </div>
+    </section>
+
+    <section class="section bg-gray-50">
+        <div class="container container-narrow">
+            <h2 class="text-center mb-8">La Nostra Missione</h2>
+            <p class="text-lg mb-4">
+                Trasformiamo la teoria scientifica del CPF in una certificazione operativa per le aziende,
+                colmando il gap tra sicurezza tecnica e fattore umano.
+            </p>
+            <p class="text-lg mb-4">
+                Il nostro approccio è <strong>scientifico</strong>, <strong>non punitivo</strong> e <strong>Privacy by Design</strong>.
+            </p>
+            <div class="text-center mt-8">
+                <p class="text-sm text-gray-600">
+                    <strong>Schema Owner:</strong> <a href="https://cpf3.org" class="text-secondary">CPF3.org</a> -
+                    Ente di ricerca scientifica che detiene lo standard del Cybersecurity Psychology Framework
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="contact">
+        <div class="container container-narrow">
+            <div class="card">
+                <h2 class="text-center mb-6">Contattaci</h2>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label class="form-label">Nome *</label>
+                        <input type="text" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Azienda</label>
+                        <input type="text" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sono un *</label>
+                        <select class="form-select">
+                            <option value="ciso">CISO/CTO</option>
+                            <option value="hr">CEO/HR</option>
+                            <option value="assessor">Aspirante Assessor</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Messaggio *</label>
+                        <textarea class="form-textarea" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Invia Richiesta</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Certicredia. Tutti i diritti riservati.</p>
+                <p>Powered by CPF3.org - Schema Owner del Cybersecurity Psychology Framework</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/i18n.js"></script>
+    <script src="/js/navigation.js"></script>
+</body>
+</html>

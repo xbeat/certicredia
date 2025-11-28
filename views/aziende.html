@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Per le Aziende - Certificazione CPF | Certicredia</title>
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- NAVBAR (same as homepage) -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <img src="/images/logo.svg" alt="Certicredia Logo">
+                <span>Certicredia</span>
+            </a>
+            <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="navbar-menu" id="navbar-menu">
+                <li><a href="/" class="navbar-link">Home</a></li>
+                <li><a href="/aziende" class="navbar-link active">Aziende</a></li>
+                <li><a href="/academy" class="navbar-link">Academy</a></li>
+                <li><a href="/framework" class="navbar-link">Il Framework</a></li>
+                <li><a href="/chi-siamo" class="navbar-link">Chi Siamo</a></li>
+            </ul>
+            <div class="navbar-actions">
+                <div class="language-switcher">
+                    <button data-lang="it" class="active">IT</button>
+                    <button data-lang="en">EN</button>
+                </div>
+                <a href="/login" class="btn btn-ghost btn-sm">Accedi</a>
+                <a href="/prodotti" class="btn btn-primary btn-sm">Auto-Assessment</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" style="min-height: 60vh; padding-top: 100px;">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Certificazione CPF per Aziende</h1>
+                <p>Riduci il rischio umano con un approccio scientifico, non punitivo.<br>Trasforma la cybersecurity in benessere organizzativo.</p>
+                <div class="hero-actions">
+                    <a href="#pricing" class="btn btn-accent btn-lg">Esplora i Servizi</a>
+                    <a href="#contact" class="btn btn-outline btn-lg" style="color: white; border-color: white;">Richiedi Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section bg-white">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>Il Percorso di Certificazione</h2>
+                <p class="text-xl text-gray-600">Un processo strutturato in 4 fasi</p>
+            </div>
+            <div class="grid grid-4">
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #2D5F5D, #1d4644);">1</div>
+                    <h4>Assessment Iniziale</h4>
+                    <p>Compilazione della matrice CPF 10x10 con dati aggregati (Privacy by Design).</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #2D5F5D, #1d4644);">2</div>
+                    <h4>Analisi e Scoring</h4>
+                    <p>Scoring ternario (Verde/Giallo/Rosso) per ogni categoria di rischio psicologico.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #2D5F5D, #1d4644);">3</div>
+                    <h4>Piano di Remediation</h4>
+                    <p>Strategie personalizzate per mitigare le vulnerabilità identificate.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #2D5F5D, #1d4644);">4</div>
+                    <h4>Certificazione</h4>
+                    <p>Rilascio certificato ufficiale CPF con validità 2 anni.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BENEFITS TABS -->
+    <section class="section bg-gray-50" id="benefits">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>Vantaggi per il tuo Ruolo</h2>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem;">
+                <button class="btn btn-primary tab-btn active" data-tab="ciso">Per CISO/CTO</button>
+                <button class="btn btn-outline tab-btn" data-tab="hr">Per CEO/HR</button>
+            </div>
+            <div class="container-narrow">
+                <div class="tab-content active" id="ciso-tab">
+                    <div class="card">
+                        <h3>Vantaggi per CISO/CTO</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 1rem 0; border-bottom: 1px solid var(--color-gray-200); display: flex; gap: 1rem;">
+                                <span style="color: var(--color-success); font-weight: bold;">✓</span>
+                                <span><strong>Integrazione NIST CSF 2.0</strong>: Mappatura diretta con le funzioni Identify, Protect, Detect</span>
+                            </li>
+                            <li style="padding: 1rem 0; border-bottom: 1px solid var(--color-gray-200); display: flex; gap: 1rem;">
+                                <span style="color: var(--color-success); font-weight: bold;">✓</span>
+                                <span><strong>Riduzione incidenti</strong>: 25-40% in meno di violazioni legate al fattore umano</span>
+                            </li>
+                            <li style="padding: 1rem 0; border-bottom: 1px solid var(--color-gray-200); display: flex; gap: 1rem;">
+                                <span style="color: var(--color-success); font-weight: bold;">✓</span>
+                                <span><strong>KPI misurabili</strong>: Dashboard con metriche oggettive e trending</span>
+                            </li>
+                            <li style="padding: 1rem 0; display: flex; gap: 1rem;">
+                                <span style="color: var(--color-success); font-weight: bold;">✓</span>
+                                <span><strong>Compliance facilitata</strong>: Documentazione pronta per audit e certificazioni</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content" id="hr-tab" style="display: none;">
+                    <div class="card">
+                        <h3>Vantaggi per CEO/HR</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 1rem 0; border-bottom: 1px solid var(--color-gray-200); display: flex; gap: 1rem;">
+                                <span style="color: var(--color-success); font-weight: bold;">✓</span>
+                                <span><strong>Approccio non punitivo</strong>: Nessun profiling individuale, focus sul sistema</span>
+                            </li>
+                            <li style="padding: 1rem 0; border-bottom: 1px solid var(--color-gray-200); display: flex; gap: 1rem;">
+                                <span style="color: var(--color-success); font-weight: bold;">✓</span>
+                                <span><strong>Benessere organizzativo</strong>: Riduzione stress e burnout legati alla security</span>
+                            </li>
+                            <li style="padding: 1rem 0; border-bottom: 1px solid var(--color-gray-200); display: flex; gap: 1rem;">
+                                <span style="color: var(--color-success); font-weight: bold;">✓</span>
+                                <span><strong>ROI stimato 150-250%</strong>: Riduzione costi da incidenti vs investimento certificazione</span>
+                            </li>
+                            <li style="padding: 1rem 0; display: flex; gap: 1rem;">
+                                <span style="color: var(--color-success); font-weight: bold;">✓</span>
+                                <span><strong>Cultura della sicurezza</strong>: Shift da "colpa" a "sistema resiliente"</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section" id="pricing">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>Scegli il Tuo Piano</h2>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 class="pricing-title">Auto-Assessment</h3>
+                    <p>Inizia in autonomia</p>
+                    <div class="pricing-price">€990 <span>+ IVA</span></div>
+                    <ul class="pricing-features">
+                        <li>Accesso piattaforma CPF</li>
+                        <li>Questionari strutturati</li>
+                        <li>Report preliminare con scoring</li>
+                        <li>Identificazione aree critiche</li>
+                        <li>Supporto email</li>
+                    </ul>
+                    <a href="/prodotti?sku=CERT-CPF-SELF" class="btn btn-outline">Inizia Ora</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">PIÙ RICHIESTO</div>
+                    <h3 class="pricing-title">Certificazione Completa</h3>
+                    <p>Con CPF Certified Assessor</p>
+                    <div class="pricing-price">€4.500 <span>+ IVA</span></div>
+                    <ul class="pricing-features">
+                        <li>Valutazione guidata da Assessor</li>
+                        <li>Analisi matrice 10x10 completa</li>
+                        <li>Report dettagliato</li>
+                        <li>Piano di remediation personalizzato</li>
+                        <li>Certificato ufficiale (2 anni)</li>
+                        <li>Follow-up trimestrale (anno 1)</li>
+                    </ul>
+                    <a href="/prodotti?sku=CERT-CPF-FULL" class="btn btn-accent">Richiedi Preventivo</a>
+                </div>
+                <div class="pricing-card">
+                    <h3 class="pricing-title">Re-Assessment</h3>
+                    <p>Rinnovo annuale</p>
+                    <div class="pricing-price">€1.200 <span>+ IVA</span></div>
+                    <ul class="pricing-features">
+                        <li>Valutazione di mantenimento</li>
+                        <li>Aggiornamento report</li>
+                        <li>Trending storico</li>
+                        <li>Identificazione nuovi rischi</li>
+                        <li>Estensione validità certificato</li>
+                    </ul>
+                    <a href="/prodotti?sku=ASSESS-REFRESH" class="btn btn-outline">Rinnova</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section bg-primary text-white text-center">
+        <div class="container container-narrow">
+            <h2 style="color: white;">Pronto a certificare la tua azienda?</h2>
+            <p class="text-xl mb-8">Contatta un CPF Certified Assessor per una consulenza gratuita.</p>
+            <a href="/chi-siamo#contact" class="btn btn-accent btn-lg">Richiedi Consulenza</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Certicredia. Tutti i diritti riservati.</p>
+                <p>Powered by CPF3.org</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/i18n.js"></script>
+    <script src="/js/navigation.js"></script>
+    <script src="/js/animations.js"></script>
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+                btn.classList.add('active');
+                document.getElementById(tab + '-tab').style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il Framework CPF - Certicredia</title>
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <img src="/images/logo.svg" alt="Certicredia Logo">
+                <span>Certicredia</span>
+            </a>
+            <ul class="navbar-menu" id="navbar-menu">
+                <li><a href="/" class="navbar-link">Home</a></li>
+                <li><a href="/aziende" class="navbar-link">Aziende</a></li>
+                <li><a href="/academy" class="navbar-link">Academy</a></li>
+                <li><a href="/framework" class="navbar-link active">Il Framework</a></li>
+                <li><a href="/chi-siamo" class="navbar-link">Chi Siamo</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero" style="min-height: 50vh; padding-top: 100px;">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Cybersecurity Psychology Framework</h1>
+                <p>Il primo modello che integra psicoanalisi e scienze cognitive con la cybersecurity tecnica</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-white">
+        <div class="container container-narrow">
+            <h2>Le 10 Categorie di Rischio Psicologico</h2>
+            <div class="grid" style="gap: 1rem;">
+                ${['Vulnerabilità basate sull\'Autorità', 'Vulnerabilità Temporali', 'Influenza Sociale',
+                   'Vulnerabilità Affettive', 'Sovraccarico Cognitivo', 'Dinamiche di Gruppo',
+                   'Risposta allo Stress', 'Processi Inconsci', 'Bias dell\'AI', 'Stati Critici Convergenti']
+                  .map((cat, i) => `<div class="card"><h4>${i+1}. ${cat}</h4></div>`).join('')}
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-gray-50">
+        <div class="container container-narrow text-center">
+            <h2>Integrazione con Standard Tecnici</h2>
+            <div class="grid grid-2 mt-8">
+                <div class="card">
+                    <h3>NIST CSF 2.0</h3>
+                    <p>Mappatura con funzioni Identify, Protect, Detect, Respond, Recover</p>
+                </div>
+                <div class="card">
+                    <h3>OWASP</h3>
+                    <p>Analisi fattori umani nei Top 10 vulnerabilities</p>
+                </div>
+            </div>
+            <div class="mt-8">
+                <a href="/aziende" class="btn btn-primary btn-lg">Certifica la Tua Azienda</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Certicredia. Powered by CPF3.org</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/i18n.js"></script>
+    <script src="/js/navigation.js"></script>
+</body>
+</html>

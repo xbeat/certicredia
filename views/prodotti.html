@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prodotti e Servizi - Certicredia</title>
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <img src="/images/logo.svg" alt="Certicredia Logo">
+                <span>Certicredia</span>
+            </a>
+            <ul class="navbar-menu" id="navbar-menu">
+                <li><a href="/" class="navbar-link">Home</a></li>
+                <li><a href="/aziende" class="navbar-link">Aziende</a></li>
+                <li><a href="/academy" class="navbar-link">Academy</a></li>
+                <li><a href="/prodotti" class="navbar-link active">Prodotti</a></li>
+            </ul>
+            <div class="navbar-actions">
+                <a href="/carrello" class="btn btn-ghost btn-sm">🛒 Carrello (<span id="cart-count">0</span>)</a>
+                <a href="/login" class="btn btn-primary btn-sm">Accedi</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section" style="margin-top: 80px;">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h1 data-i18n="products.catalog_title">I Nostri Prodotti e Servizi</h1>
+                <div class="flex-center gap-4 mt-6">
+                    <button class="btn btn-outline btn-sm filter-btn active" data-type="all">Tutti</button>
+                    <button class="btn btn-outline btn-sm filter-btn" data-type="certification">Certificazioni</button>
+                    <button class="btn btn-outline btn-sm filter-btn" data-type="course">Corsi</button>
+                    <button class="btn btn-outline btn-sm filter-btn" data-type="book">Libri</button>
+                </div>
+            </div>
+
+            <div id="products-grid" class="grid grid-3">
+                <div class="spinner" style="grid-column: 1/-1; margin: 4rem auto;"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Certicredia. Powered by CPF3.org</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/i18n.js"></script>
+    <script src="/js/navigation.js"></script>
+    <script>
+        let allProducts = [];
+        const productsGrid = document.getElementById('products-grid');
+
+        // Load products
+        async function loadProducts(type = 'all') {
+            try {
+                const lang = localStorage.getItem('language') || 'it';
+                const url = type === 'all' ? `/api/products?lang=${lang}` : `/api/products?type=${type}&lang=${lang}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.success) {
+                    allProducts = data.data.products;
+                    renderProducts(allProducts);
+                }
+            } catch (error) {
+                productsGrid.innerHTML = '<p class="text-center text-gray-600">Errore nel caricamento dei prodotti.</p>';
+            }
+        }
+
+        function renderProducts(products) {
+            if (products.length === 0) {
+                productsGrid.innerHTML = '<p class="text-center text-gray-600">Nessun prodotto trovato.</p>';
+                return;
+            }
+
+            productsGrid.innerHTML = products.map(product => `
+                <div class="card">
+                    <div class="badge badge-primary mb-4">${product.type.toUpperCase()}</div>
+                    <h3 class="card-title">${product.name}</h3>
+                    <p class="card-description">${product.short_description || product.description?.substring(0, 150) + '...' || ''}</p>
+                    <div class="mt-6">
+                        <div class="text-3xl font-bold text-primary mb-2">€${product.price.toFixed(2)}</div>
+                        <p class="text-sm text-gray-500">+ IVA</p>
+                    </div>
+                    <div class="card-footer">
+                        <button onclick="addToCart('${product.id}')" class="btn btn-primary" style="width: 100%;">
+                            Aggiungi al Carrello
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function addToCart(productId) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/ecommerce/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ productId, quantity: 1 })
+                });
+
+                if (response.ok) {
+                    alert('Prodotto aggiunto al carrello!');
+                    updateCartCount();
+                } else if (response.status === 401) {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                alert('Errore nell\'aggiunta al carrello.');
+            }
+        }
+
+        async function updateCartCount() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const response = await fetch('/api/ecommerce/cart', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('cart-count').textContent = data.data.items.length;
+                }
+            } catch (error) {}
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                loadProducts(btn.dataset.type);
+            });
+        });
+
+        loadProducts();
+        updateCartCount();
+    </script>
+</body>
+</html>

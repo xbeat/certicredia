@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "home": "Home",
+    "companies": "Aziende",
+    "academy": "Academy",
+    "framework": "Il Framework",
+    "about": "Chi Siamo",
+    "login": "Accedi",
+    "register": "Registrati",
+    "dashboard": "Dashboard",
+    "logout": "Esci",
+    "products": "Prodotti",
+    "cart": "Carrello"
+  },
+  "hero": {
+    "title": "Il Missing Layer della Cybersecurity",
+    "subtitle": "L'85% delle violazioni è causato dal fattore umano. Il CPF colma il gap tra sicurezza tecnica e psicologia.",
+    "cta_primary": "Per le Aziende",
+    "cta_secondary": "Diventa Assessor",
+    "powered_by": "Powered by CPF3.org"
+  },
+  "trust": {
+    "nist_compliance": "Compliance NIST CSF 2.0",
+    "owasp_integration": "Integrazione OWASP",
+    "scientific": "Fondamento Scientifico",
+    "privacy": "Privacy by Design"
+  },
+  "problem": {
+    "title": "Il Paradosso della Cybersecurity",
+    "subtitle": "La spesa globale in cybersecurity supera i 150 miliardi, ma le violazioni aumentano",
+    "stat_spending": "150Mld+",
+    "stat_spending_label": "Spesa globale annua",
+    "stat_breaches": "85%",
+    "stat_breaches_label": "Incidenti causati dal fattore umano",
+    "stat_failure": "70%",
+    "stat_failure_label": "Fallimento dei training tradizionali",
+    "description": "La formazione tradizionale fallisce perché agisce sulla razionalità, ma le decisioni di sicurezza avvengono a livello pre-cognitivo (300-500ms prima della consapevolezza)."
+  },
+  "paths": {
+    "title": "Scegli il tuo percorso",
+    "ciso_title": "CISO / CTO",
+    "ciso_desc": "Integra il CPF nel tuo programma di sicurezza. Identifica vulnerabilità umane prima che diventino incidenti.",
+    "ciso_cta": "Scopri di più",
+    "hr_title": "CEO / HR",
+    "hr_desc": "Trasforma la sicurezza in benessere organizzativo. Riduci il rischio umano senza punire le persone.",
+    "hr_cta": "Scopri di più",
+    "assessor_title": "Professionisti",
+    "assessor_desc": "Diventa CPF Certified Assessor. Una carriera ad alto valore nel mercato della cybersecurity.",
+    "assessor_cta": "Entra in Academy"
+  },
+  "matrix": {
+    "title": "La Matrice CPF: 10 Categorie, 100 Indicatori",
+    "subtitle": "Un framework scientifico che integra psicoanalisi, scienze cognitive e cybersecurity",
+    "categories": {
+      "authority": "Vulnerabilità da Autorità",
+      "temporal": "Vulnerabilità Temporali",
+      "social": "Influenza Sociale",
+      "affective": "Vulnerabilità Affettive",
+      "cognitive": "Sovraccarico Cognitivo",
+      "group": "Dinamiche di Gruppo",
+      "stress": "Risposta allo Stress",
+      "unconscious": "Processi Inconsci",
+      "ai": "Bias dell'AI",
+      "critical": "Stati Critici Convergenti"
+    },
+    "scoring_title": "Scoring Ternario",
+    "scoring_green": "Verde: Sicuro",
+    "scoring_yellow": "Giallo: Monitorare",
+    "scoring_red": "Rosso: Intervento Immediato"
+  },
+  "cta": {
+    "start_assessment": "Inizia Auto-Assessment",
+    "contact_assessor": "Contatta un Assessor",
+    "learn_more": "Scopri di più"
+  },
+  "footer": {
+    "about": "Chi Siamo",
+    "privacy": "Privacy Policy",
+    "terms": "Termini e Condizioni",
+    "contact": "Contatti",
+    "powered": "Powered by CPF3.org - Schema Owner del Cybersecurity Psychology Framework"
+  },
+  "auth": {
+    "login_title": "Accedi al Portale",
+    "register_title": "Crea il tuo Account",
+    "email": "Email",
+    "password": "Password",
+    "first_name": "Nome",
+    "last_name": "Cognome",
+    "company": "Azienda",
+    "job_title": "Ruolo",
+    "login_button": "Accedi",
+    "register_button": "Registrati",
+    "forgot_password": "Password dimenticata?",
+    "no_account": "Non hai un account?",
+    "have_account": "Hai già un account?",
+    "sign_up": "Registrati",
+    "sign_in": "Accedi"
+  },
+  "products": {
+    "catalog_title": "I Nostri Prodotti e Servizi",
+    "certification": "Certificazioni",
+    "courses": "Corsi",
+    "books": "Libri",
+    "add_to_cart": "Aggiungi al Carrello",
+    "buy_now": "Acquista Ora",
+    "from": "da",
+    "vat_excluded": "IVA esclusa"
+  },
+  "cart": {
+    "title": "Carrello",
+    "empty": "Il tuo carrello è vuoto",
+    "subtotal": "Subtotale",
+    "vat": "IVA",
+    "total": "Totale",
+    "proceed_checkout": "Procedi al Checkout",
+    "continue_shopping": "Continua gli Acquisti"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "billing_info": "Informazioni di Fatturazione",
+    "payment_method": "Metodo di Pagamento",
+    "complete_order": "Completa Ordine"
+  }
+}

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Certicredia - Hub esclusivo di certificazione per il Cybersecurity Psychology Framework. Il Missing Layer della Cybersecurity.">
+    <meta name="keywords" content="cybersecurity, psychology, CPF, certification, NIST, OWASP, human factor">
+    <title>Certicredia - Il Missing Layer della Cybersecurity | CPF Certification Hub</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <img src="/images/logo.svg" alt="Certicredia Logo" id="logo">
+                <span>Certicredia</span>
+            </a>
+
+            <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="navbar-menu" id="navbar-menu">
+                <li><a href="/" class="navbar-link active" data-i18n="nav.home">Home</a></li>
+                <li><a href="/aziende" class="navbar-link" data-i18n="nav.companies">Aziende</a></li>
+                <li><a href="/academy" class="navbar-link" data-i18n="nav.academy">Academy</a></li>
+                <li><a href="/framework" class="navbar-link" data-i18n="nav.framework">Il Framework</a></li>
+                <li><a href="/chi-siamo" class="navbar-link" data-i18n="nav.about">Chi Siamo</a></li>
+            </ul>
+
+            <div class="navbar-actions">
+                <div class="language-switcher">
+                    <button data-lang="it" class="active">IT</button>
+                    <button data-lang="en">EN</button>
+                </div>
+                <a href="/login" class="btn btn-ghost btn-sm" data-i18n="nav.login">Accedi</a>
+                <a href="/prodotti" class="btn btn-primary btn-sm" data-i18n="cta.start_assessment">Auto-Assessment</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="slide-up" data-i18n="hero.title">Il Missing Layer della Cybersecurity</h1>
+                <p class="slide-up" data-i18n="hero.subtitle">
+                    L'85% delle violazioni è causato dal fattore umano. Il CPF colma il gap tra sicurezza tecnica e psicologia.
+                </p>
+                <div class="hero-actions slide-up">
+                    <a href="/aziende" class="btn btn-accent btn-lg" data-i18n="hero.cta_primary">Per le Aziende</a>
+                    <a href="/academy" class="btn btn-outline btn-lg" style="color: white; border-color: white;" data-i18n="hero.cta_secondary">Diventa Assessor</a>
+                </div>
+                <div class="hero-badge slide-up">
+                    <span data-i18n="hero.powered_by">Powered by CPF3.org</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST BAR -->
+    <section class="trust-bar">
+        <div class="container">
+            <div class="trust-items">
+                <div class="trust-item fade-in">
+                    <div class="trust-icon">🛡️</div>
+                    <h4 data-i18n="trust.nist_compliance">Compliance NIST CSF 2.0</h4>
+                </div>
+                <div class="trust-item fade-in">
+                    <div class="trust-icon">🔐</div>
+                    <h4 data-i18n="trust.owasp_integration">Integrazione OWASP</h4>
+                </div>
+                <div class="trust-item fade-in">
+                    <div class="trust-icon">🧠</div>
+                    <h4 data-i18n="trust.scientific">Fondamento Scientifico</h4>
+                </div>
+                <div class="trust-item fade-in">
+                    <div class="trust-icon">🔒</div>
+                    <h4 data-i18n="trust.privacy">Privacy by Design</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE PROBLEM SECTION -->
+    <section class="section bg-gray-50" id="problem">
+        <div class="container">
+            <div class="text-center">
+                <h2 data-i18n="problem.title">Il Paradosso della Cybersecurity</h2>
+                <p class="text-xl text-gray-600" data-i18n="problem.subtitle">
+                    La spesa globale in cybersecurity supera i 150 miliardi, ma le violazioni aumentano
+                </p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card slide-up">
+                    <div class="stat-value" data-i18n="problem.stat_spending">150Mld+</div>
+                    <div class="stat-label" data-i18n="problem.stat_spending_label">Spesa globale annua</div>
+                </div>
+                <div class="stat-card slide-up">
+                    <div class="stat-value" data-i18n="problem.stat_breaches">85%</div>
+                    <div class="stat-label" data-i18n="problem.stat_breaches_label">Incidenti causati dal fattore umano</div>
+                </div>
+                <div class="stat-card slide-up">
+                    <div class="stat-value" data-i18n="problem.stat_failure">70%</div>
+                    <div class="stat-label" data-i18n="problem.stat_failure_label">Fallimento dei training tradizionali</div>
+                </div>
+            </div>
+
+            <div class="container-narrow mt-8">
+                <p class="text-lg text-center text-gray-700" data-i18n="problem.description">
+                    La formazione tradizionale fallisce perché agisce sulla razionalità, ma le decisioni di sicurezza
+                    avvengono a livello pre-cognitivo (300-500ms prima della consapevolezza).
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PATHS SECTION (3 Cards) -->
+    <section class="section" id="paths">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2 data-i18n="paths.title">Scegli il tuo percorso</h2>
+            </div>
+
+            <div class="grid grid-3">
+                <!-- CISO/CTO Card -->
+                <div class="card slide-up">
+                    <div class="card-icon">👨‍💻</div>
+                    <div class="card-header">
+                        <h3 class="card-title" data-i18n="paths.ciso_title">CISO / CTO</h3>
+                    </div>
+                    <p class="card-description" data-i18n="paths.ciso_desc">
+                        Integra il CPF nel tuo programma di sicurezza. Identifica vulnerabilità umane prima che diventino incidenti.
+                    </p>
+                    <div class="card-footer">
+                        <a href="/aziende" class="btn btn-primary" data-i18n="paths.ciso_cta">Scopri di più</a>
+                    </div>
+                </div>
+
+                <!-- CEO/HR Card -->
+                <div class="card slide-up">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #DC2626, #B91C1C);">👔</div>
+                    <div class="card-header">
+                        <h3 class="card-title" data-i18n="paths.hr_title">CEO / HR</h3>
+                    </div>
+                    <p class="card-description" data-i18n="paths.hr_desc">
+                        Trasforma la sicurezza in benessere organizzativo. Riduci il rischio umano senza punire le persone.
+                    </p>
+                    <div class="card-footer">
+                        <a href="/aziende" class="btn btn-accent" data-i18n="paths.hr_cta">Scopri di più</a>
+                    </div>
+                </div>
+
+                <!-- Assessor Card -->
+                <div class="card slide-up">
+                    <div class="card-icon">🎓</div>
+                    <div class="card-header">
+                        <h3 class="card-title" data-i18n="paths.assessor_title">Professionisti</h3>
+                    </div>
+                    <p class="card-description" data-i18n="paths.assessor_desc">
+                        Diventa CPF Certified Assessor. Una carriera ad alto valore nel mercato della cybersecurity.
+                    </p>
+                    <div class="card-footer">
+                        <a href="/academy" class="btn btn-secondary" data-i18n="paths.assessor_cta">Entra in Academy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MATRIX PREVIEW SECTION -->
+    <section class="section bg-gradient-matrix" id="matrix">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2 class="text-white" data-i18n="matrix.title">La Matrice CPF: 10 Categorie, 100 Indicatori</h2>
+                <p class="text-xl" style="color: rgba(255,255,255,0.9);" data-i18n="matrix.subtitle">
+                    Un framework scientifico che integra psicoanalisi, scienze cognitive e cybersecurity
+                </p>
+            </div>
+
+            <div class="matrix-preview">
+                <div class="matrix-grid" id="matrix-grid">
+                    <!-- Matrix cells will be generated by JavaScript -->
+                </div>
+
+                <div class="matrix-legend">
+                    <div class="legend-item">
+                        <div class="legend-color red"></div>
+                        <span data-i18n="matrix.scoring_red">Rosso: Intervento Immediato</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color yellow"></div>
+                        <span data-i18n="matrix.scoring_yellow">Giallo: Monitorare</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color green"></div>
+                        <span data-i18n="matrix.scoring_green">Verde: Sicuro</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="/framework" class="btn btn-accent btn-lg" data-i18n="cta.learn_more">Scopri di più</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA SECTION -->
+    <section class="section">
+        <div class="container container-narrow text-center">
+            <h2>Pronto a colmare il Missing Layer?</h2>
+            <p class="text-xl text-gray-600 mb-8">
+                Inizia con un auto-assessment gratuito o contatta un CPF Certified Assessor per una valutazione completa.
+            </p>
+            <div class="flex-center gap-4">
+                <a href="/prodotti" class="btn btn-primary btn-lg" data-i18n="cta.start_assessment">Inizia Auto-Assessment</a>
+                <a href="/chi-siamo#contact" class="btn btn-outline btn-lg" data-i18n="cta.contact_assessor">Contatta un Assessor</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Certicredia</h4>
+                    <p>Hub esclusivo di certificazione per il Cybersecurity Psychology Framework.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Link Utili</h4>
+                    <ul class="footer-links">
+                        <li><a href="/aziende" data-i18n="nav.companies">Aziende</a></li>
+                        <li><a href="/academy" data-i18n="nav.academy">Academy</a></li>
+                        <li><a href="/framework" data-i18n="nav.framework">Il Framework</a></li>
+                        <li><a href="/chi-siamo" data-i18n="nav.about">Chi Siamo</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Prodotti</h4>
+                    <ul class="footer-links">
+                        <li><a href="/prodotti">Certificazioni</a></li>
+                        <li><a href="/prodotti?type=course">Corsi</a></li>
+                        <li><a href="/prodotti?type=book">Libri</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Legale</h4>
+                    <ul class="footer-links">
+                        <li><a href="/privacy" data-i18n="footer.privacy">Privacy Policy</a></li>
+                        <li><a href="/terms" data-i18n="footer.terms">Termini e Condizioni</a></li>
+                        <li><a href="/chi-siamo#contact" data-i18n="footer.contact">Contatti</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Certicredia. Tutti i diritti riservati.</p>
+                <p data-i18n="footer.powered">Powered by CPF3.org - Schema Owner del Cybersecurity Psychology Framework</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/i18n.js"></script>
+    <script src="/js/navigation.js"></script>
+    <script src="/js/animations.js"></script>
+    <script>
+        // Generate matrix grid on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const matrixGrid = document.getElementById('matrix-grid');
+            const colors = ['red', 'yellow', 'green'];
+
+            // Generate 100 cells (10x10)
+            for (let i = 0; i < 100; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'matrix-cell';
+
+                // Randomly assign colors for demo (in real app, this would be data-driven)
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                cell.classList.add(randomColor);
+
+                matrixGrid.appendChild(cell);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="80" cy="80" r="75" fill="#0A2540"/>
+
+  <!-- Shield Shape (Security) -->
+  <path d="M80 30 L110 45 L110 75 C110 92 95 105 80 110 C65 105 50 92 50 75 L50 45 Z" fill="#2D5F5D" stroke="#FFFFFF" stroke-width="2"/>
+
+  <!-- Brain/Psychology Symbol -->
+  <g transform="translate(80, 70)">
+    <!-- Left hemisphere -->
+    <path d="M-10,0 Q-15,-10 -10,-15 Q-5,-12 -5,-8 Q-8,-5 -10,0 Z" fill="#FFFFFF" opacity="0.9"/>
+    <!-- Right hemisphere -->
+    <path d="M10,0 Q15,-10 10,-15 Q5,-12 5,-8 Q8,-5 10,0 Z" fill="#FFFFFF" opacity="0.9"/>
+    <!-- Connection -->
+    <line x1="-5" y1="-8" x2="5" y2="-8" stroke="#FFFFFF" stroke-width="1.5" opacity="0.9"/>
+  </g>
+
+  <!-- Lock Symbol (Cybersecurity) -->
+  <g transform="translate(80, 85)">
+    <rect x="-6" y="0" width="12" height="10" rx="1" fill="#DC2626" opacity="0.8"/>
+    <path d="M-4,-5 Q-4,-8 0,-8 Q4,-8 4,-5" stroke="#DC2626" stroke-width="2" fill="none" opacity="0.8"/>
+  </g>
+
+  <!-- Circular border -->
+  <circle cx="80" cy="80" r="75" fill="none" stroke="#2D5F5D" stroke-width="3"/>
+
+  <!-- Text (optional, can be removed if logo is used small) -->
+  <text x="80" y="140" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#0A2540" text-anchor="middle">CERTICREDIA</text>
+  <text x="80" y="153" font-family="Inter, sans-serif" font-size="8" fill="#2D5F5D" text-anchor="middle">CPF CERTIFICATION HUB</text>
+</svg>

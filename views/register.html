@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione - Certicredia</title>
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="flex-center" style="min-height: 100vh; background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary)); padding: 2rem 0;">
+        <div class="card" style="max-width: 550px; width: 90%; margin: 2rem;">
+            <div class="text-center mb-6">
+                <a href="/">
+                    <img src="/images/logo.svg" alt="Certicredia" style="height: 60px; margin-bottom: 1rem;">
+                </a>
+                <h2 data-i18n="auth.register_title">Crea il tuo Account</h2>
+                <p class="text-gray-600">Inizia il tuo percorso con Certicredia</p>
+            </div>
+
+            <div id="error-message" class="hidden" style="padding: 1rem; background: rgba(220, 38, 38, 0.1); border: 1px solid var(--color-danger); border-radius: var(--radius-md); margin-bottom: 1rem; color: var(--color-danger);"></div>
+
+            <form id="register-form">
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="auth.first_name">Nome</label>
+                        <input type="text" id="firstName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="auth.last_name">Cognome</label>
+                        <input type="text" id="lastName" class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.email">Email</label>
+                    <input type="email" id="email" class="form-input" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.password">Password</label>
+                    <input type="password" id="password" class="form-input" required minlength="8" autocomplete="new-password">
+                    <small class="text-gray-500">Minimo 8 caratteri</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.company">Azienda (opzionale)</label>
+                    <input type="text" id="company" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.job_title">Ruolo (opzionale)</label>
+                    <input type="text" id="jobTitle" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                        <input type="checkbox" required style="margin-top: 0.25rem;">
+                        <span class="text-sm">Accetto i <a href="/terms" class="text-secondary">Termini e Condizioni</a> e la <a href="/privacy" class="text-secondary">Privacy Policy</a></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" data-i18n="auth.register_button">
+                    Registrati
+                </button>
+            </form>
+
+            <div class="text-center mt-6" style="padding-top: 1.5rem; border-top: 1px solid var(--color-gray-200);">
+                <p class="text-sm text-gray-600">
+                    <span data-i18n="auth.have_account">Hai già un account?</span>
+                    <a href="/login" class="text-secondary font-semibold" data-i18n="auth.sign_in">Accedi</a>
+                </p>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/" class="text-sm text-gray-500">← Torna alla Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/i18n.js"></script>
+    <script>
+        const registerForm = document.getElementById('register-form');
+        const errorMessage = document.getElementById('error-message');
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorMessage.classList.add('hidden');
+
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                company: document.getElementById('company').value,
+                jobTitle: document.getElementById('jobTitle').value
+            };
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store token
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
+
+                    // Redirect to dashboard
+                    window.location.href = '/dashboard';
+                } else {
+                    errorMessage.textContent = data.error.message || 'Registrazione fallita. Riprova.';
+                    errorMessage.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Errore di connessione. Riprova.';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

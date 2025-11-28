@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrello - Certicredia</title>
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <img src="/images/logo.svg" alt="Certicredia">
+                <span>Certicredia</span>
+            </a>
+            <div class="navbar-actions">
+                <a href="/prodotti" class="btn btn-ghost btn-sm">← Continua gli Acquisti</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section" style="margin-top: 80px; min-height: 70vh;">
+        <div class="container container-narrow">
+            <h1 class="text-center mb-8" data-i18n="cart.title">Carrello</h1>
+
+            <div id="cart-container">
+                <div class="spinner" style="margin: 4rem auto;"></div>
+            </div>
+
+            <div id="cart-summary" class="hidden card mt-8">
+                <div class="flex-between mb-4">
+                    <span>Subtotale:</span>
+                    <span class="font-bold">€<span id="subtotal">0.00</span></span>
+                </div>
+                <div class="flex-between mb-4">
+                    <span>IVA (22%):</span>
+                    <span class="font-bold">€<span id="vat">0.00</span></span>
+                </div>
+                <div class="flex-between mb-6" style="padding-top: 1rem; border-top: 2px solid var(--color-gray-800);">
+                    <span class="text-xl font-bold">Totale:</span>
+                    <span class="text-2xl font-bold text-primary">€<span id="total">0.00</span></span>
+                </div>
+                <a href="/checkout" class="btn btn-accent btn-lg" style="width: 100%;">Procedi al Checkout</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Certicredia</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/i18n.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login';
+        }
+
+        async function loadCart() {
+            try {
+                const response = await fetch('/api/ecommerce/cart', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const data = await response.json();
+                const container = document.getElementById('cart-container');
+
+                if (!response.ok || data.data.items.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center" style="padding: 4rem 0;">
+                            <div style="font-size: 4rem; margin-bottom: 1rem;">🛒</div>
+                            <h3>Il tuo carrello è vuoto</h3>
+                            <a href="/prodotti" class="btn btn-primary mt-4">Esplora i Prodotti</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = data.data.items.map(item => `
+                    <div class="card mb-4">
+                        <div class="flex-between">
+                            <div>
+                                <h4>${item.name}</h4>
+                                <p class="text-gray-600">${item.sku}</p>
+                                <p class="text-xl font-bold mt-2">€${parseFloat(item.price).toFixed(2)}</p>
+                            </div>
+                            <div class="flex-center gap-4">
+                                <div class="flex-center gap-2">
+                                    <button onclick="updateQuantity('${item.id}', ${item.quantity - 1})" class="btn btn-sm btn-outline">-</button>
+                                    <span class="px-4">${item.quantity}</span>
+                                    <button onclick="updateQuantity('${item.id}', ${item.quantity + 1})" class="btn btn-sm btn-outline">+</button>
+                                </div>
+                                <button onclick="removeItem('${item.id}')" class="btn btn-sm btn-ghost" style="color: var(--color-danger);">🗑️</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                const subtotal = parseFloat(data.data.summary.subtotal);
+                const vat = subtotal * 0.22;
+                const total = subtotal + vat;
+
+                document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+                document.getElementById('vat').textContent = vat.toFixed(2);
+                document.getElementById('total').textContent = total.toFixed(2);
+                document.getElementById('cart-summary').classList.remove('hidden');
+
+            } catch (error) {
+                console.error('Error loading cart:', error);
+            }
+        }
+
+        async function updateQuantity(itemId, quantity) {
+            if (quantity < 1) {
+                removeItem(itemId);
+                return;
+            }
+
+            await fetch(`/api/ecommerce/cart/${itemId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ quantity })
+            });
+            loadCart();
+        }
+
+        async function removeItem(itemId) {
+            await fetch(`/api/ecommerce/cart/${itemId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            loadCart();
+        }
+
+        loadCart();
+    </script>
+</body>
+</html>

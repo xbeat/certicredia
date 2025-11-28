@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Certicredia</title>
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <img src="/images/logo.svg" alt="Certicredia">
+                <span>Certicredia</span>
+            </a>
+            <div class="navbar-actions">
+                <span id="user-name" class="text-gray-700"></span>
+                <button onclick="logout()" class="btn btn-ghost btn-sm">Esci</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section" style="margin-top: 80px; min-height: 80vh;">
+        <div class="container">
+            <h1 class="mb-8">Dashboard</h1>
+
+            <div class="grid grid-3 mb-8">
+                <div class="card">
+                    <h4>I Miei Ordini</h4>
+                    <div class="stat-value text-secondary" id="order-count">0</div>
+                </div>
+                <div class="card">
+                    <h4>Certificazioni</h4>
+                    <div class="stat-value text-success">0</div>
+                </div>
+                <div class="card">
+                    <h4>Corsi Completati</h4>
+                    <div class="stat-value text-primary">0</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="mb-6">Ordini Recenti</h3>
+                <div id="orders-list">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="/prodotti" class="btn btn-primary">Esplora Prodotti</a>
+                <a href="/aziende" class="btn btn-outline">Certificazione Aziendale</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) window.location.href = '/login';
+
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        document.getElementById('user-name').textContent = `${user.firstName} ${user.lastName}`;
+
+        async function loadOrders() {
+            try {
+                const response = await fetch('/api/ecommerce/orders', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+
+                document.getElementById('order-count').textContent = data.data.orders.length;
+
+                const ordersList = document.getElementById('orders-list');
+                if (data.data.orders.length === 0) {
+                    ordersList.innerHTML = '<p class="text-center text-gray-600">Nessun ordine trovato.</p>';
+                    return;
+                }
+
+                ordersList.innerHTML = data.data.orders.map(order => `
+                    <div class="flex-between mb-4 pb-4" style="border-bottom: 1px solid var(--color-gray-200);">
+                        <div>
+                            <div class="font-bold">${order.order_number}</div>
+                            <div class="text-sm text-gray-600">${new Date(order.created_at).toLocaleDateString('it-IT')}</div>
+                        </div>
+                        <div>
+                            <div class="badge badge-${order.status === 'completed' ? 'success' : order.status === 'pending' ? 'warning' : 'primary'}">
+                                ${order.status.toUpperCase()}
+                            </div>
+                            <div class="text-right font-bold mt-2">€${parseFloat(order.total_amount).toFixed(2)}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function logout() {
+            fetch('/api/auth/logout', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            }).finally(() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/';
+            });
+        }
+
+        loadOrders();
+    </script>
+</body>
+</html>

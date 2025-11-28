@@ -1,0 +1,472 @@
+/**
+ * Certicredia - Responsive Stylesheet
+ * Mobile-first responsive design
+ */
+
+/* ================================
+   BREAKPOINTS
+   Mobile:      < 640px  (default)
+   Tablet:      640px - 1024px
+   Desktop:     > 1024px
+   ================================ */
+
+/* ================================
+   TABLET (≥ 640px)
+   ================================ */
+
+@media (max-width: 1024px) {
+  /* Typography adjustments */
+  h1 { font-size: var(--text-4xl); }
+  h2 { font-size: var(--text-3xl); }
+  h3 { font-size: var(--text-2xl); }
+
+  .hero h1 {
+    font-size: var(--text-5xl);
+  }
+
+  /* Grid adjustments */
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Navbar */
+  .navbar-menu {
+    gap: var(--space-4);
+  }
+
+  /* Pricing */
+  .pricing-card.featured {
+    transform: scale(1);
+  }
+
+  /* Matrix */
+  .matrix-grid {
+    gap: var(--space-1);
+  }
+
+  /* Stats */
+  .stat-value {
+    font-size: var(--text-5xl);
+  }
+}
+
+/* ================================
+   MOBILE (< 640px)
+   ================================ */
+
+@media (max-width: 640px) {
+  /* Base typography */
+  html {
+    font-size: 14px;
+  }
+
+  h1 { font-size: var(--text-3xl); }
+  h2 { font-size: var(--text-2xl); }
+  h3 { font-size: var(--text-xl); }
+  h4 { font-size: var(--text-lg); }
+
+  /* Container */
+  .container {
+    padding: 0 var(--space-4);
+  }
+
+  /* Sections */
+  .section {
+    padding: var(--space-12) 0;
+  }
+
+  .section-lg {
+    padding: var(--space-16) 0;
+  }
+
+  /* Grid system */
+  .grid,
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  /* Flex utilities */
+  .flex-between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  /* ================================
+     NAVBAR - Mobile
+     ================================ */
+
+  .navbar-container {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .navbar-brand {
+    font-size: var(--text-lg);
+  }
+
+  .navbar-brand img {
+    height: 32px;
+  }
+
+  .navbar-toggle {
+    display: flex;
+  }
+
+  .navbar-menu {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: var(--color-white);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--space-4);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+  }
+
+  .navbar-menu.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .navbar-link {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-gray-100);
+  }
+
+  .navbar-link.active::after {
+    display: none;
+  }
+
+  .navbar-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: var(--space-2);
+  }
+
+  .navbar-actions .btn {
+    width: 100%;
+  }
+
+  .language-switcher {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ================================
+     HERO - Mobile
+     ================================ */
+
+  .hero {
+    min-height: 80vh;
+    padding-top: 60px;
+  }
+
+  .hero h1 {
+    font-size: var(--text-4xl);
+    line-height: 1.2;
+  }
+
+  .hero p {
+    font-size: var(--text-lg);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  /* ================================
+     TRUST BAR - Mobile
+     ================================ */
+
+  .trust-bar {
+    padding: var(--space-6) 0;
+  }
+
+  .trust-items {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  .trust-item {
+    min-width: auto;
+  }
+
+  .trust-icon {
+    width: 40px;
+    height: 40px;
+    font-size: var(--text-xl);
+  }
+
+  .trust-item h4 {
+    font-size: var(--text-xs);
+  }
+
+  /* ================================
+     CARDS - Mobile
+     ================================ */
+
+  .card {
+    padding: var(--space-6);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    font-size: var(--text-2xl);
+  }
+
+  .card-title {
+    font-size: var(--text-xl);
+  }
+
+  /* ================================
+     STATS - Mobile
+     ================================ */
+
+  .stats-grid {
+    gap: var(--space-4);
+  }
+
+  .stat-card {
+    padding: var(--space-6);
+  }
+
+  .stat-value {
+    font-size: var(--text-4xl);
+  }
+
+  .stat-label {
+    font-size: var(--text-base);
+  }
+
+  /* ================================
+     MATRIX - Mobile
+     ================================ */
+
+  .matrix-preview {
+    padding: var(--space-6);
+  }
+
+  .matrix-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-1);
+  }
+
+  .matrix-legend {
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: flex-start;
+  }
+
+  /* ================================
+     PRICING - Mobile
+     ================================ */
+
+  .pricing-grid {
+    gap: var(--space-6);
+  }
+
+  .pricing-card {
+    padding: var(--space-6);
+  }
+
+  .pricing-card.featured {
+    transform: none;
+  }
+
+  .pricing-price {
+    font-size: var(--text-4xl);
+  }
+
+  /* ================================
+     BUTTONS - Mobile
+     ================================ */
+
+  .btn-lg {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--text-base);
+  }
+
+  /* ================================
+     FORMS - Mobile
+     ================================ */
+
+  .form-group {
+    margin-bottom: var(--space-4);
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    padding: var(--space-3);
+    font-size: var(--text-base);
+  }
+
+  /* ================================
+     FOOTER - Mobile
+     ================================ */
+
+  .footer {
+    padding: var(--space-12) 0 var(--space-6);
+  }
+
+  .footer-grid {
+    gap: var(--space-6);
+  }
+
+  .footer-section h4 {
+    font-size: var(--text-lg);
+  }
+
+  /* ================================
+     MODAL - Mobile
+     ================================ */
+
+  .modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: var(--space-4);
+  }
+
+  .modal-title {
+    font-size: var(--text-xl);
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+
+  /* ================================
+     UTILITIES - Mobile
+     ================================ */
+
+  .text-center-mobile {
+    text-align: center;
+  }
+
+  .hide-mobile {
+    display: none !important;
+  }
+
+  .show-mobile {
+    display: block !important;
+  }
+
+  /* Spacing adjustments */
+  .mt-8 { margin-top: var(--space-6); }
+  .mb-8 { margin-bottom: var(--space-6); }
+  .pt-12 { padding-top: var(--space-8); }
+  .pb-12 { padding-bottom: var(--space-8); }
+}
+
+/* ================================
+   PRINT STYLES
+   ================================ */
+
+@media print {
+  .navbar,
+  .footer,
+  .btn,
+  .navbar-toggle,
+  .language-switcher {
+    display: none;
+  }
+
+  body {
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  .card,
+  .modal {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+}
+
+/* ================================
+   ACCESSIBILITY
+   ================================ */
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .btn {
+    border-width: 3px;
+  }
+
+  .card {
+    border-width: 2px;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* Dark mode support (optional, for future) */
+@media (prefers-color-scheme: dark) {
+  /* Uncomment to enable dark mode
+  :root {
+    --color-white: #1F2937;
+    --color-gray-50: #374151;
+    --color-gray-100: #4B5563;
+    --color-gray-800: #F3F4F6;
+    --color-gray-900: #FFFFFF;
+  }
+  */
+}

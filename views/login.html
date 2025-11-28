@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Certicredia</title>
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="flex-center" style="min-height: 100vh; background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));">
+        <div class="card" style="max-width: 450px; width: 90%; margin: 2rem;">
+            <div class="text-center mb-6">
+                <a href="/">
+                    <img src="/images/logo.svg" alt="Certicredia" style="height: 60px; margin-bottom: 1rem;">
+                </a>
+                <h2 data-i18n="auth.login_title">Accedi al Portale</h2>
+                <p class="text-gray-600">Inserisci le tue credenziali</p>
+            </div>
+
+            <div id="error-message" class="hidden" style="padding: 1rem; background: rgba(220, 38, 38, 0.1); border: 1px solid var(--color-danger); border-radius: var(--radius-md); margin-bottom: 1rem; color: var(--color-danger);"></div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.email">Email</label>
+                    <input type="email" id="email" class="form-input" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.password">Password</label>
+                    <input type="password" id="password" class="form-input" required autocomplete="current-password">
+                </div>
+
+                <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" name="remember">
+                        <span class="text-sm">Ricordami</span>
+                    </label>
+                    <a href="#" class="text-sm text-secondary" data-i18n="auth.forgot_password">Password dimenticata?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" data-i18n="auth.login_button">
+                    Accedi
+                </button>
+            </form>
+
+            <div class="text-center mt-6" style="padding-top: 1.5rem; border-top: 1px solid var(--color-gray-200);">
+                <p class="text-sm text-gray-600">
+                    <span data-i18n="auth.no_account">Non hai un account?</span>
+                    <a href="/register" class="text-secondary font-semibold" data-i18n="auth.sign_up">Registrati</a>
+                </p>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/" class="text-sm text-gray-500">← Torna alla Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/i18n.js"></script>
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorMessage.classList.add('hidden');
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store token
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
+
+                    // Redirect to dashboard
+                    window.location.href = '/dashboard';
+                } else {
+                    errorMessage.textContent = data.error.message || 'Login fallito. Verifica le credenziali.';
+                    errorMessage.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Errore di connessione. Riprova.';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

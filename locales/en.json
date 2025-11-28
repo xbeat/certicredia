@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "home": "Home",
+    "companies": "Companies",
+    "academy": "Academy",
+    "framework": "The Framework",
+    "about": "About Us",
+    "login": "Login",
+    "register": "Sign Up",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "products": "Products",
+    "cart": "Cart"
+  },
+  "hero": {
+    "title": "The Missing Layer of Cybersecurity",
+    "subtitle": "85% of breaches are caused by the human factor. CPF bridges the gap between technical security and psychology.",
+    "cta_primary": "For Companies",
+    "cta_secondary": "Become an Assessor",
+    "powered_by": "Powered by CPF3.org"
+  },
+  "trust": {
+    "nist_compliance": "NIST CSF 2.0 Compliance",
+    "owasp_integration": "OWASP Integration",
+    "scientific": "Scientific Foundation",
+    "privacy": "Privacy by Design"
+  },
+  "problem": {
+    "title": "The Cybersecurity Paradox",
+    "subtitle": "Global cybersecurity spending exceeds $150 billion, yet breaches continue to rise",
+    "stat_spending": "$150B+",
+    "stat_spending_label": "Annual global spending",
+    "stat_breaches": "85%",
+    "stat_breaches_label": "Incidents caused by human factor",
+    "stat_failure": "70%",
+    "stat_failure_label": "Traditional training failure rate",
+    "description": "Traditional training fails because it targets rationality, but security decisions occur at a pre-cognitive level (300-500ms before conscious awareness)."
+  },
+  "paths": {
+    "title": "Choose Your Path",
+    "ciso_title": "CISO / CTO",
+    "ciso_desc": "Integrate CPF into your security program. Identify human vulnerabilities before they become incidents.",
+    "ciso_cta": "Learn More",
+    "hr_title": "CEO / HR",
+    "hr_desc": "Transform security into organizational well-being. Reduce human risk without punishing people.",
+    "hr_cta": "Learn More",
+    "assessor_title": "Professionals",
+    "assessor_desc": "Become a CPF Certified Assessor. A high-value career in the cybersecurity market.",
+    "assessor_cta": "Join Academy"
+  },
+  "matrix": {
+    "title": "The CPF Matrix: 10 Categories, 100 Indicators",
+    "subtitle": "A scientific framework integrating psychoanalysis, cognitive sciences, and cybersecurity",
+    "categories": {
+      "authority": "Authority Vulnerabilities",
+      "temporal": "Temporal Vulnerabilities",
+      "social": "Social Influence",
+      "affective": "Affective Vulnerabilities",
+      "cognitive": "Cognitive Overload",
+      "group": "Group Dynamics",
+      "stress": "Stress Response",
+      "unconscious": "Unconscious Processes",
+      "ai": "AI Bias",
+      "critical": "Critical Convergent States"
+    },
+    "scoring_title": "Ternary Scoring",
+    "scoring_green": "Green: Secure",
+    "scoring_yellow": "Yellow: Monitor",
+    "scoring_red": "Red: Immediate Action"
+  },
+  "cta": {
+    "start_assessment": "Start Self-Assessment",
+    "contact_assessor": "Contact an Assessor",
+    "learn_more": "Learn More"
+  },
+  "footer": {
+    "about": "About Us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms and Conditions",
+    "contact": "Contact",
+    "powered": "Powered by CPF3.org - Schema Owner of the Cybersecurity Psychology Framework"
+  },
+  "auth": {
+    "login_title": "Login to Portal",
+    "register_title": "Create Your Account",
+    "email": "Email",
+    "password": "Password",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "company": "Company",
+    "job_title": "Job Title",
+    "login_button": "Login",
+    "register_button": "Sign Up",
+    "forgot_password": "Forgot password?",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "sign_up": "Sign Up",
+    "sign_in": "Sign In"
+  },
+  "products": {
+    "catalog_title": "Our Products and Services",
+    "certification": "Certifications",
+    "courses": "Courses",
+    "books": "Books",
+    "add_to_cart": "Add to Cart",
+    "buy_now": "Buy Now",
+    "from": "from",
+    "vat_excluded": "VAT excluded"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "subtotal": "Subtotal",
+    "vat": "VAT",
+    "total": "Total",
+    "proceed_checkout": "Proceed to Checkout",
+    "continue_shopping": "Continue Shopping"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "billing_info": "Billing Information",
+    "payment_method": "Payment Method",
+    "complete_order": "Complete Order"
+  }
+}
