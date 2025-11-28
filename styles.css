@@ -1,0 +1,195 @@
+/* Custom Styles for CertiCredia */
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Custom scrollbar for chat */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Button Styles */
+.btn-primary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+    background-color: rgb(6, 182, 212);
+    color: rgb(15, 23, 42);
+    box-shadow: 0 10px 15px -3px rgba(6, 182, 212, 0.2);
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: rgb(34, 211, 238);
+    transform: translateY(-2px);
+}
+
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5);
+}
+
+.btn-outline {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+    border: 2px solid rgb(6, 182, 212);
+    color: rgb(6, 182, 212);
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.btn-outline:hover {
+    background-color: rgba(6, 182, 212, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn-outline:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5);
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Navbar background transition */
+.navbar-scrolled {
+    background-color: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgb(30, 41, 59);
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+/* Animation classes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Chat animations */
+.chat-message-enter {
+    animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading spinner */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+/* Form validation states */
+.form-input.error {
+    border-color: rgb(239, 68, 68) !important;
+}
+
+.form-input.success {
+    border-color: rgb(34, 197, 94) !important;
+}
+
+/* Hover effects for cards */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Background gradient overlay */
+.gradient-overlay {
+    position: relative;
+}
+
+.gradient-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.8));
+    pointer-events: none;
+}
+
+/* Mobile menu slide animation */
+#mobile-menu {
+    transition: all 0.3s ease-in-out;
+}
+
+#mobile-menu.show {
+    display: block !important;
+}
+
+/* Pulse animation for online indicator */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+    .btn-primary,
+    .btn-outline {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Prevent text selection on buttons */
+button {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+/* Accessibility: Focus visible */
+*:focus-visible {
+    outline: 2px solid rgb(6, 182, 212);
+    outline-offset: 2px;
+}
