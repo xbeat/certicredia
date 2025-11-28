@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Briefcase, CheckCircle, FileText, LayoutDashboard, Award, GraduationCap, UserCheck, BrainCircuit, Building2, BarChart3, FileJson, TrendingUp, Shield, Users, Lock } from 'lucide-react';
+import { Zap, Globe, ShieldAlert, User, Briefcase, CheckCircle, FileText, LayoutDashboard, Award, GraduationCap, UserCheck, BrainCircuit, Building2, BarChart3, FileJson, TrendingUp, Shield, Users, Lock } from 'lucide-react';
 import { Button } from './Button';
 
 export const Services: React.FC = () => {
@@ -52,6 +52,41 @@ export const Services: React.FC = () => {
                 ))}
               </ul>
               <Button variant="outline">Candidati Ora</Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 2: Specialists Benefits (New Section) */}
+        <section className="mb-32">
+          <div className="bg-slate-800/50 rounded-3xl p-8 md:p-12 border border-slate-700/50">
+            <div className="text-center mb-12">
+              <h3 className="text-2xl font-bold text-white mb-4">Perché scegliere il percorso SecurCert?</h3>
+              <p className="text-slate-400 max-w-2xl mx-auto">
+                La certificazione non è il traguardo, è l'inizio della tua ascesa professionale.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-cyan-500/50 transition-colors">
+                <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <TrendingUp className="w-6 h-6 text-cyan-400" />
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2">Tariffe Premium</h4>
+                <p className="text-slate-400 text-sm">Gli specialisti certificati SecurCert accedono a tariffe di consulenza medie del +40% rispetto al mercato.</p>
+              </div>
+              <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-cyan-500/50 transition-colors">
+                <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Users className="w-6 h-6 text-cyan-400" />
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2">Community Esclusiva</h4>
+                <p className="text-slate-400 text-sm">Accesso a canali Slack privati per confronto diretto con i migliori esperti di cybersecurity in Italia.</p>
+              </div>
+              <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-cyan-500/50 transition-colors">
+                <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <ShieldAlert className="w-6 h-6 text-cyan-400" />
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2">Incident Response</h4>
+                <p className="text-slate-400 text-sm">Partecipa come risorsa ausiliaria nei team di risposta agli incidenti critici dei nostri clienti enterprise.</p>
+              </div>
             </div>
           </div>
         </section>
@@ -154,7 +189,7 @@ export const Services: React.FC = () => {
                 <Briefcase className="w-6 h-6" />
                 <span>PER AZIENDE</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
                 La Security Governance, Semplificata
               </h2>
               <p className="text-slate-400 mb-8 leading-relaxed">
@@ -299,6 +334,55 @@ export const Services: React.FC = () => {
               </div>
            </div>
 
+        </section>
+
+        {/* Section 2: Company Strategic Benefits (New Section) */}
+        <section>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="col-span-1 md:col-span-3 text-center mb-8">
+                <h3 className="text-2xl font-bold text-white">Non solo burocrazia: Vantaggi Reali</h3>
+            </div>
+            
+            <div className="group relative overflow-hidden rounded-2xl bg-slate-800 p-8 border border-slate-700 hover:bg-slate-750 transition-all">
+               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Lock className="w-24 h-24 text-blue-500" />
+               </div>
+               <div className="relative z-10">
+                  <Lock className="w-10 h-10 text-blue-400 mb-4" />
+                  <h4 className="text-xl font-bold text-white mb-2">Protezione Legale</h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    La certificazione SecurCert dimostra la "due diligence" nella gestione dei dati, offrendo uno scudo legale fondamentale in caso di data breach secondo le normative GDPR.
+                  </p>
+               </div>
+            </div>
+
+            <div className="group relative overflow-hidden rounded-2xl bg-slate-800 p-8 border border-slate-700 hover:bg-slate-750 transition-all">
+               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Globe className="w-24 h-24 text-blue-500" />
+               </div>
+               <div className="relative z-10">
+                  <Globe className="w-10 h-10 text-blue-400 mb-4" />
+                  <h4 className="text-xl font-bold text-white mb-2">Vantaggio Competitivo</h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Entra nelle vendor list delle grandi multinazionali. La certificazione è sempre più un requisito bloccante per partecipare a gare d'appalto pubbliche e private.
+                  </p>
+               </div>
+            </div>
+
+            <div className="group relative overflow-hidden rounded-2xl bg-slate-800 p-8 border border-slate-700 hover:bg-slate-750 transition-all">
+               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Zap className="w-24 h-24 text-blue-500" />
+               </div>
+               <div className="relative z-10">
+                  <Zap className="w-10 h-10 text-blue-400 mb-4" />
+                  <h4 className="text-xl font-bold text-white mb-2">Riduzione Rischi</h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Riduci del 70% la probabilità di attacchi ransomware di successo grazie all'implementazione strutturata dei controlli di sicurezza previsti dal framework.
+                  </p>
+               </div>
+            </div>
+
+          </div>
         </section>
 
       </div>

@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-semibold mb-4">Certificazioni</h4>
             <ul className="space-y-2 text-sm text-slate-400">
-              <li><a href="#" className="hover:text-cyan-400">ISO 27001</a></li>
+              <li><a href="#" className="hover:text-cyan-400">CPF3:2025</a></li>
               <li><a href="#" className="hover:text-cyan-400">NIS 2 Compliance</a></li>
               <li><a href="#" className="hover:text-cyan-400">GDPR Audit</a></li>
               <li><a href="#" className="hover:text-cyan-400">TISAX</a></li>
