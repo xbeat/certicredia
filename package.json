@@ -28,8 +28,8 @@
     "express-validator": "^7.0.1",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^7.0.11",
     "pg": "^8.11.3",
+    "resend": "^6.5.2",
     "stripe": "^14.9.0",
     "uuid": "^9.0.1"
   },

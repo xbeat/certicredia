@@ -1,70 +1,22 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import dotenv from 'dotenv';
 import logger from '../utils/logger.js';
 
 dotenv.config();
 
-// Email transporter configuration
-const createTransporter = () => {
-  // Check if all required email environment variables are set
-  if (!process.env.SMTP_HOST || !process.env.SMTP_PORT || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    logger.warn('⚠️  Configurazione email incompleta. Email non verranno inviate.');
-    return null;
-  }
+// Initialize Resend client
+let resend = null;
 
-  const isSecure = process.env.SMTP_SECURE === 'true';
-  const port = parseInt(process.env.SMTP_PORT);
+if (process.env.RESEND_API_KEY) {
+  resend = new Resend(process.env.RESEND_API_KEY);
+  logger.info('✅ Resend email service initialized');
+} else {
+  logger.warn('⚠️  RESEND_API_KEY non configurata. Email non verranno inviate.');
+}
 
-  const transportConfig = {
-    host: process.env.SMTP_HOST,
-    port: port,
-    secure: isSecure, // true for 465 (SSL), false for 587 (STARTTLS)
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-    connectionTimeout: 10000, // 10 secondi timeout per connessione
-    greetingTimeout: 5000, // 5 secondi timeout per greeting
-    socketTimeout: 10000, // 10 secondi timeout per socket
-    pool: true, // Usa connection pooling
-    maxConnections: 5,
-    maxMessages: 100
-  };
-
-  // TLS config only for STARTTLS (port 587)
-  // For SSL (port 465), secure: true is enough
-  if (!isSecure && port === 587) {
-    transportConfig.requireTLS = true;
-    transportConfig.tls = {
-      rejectUnauthorized: false, // Allow self-signed certs for now
-      minVersion: 'TLSv1.2'
-    };
-  }
-
-  const transporter = nodemailer.createTransport(transportConfig);
-
-  // Verify transporter configuration in modo non-bloccante con timeout
-  // Non blocca l'avvio del server se SMTP non è raggiungibile
-  setImmediate(() => {
-    const verifyTimeout = setTimeout(() => {
-      logger.warn('⚠️  Timeout verifica SMTP. Il server continuerà senza supporto email.');
-    }, 3000);
-
-    transporter.verify((error, success) => {
-      clearTimeout(verifyTimeout);
-      if (error) {
-        logger.error('❌ Errore configurazione email:', error.message);
-        logger.warn('⚠️  Il server continuerà senza supporto email. Controlla SMTP_HOST e porta firewall.');
-      } else {
-        logger.info('✅ Server email pronto per inviare messaggi');
-      }
-    });
-  });
-
-  return transporter;
-};
-
-const transporter = createTransporter();
+// Default sender email (Resend requires verified domain or use onboarding@resend.dev)
+const FROM_EMAIL = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || 'request@certicredia.org';
 
 /**
  * Send contact form notification email
@@ -72,11 +24,11 @@ const transporter = createTransporter();
  * @returns {Promise<Object>} - Email send result
  */
 const sendContactNotification = async (data) => {
-  if (!transporter) {
-    logger.warn('Email transporter non configurato. Simulazione invio email.');
+  if (!resend) {
+    logger.warn('Email service non configurato. Simulazione invio email.');
     return {
       success: false,
-      message: 'Email transporter non configurato',
+      message: 'Email service non configurato',
       simulated: true
     };
   }
@@ -162,36 +114,19 @@ const sendContactNotification = async (data) => {
     </html>
   `;
 
-  // Plain text version
-  const textContent = `
-CERTICREDIA ITALIA - Nuova Richiesta di Contatto
-
-Tipo: ${userType === 'COMPANY' ? 'AZIENDA' : 'SPECIALISTA'}
-
-Nome: ${name}
-Email: ${email}
-${company ? `Azienda: ${company}` : ''}
-${linkedin ? `LinkedIn/CV: ${linkedin}` : ''}
-${message ? `\nMessaggio:\n${message}` : ''}
-
-Data/Ora: ${new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' })}
-  `;
-
-  const mailOptions = {
-    from: `"CertiCredia Platform" <${process.env.SMTP_USER}>`,
-    to: process.env.NOTIFICATION_EMAIL || 'request@certicredia.org',
-    replyTo: email,
-    subject: subject,
-    text: textContent,
-    html: htmlContent,
-  };
-
   try {
-    const info = await transporter.sendMail(mailOptions);
-    logger.info(`✅ Email inviata: ${info.messageId}`);
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: NOTIFICATION_EMAIL,
+      reply_to: email,
+      subject: subject,
+      html: htmlContent,
+    });
+
+    logger.info(`✅ Email inviata: ${result.id}`);
     return {
       success: true,
-      messageId: info.messageId,
+      messageId: result.id,
       message: 'Email inviata con successo'
     };
   } catch (error) {
@@ -206,8 +141,8 @@ Data/Ora: ${new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' })}
  * @returns {Promise<Object>} - Email send result
  */
 const sendAutoResponse = async (data) => {
-  if (!transporter) {
-    return { success: false, message: 'Email transporter non configurato', simulated: true };
+  if (!resend) {
+    return { success: false, message: 'Email service non configurato', simulated: true };
   }
 
   const { name, email, userType } = data;
@@ -236,7 +171,7 @@ const sendAutoResponse = async (data) => {
 
           <div style="background: white; padding: 20px; border-left: 4px solid #06b6d4; margin: 20px 0; border-radius: 5px;">
             <p style="margin: 0;"><strong>📧 Per qualsiasi urgenza, contattaci a:</strong></p>
-            <p style="margin: 10px 0 0 0;"><a href="mailto:request@certicredia.org" style="color: #0891b2;">request@certicredia.org</a></p>
+            <p style="margin: 10px 0 0 0;"><a href="mailto:${NOTIFICATION_EMAIL}" style="color: #0891b2;">${NOTIFICATION_EMAIL}</a></p>
           </div>
 
           <p>Nel frattempo, puoi visitare il nostro sito per saperne di più sui nostri servizi.</p>
@@ -251,19 +186,18 @@ const sendAutoResponse = async (data) => {
     </html>
   `;
 
-  const mailOptions = {
-    from: `"CertiCredia Italia" <${process.env.SMTP_USER}>`,
-    to: email,
-    subject: '✅ Richiesta Ricevuta - CertiCredia Italia',
-    html: htmlContent,
-  };
-
   try {
-    const info = await transporter.sendMail(mailOptions);
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: '✅ Richiesta Ricevuta - CertiCredia Italia',
+      html: htmlContent,
+    });
+
     logger.info(`✅ Auto-risposta inviata a: ${email}`);
     return {
       success: true,
-      messageId: info.messageId
+      messageId: result.id
     };
   } catch (error) {
     logger.error('❌ Errore invio auto-risposta:', error);
@@ -272,14 +206,12 @@ const sendAutoResponse = async (data) => {
   }
 };
 
-export { transporter, sendContactNotification, sendAutoResponse };
-
 /**
  * Send order confirmation email to customer
  */
 export const sendOrderConfirmation = async (orderData) => {
-  if (!transporter) {
-    return { success: false, message: 'Email transporter non configurato', simulated: true };
+  if (!resend) {
+    return { success: false, message: 'Email service non configurato', simulated: true };
   }
 
   const { order, items, user } = orderData;
@@ -335,7 +267,7 @@ export const sendOrderConfirmation = async (orderData) => {
             <small>Riceverai le istruzioni per il pagamento via email separata.</small>
           </div>
 
-          <p style="margin-top: 30px;">Per qualsiasi domanda, contattaci a <a href="mailto:request@certicredia.org">request@certicredia.org</a></p>
+          <p style="margin-top: 30px;">Per qualsiasi domanda, contattaci a <a href="mailto:${NOTIFICATION_EMAIL}">${NOTIFICATION_EMAIL}</a></p>
         </div>
         <div class="footer">
           <p>© 2025 CertiCredia Italia S.r.l. - Certificazioni Cybersecurity</p>
@@ -346,14 +278,15 @@ export const sendOrderConfirmation = async (orderData) => {
   `;
 
   try {
-    const info = await transporter.sendMail({
-      from: `"CertiCredia Italia" <${process.env.SMTP_USER}>`,
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
       to: user.email,
       subject: `Conferma Ordine ${order.order_number} - CertiCredia`,
       html: htmlContent,
     });
+
     logger.info(`✅ Email conferma ordine inviata a: ${user.email}`);
-    return { success: true, messageId: info.messageId };
+    return { success: true, messageId: result.id };
   } catch (error) {
     logger.error('❌ Errore invio email conferma ordine:', error);
     return { success: false, error: error.message };
@@ -364,7 +297,7 @@ export const sendOrderConfirmation = async (orderData) => {
  * Send order notification to admin
  */
 export const sendOrderNotificationToAdmin = async (orderData) => {
-  if (!transporter) {
+  if (!resend) {
     return { success: false, simulated: true };
   }
 
@@ -412,16 +345,19 @@ export const sendOrderNotificationToAdmin = async (orderData) => {
   `;
 
   try {
-    const info = await transporter.sendMail({
-      from: `"CertiCredia Platform" <${process.env.SMTP_USER}>`,
-      to: process.env.NOTIFICATION_EMAIL || 'request@certicredia.org',
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: NOTIFICATION_EMAIL,
       subject: `Nuovo Ordine ${order.order_number}`,
       html: htmlContent,
     });
+
     logger.info(`✅ Notifica ordine inviata agli admin`);
-    return { success: true, messageId: info.messageId };
+    return { success: true, messageId: result.id };
   } catch (error) {
     logger.error('❌ Errore invio notifica ordine:', error);
     return { success: false, error: error.message };
   }
 };
+
+export { resend, sendContactNotification, sendAutoResponse };
