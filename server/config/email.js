@@ -12,24 +12,36 @@ const createTransporter = () => {
     return null;
   }
 
-  const transporter = nodemailer.createTransport({
+  const isSecure = process.env.SMTP_SECURE === 'true';
+  const port = parseInt(process.env.SMTP_PORT);
+
+  const transportConfig = {
     host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT),
-    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+    port: port,
+    secure: isSecure, // true for 465 (SSL), false for 587 (STARTTLS)
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
-    connectionTimeout: 5000, // 5 secondi timeout per connessione
-    greetingTimeout: 3000, // 3 secondi timeout per greeting
-    socketTimeout: 5000, // 5 secondi timeout per socket
-    tls: {
-      rejectUnauthorized: process.env.NODE_ENV === 'production'
-    },
+    connectionTimeout: 10000, // 10 secondi timeout per connessione
+    greetingTimeout: 5000, // 5 secondi timeout per greeting
+    socketTimeout: 10000, // 10 secondi timeout per socket
     pool: true, // Usa connection pooling
     maxConnections: 5,
     maxMessages: 100
-  });
+  };
+
+  // TLS config only for STARTTLS (port 587)
+  // For SSL (port 465), secure: true is enough
+  if (!isSecure && port === 587) {
+    transportConfig.requireTLS = true;
+    transportConfig.tls = {
+      rejectUnauthorized: false, // Allow self-signed certs for now
+      minVersion: 'TLSv1.2'
+    };
+  }
+
+  const transporter = nodemailer.createTransport(transportConfig);
 
   // Verify transporter configuration in modo non-bloccante con timeout
   // Non blocca l'avvio del server se SMTP non è raggiungibile
