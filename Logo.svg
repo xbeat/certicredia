@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Livello_2" data-name="Livello 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 339.93 315.44">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #333;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #fb4343;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Livello_1-2" data-name="Livello 1">
+    <g>
+      <rect class="cls-3" width="339.93" height="315.44" rx="60.52" ry="60.52"/>
+      <g>
+        <circle class="cls-2" cx="71.37" cy="62.53" r="31.24"/>
+        <circle class="cls-2" cx="136.92" cy="62.53" r="31.24"/>
+        <circle class="cls-2" cx="71.37" cy="127.09" r="31.24"/>
+        <circle class="cls-2" cx="71.37" cy="191.65" r="31.24"/>
+        <circle class="cls-2" cx="136.92" cy="191.65" r="31.24"/>
+        <circle class="cls-2" cx="71.37" cy="256.21" r="31.24"/>
+        <circle class="cls-2" cx="136.92" cy="256.21" r="31.24"/>
+        <circle class="cls-1" cx="280.55" cy="128.31" r="31.24"/>
+      </g>
+    </g>
+  </g>
+</svg>
