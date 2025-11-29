@@ -1,113 +1,396 @@
-# CertiCredia Italia - Website
+# 🛡️ CertiCredia Italia - Piattaforma Certificazioni Cybersecurity
 
-Sito web istituzionale per CertiCredia Italia, ente di certificazione cybersecurity.
+Piattaforma web completa per la gestione delle certificazioni di cybersecurity con backend Node.js, database PostgreSQL e sistema di notifiche email.
 
-## Tecnologie
+---
 
-Questo sito è sviluppato in **HTML, CSS e JavaScript puro (vanilla)**, senza framework o dipendenze esterne.
+## 🚀 Caratteristiche
 
-- **HTML5**: Struttura semantica del sito
-- **CSS3**: Stili personalizzati + Tailwind CSS (via CDN)
-- **Vanilla JavaScript**: Logica interattiva (navbar, form, chatbot)
+- **Frontend Vanilla JS/CSS/HTML** - Nessun framework pesante, solo tecnologie web native
+- **Backend Node.js + Express** - API RESTful robusta e scalabile
+- **Database PostgreSQL (Neon)** - Archiviazione dati serverless e sicura
+- **Sistema Email Automatico** - Notifiche via SMTP con Nodemailer
+- **Deployment Ready** - Configurato per Render.com
+- **Security First** - Helmet, CORS, Rate Limiting, Validazione Input
 
-## Struttura del Progetto
+---
+
+## 📋 Prerequisiti
+
+- **Node.js** >= 18.0.0
+- **npm** o **yarn**
+- Account **Neon** (database PostgreSQL serverless)
+- Server SMTP per email (Gmail, SendGrid, Mailgun, ecc.)
+
+---
+
+## 🛠️ Installazione Locale
+
+### 1. Clona il repository
+
+```bash
+git clone https://github.com/xbeat/certicredia.git
+cd certicredia
+```
+
+### 2. Installa le dipendenze
+
+```bash
+npm install
+```
+
+### 3. Configura le variabili d'ambiente
+
+Crea un file `.env` nella root del progetto (copia da `.env.example`):
+
+```bash
+cp .env.example .env
+```
+
+Modifica il file `.env` con i tuoi parametri:
+
+```env
+# Server
+NODE_ENV=development
+PORT=3000
+
+# Database (Neon PostgreSQL)
+DATABASE_URL=postgresql://username:password@your-neon-host.neon.tech/certicredia?sslmode=require
+
+# Email SMTP
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=request@certicredia.org
+SMTP_PASS=your-app-password
+
+# Notification
+NOTIFICATION_EMAIL=request@certicredia.org
+CORS_ORIGIN=*
+```
+
+### 4. Avvia il server
+
+```bash
+# Modalità produzione
+npm start
+
+# Modalità sviluppo (con auto-reload)
+npm run dev
+```
+
+Il server sarà disponibile su `http://localhost:3000`
+
+---
+
+## 🗄️ Setup Database PostgreSQL (Neon)
+
+### 1. Crea un progetto su Neon
+
+1. Vai su [neon.tech](https://neon.tech)
+2. Crea un nuovo progetto
+3. Copia la **connection string** che ti viene fornita
+
+### 2. Configura la connection string
+
+La connection string ha questo formato:
+
+```
+postgresql://username:password@hostname.neon.tech/dbname?sslmode=require
+```
+
+Incollala nel file `.env` come valore di `DATABASE_URL`.
+
+### 3. Schema automatico
+
+Il database viene inizializzato automaticamente all'avvio del server. Lo schema include:
+
+- **Tabella `contacts`**: Memorizza tutti i form di registrazione
+  - `id` (SERIAL PRIMARY KEY)
+  - `user_type` (COMPANY | SPECIALIST)
+  - `name`, `email`, `company`, `linkedin`, `message`
+  - `created_at`, `ip_address`, `user_agent`
+  - `status` (new, contacted, closed)
+  - `notes` (per uso interno)
+
+---
+
+## 📧 Configurazione Email SMTP
+
+### Opzione 1: Gmail
+
+1. Abilita la **2-Step Verification** sul tuo account Google
+2. Genera una **App Password**:
+   - Vai su [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+   - Genera una password per "Mail"
+3. Usa queste credenziali:
+
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=request@certicredia.org
+SMTP_PASS=your-16-char-app-password
+```
+
+### Opzione 2: SendGrid
+
+```env
+SMTP_HOST=smtp.sendgrid.net
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=apikey
+SMTP_PASS=your-sendgrid-api-key
+```
+
+### Opzione 3: Provider Custom
+
+Contatta il tuo provider email e richiedi:
+- SMTP Host
+- SMTP Port
+- Username
+- Password
+
+---
+
+## 🌐 Deployment su Render
+
+### Metodo 1: Deploy Automatico (Consigliato)
+
+1. **Crea un account su [Render.com](https://render.com)**
+
+2. **Connetti il repository GitHub**:
+   - New → Web Service
+   - Collega il tuo repository GitHub
+
+3. **Render rileverà automaticamente il file `render.yaml`**
+
+4. **Configura le Environment Variables**:
+   - Dashboard → Environment
+   - Aggiungi tutte le variabili da `.env.example`:
+     - `DATABASE_URL`
+     - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`
+     - Altre variabili necessarie
+
+5. **Deploy!**
+   - Render installerà le dipendenze e avvierà il server automaticamente
+
+### Metodo 2: Deploy Manuale
+
+1. Vai su Render Dashboard
+2. New → Web Service
+3. Configurazioni:
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Environment**: Node
+   - **Branch**: `main` (o il tuo branch)
+
+---
+
+## 📁 Struttura del Progetto
 
 ```
 certicredia/
-├── index.html      # Pagina principale
-├── styles.css      # Stili personalizzati
-├── app.js          # Logica JavaScript
-├── README.md       # Questo file
-└── .gitignore      # File da ignorare in Git
+├── server/
+│   ├── config/
+│   │   ├── database.js       # Connessione PostgreSQL
+│   │   └── email.js          # Configurazione Nodemailer
+│   ├── controllers/
+│   │   └── contactController.js  # Logica business form
+│   ├── middleware/
+│   │   └── validation.js     # Validazione input
+│   ├── routes/
+│   │   └── contact.js        # API routes
+│   ├── utils/
+│   │   └── logger.js         # Utility logging
+│   └── index.js              # Entry point server
+├── index.html                # Frontend
+├── app.js                    # JavaScript frontend
+├── styles.css                # Stili CSS
+├── package.json              # Dipendenze
+├── .env.example              # Template variabili ambiente
+├── render.yaml               # Configurazione Render
+└── README.md                 # Questa guida
 ```
 
-## Come Eseguire Localmente
+---
 
-### Opzione 1: Server HTTP locale (consigliato)
+## 🔌 API Endpoints
 
-Usa uno dei seguenti metodi per avviare un server HTTP locale:
+### **POST** `/api/contact`
 
-**Con Python 3:**
+Invia un form di contatto.
+
+**Body (JSON)**:
+```json
+{
+  "userType": "COMPANY",
+  "name": "Mario Rossi",
+  "email": "mario@example.com",
+  "company": "Acme Inc. - P.IVA 12345678901",
+  "message": "Vorrei maggiori informazioni sulla certificazione CPF3"
+}
+```
+
+**Response**:
+```json
+{
+  "success": true,
+  "message": "Richiesta ricevuta con successo. Ti contatteremo entro 24 ore.",
+  "data": {
+    "id": 123,
+    "userType": "COMPANY",
+    "name": "Mario Rossi",
+    "email": "mario@example.com",
+    "createdAt": "2025-11-29T10:30:00.000Z"
+  }
+}
+```
+
+### **GET** `/api/health`
+
+Health check del server e database.
+
+**Response**:
+```json
+{
+  "status": "ok",
+  "timestamp": "2025-11-29T10:30:00.000Z",
+  "database": "connected"
+}
+```
+
+### **GET** `/api/contact` *(Admin)*
+
+Recupera tutti i contatti (da proteggere con autenticazione).
+
+**Query params**:
+- `status` - Filtra per stato (new, contacted, closed)
+- `userType` - Filtra per tipo (COMPANY, SPECIALIST)
+- `limit` - Numero massimo risultati (default: 50)
+- `offset` - Offset per paginazione (default: 0)
+
+---
+
+## 🔒 Security Features
+
+- **Helmet.js** - Security headers HTTP
+- **CORS** - Cross-Origin Resource Sharing configurabile
+- **Rate Limiting** - 100 richieste per IP ogni 15 minuti
+- **Input Validation** - express-validator per sanitizzazione
+- **SQL Injection Protection** - Query parametrizzate con pg
+- **XSS Protection** - Sanitizzazione input
+
+---
+
+## 🧪 Test del Sistema
+
+### Test Manuale
+
+1. Avvia il server:
+   ```bash
+   npm start
+   ```
+
+2. Apri il browser su `http://localhost:3000`
+
+3. Compila il form di contatto e invia
+
+4. Verifica:
+   - Email ricevuta su `NOTIFICATION_EMAIL`
+   - Auto-risposta ricevuta sull'email inserita nel form
+   - Dato salvato nel database
+
+### Test API con cURL
+
 ```bash
-python3 -m http.server 8000
+curl -X POST http://localhost:3000/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userType": "COMPANY",
+    "name": "Test User",
+    "email": "test@example.com",
+    "company": "Test Company",
+    "message": "Test message"
+  }'
 ```
 
-**Con Node.js (http-server):**
+---
+
+## 📊 Gestione Database
+
+### Visualizzare i contatti
+
+```sql
+-- Tutti i contatti
+SELECT * FROM contacts ORDER BY created_at DESC;
+
+-- Solo aziende
+SELECT * FROM contacts WHERE user_type = 'COMPANY';
+
+-- Nuovi contatti non gestiti
+SELECT * FROM contacts WHERE status = 'new';
+```
+
+### Aggiornare stato contatto
+
+```sql
+UPDATE contacts
+SET status = 'contacted', notes = 'Email inviata il 29/11/2025'
+WHERE id = 123;
+```
+
+---
+
+## 🚨 Troubleshooting
+
+### Errore: "Database connection failed"
+
+- Verifica che `DATABASE_URL` sia corretto
+- Controlla che Neon sia attivo e raggiungibile
+- Verifica SSL mode: `?sslmode=require`
+
+### Errore: "Email transporter non configurato"
+
+- Verifica tutte le variabili SMTP in `.env`
+- Controlla username/password SMTP
+- Per Gmail, usa App Password, non la password normale
+
+### Errore: "Port already in use"
+
 ```bash
-npx http-server -p 8000
+# Trova il processo che usa la porta 3000
+lsof -ti:3000
+
+# Uccidi il processo
+kill -9 $(lsof -ti:3000)
 ```
 
-**Con PHP:**
-```bash
-php -S localhost:8000
-```
+---
 
-Poi apri il browser su: `http://localhost:8000`
+## 🔮 Roadmap Futuro
 
-### Opzione 2: Apertura diretta
+- [ ] **Area riservata utenti** - Autenticazione JWT
+- [ ] **E-commerce** - Sistema di pagamento per certificazioni
+- [ ] **Admin Dashboard** - Gestione contatti e ordini
+- [ ] **CRM Integration** - Webhook per HubSpot/Salesforce
+- [ ] **Analytics** - Dashboard metriche e statistiche
+- [ ] **Multi-lingua** - Supporto EN/IT
 
-Puoi anche aprire direttamente il file `index.html` nel browser, ma alcune funzionalità potrebbero non funzionare correttamente a causa delle restrizioni CORS.
+---
 
-## Funzionalità
+## 📝 License
 
-### ✅ Implementate
+Copyright © 2025 CertiCredia Italia S.r.l.
 
-- [x] Navbar responsive con effetto scroll
-- [x] Hero section con call-to-action
-- [x] Sezioni per Specialisti e Aziende
-- [x] Processo di certificazione in 4 step
-- [x] Form di contatto con switch Company/Specialist
-- [x] Footer con link e informazioni
-- [x] Chatbot AI assistente (con risposte simulate)
-- [x] Smooth scroll per navigazione
-- [x] Design responsive per mobile
+---
 
-### 🔧 Da Implementare (opzionale)
+## 🤝 Supporto
 
-- [ ] Integrazione API Gemini per chatbot AI reale
-- [ ] Form submission backend
-- [ ] Animazioni avanzate (scroll animations)
-- [ ] Dark/Light mode toggle
+Per assistenza tecnica:
+- **Email**: request@certicredia.org
+- **GitHub**: [github.com/xbeat/certicredia](https://github.com/xbeat/certicredia)
 
-## Chatbot AI
+---
 
-Il chatbot attualmente usa risposte simulate per funzionare senza dipendenze esterne.
-
-Per integrare Google Gemini AI:
-1. Ottieni una API key da [Google AI Studio](https://aistudio.google.com/app/apikey)
-2. Modifica `app.js` nella sezione "AI CHATBOT"
-3. Sostituisci la funzione `simulateAIResponse` con una chiamata API reale
-
-## Personalizzazione
-
-### Modificare i Colori
-
-I colori principali sono definiti tramite Tailwind CSS:
-- **Cyan-500**: `#06b6d4` (colore primario)
-- **Slate-900**: `#0f172a` (sfondo scuro)
-
-Per modificarli, aggiorna le classi Tailwind in `index.html` o aggiungi stili custom in `styles.css`.
-
-### Modificare i Contenuti
-
-Tutti i contenuti testuali si trovano direttamente in `index.html`. Modifica il testo nelle sezioni:
-- `#hero` - Sezione iniziale
-- `#specialists` - Per specialisti
-- `#companies` - Per aziende
-- `#process` - Metodologia
-- `#contact` - Form di contatto
-
-## Browser Support
-
-- Chrome/Edge (ultime 2 versioni)
-- Firefox (ultime 2 versioni)
-- Safari (ultime 2 versioni)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## Licenza
-
-© 2025 CertiCredia Italia S.r.l. - Tutti i diritti riservati
-
-## Contatti
-
-Per supporto o domande: info@certicredia.it
+**Fatto con ❤️ per la sicurezza del futuro digitale**

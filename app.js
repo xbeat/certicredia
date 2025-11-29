@@ -150,7 +150,7 @@ function initContactForm() {
     btnSpecialist.addEventListener('click', () => setUserType('SPECIALIST'));
 
     // Form submission
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const formData = new FormData(contactForm);
@@ -163,13 +163,53 @@ function initContactForm() {
             message: formData.get('message')
         };
 
-        console.log('Form submitted:', data);
+        // Disable submit button and show loading state
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitText.textContent;
+        submitButton.disabled = true;
+        submitText.textContent = 'Invio in corso...';
 
-        // Show success message
-        alert('Grazie per il tuo interesse! Ti contatteremo entro 24 ore.');
+        try {
+            // Call backend API
+            const apiUrl = window.location.hostname === 'localhost'
+                ? 'http://localhost:3000/api/contact'
+                : '/api/contact';
 
-        // Reset form
-        contactForm.reset();
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                // Show success message
+                showNotification('✅ Richiesta inviata con successo! Ti contatteremo entro 24 ore.', 'success');
+
+                // Reset form
+                contactForm.reset();
+
+                // Reset user type to company
+                setUserType('COMPANY');
+            } else {
+                // Show error message
+                const errorMessage = result.errors
+                    ? result.errors.map(err => err.message).join(', ')
+                    : result.message || 'Si è verificato un errore. Riprova più tardi.';
+
+                showNotification(`❌ Errore: ${errorMessage}`, 'error');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            showNotification('❌ Errore di connessione. Verifica la tua connessione e riprova.', 'error');
+        } finally {
+            // Re-enable submit button
+            submitButton.disabled = false;
+            submitText.textContent = originalButtonText;
+        }
     });
 }
 
@@ -372,9 +412,57 @@ function getScrollPosition() {
     return window.pageYOffset || document.documentElement.scrollTop;
 }
 
+// Show notification toast
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotification = document.getElementById('notification-toast');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.id = 'notification-toast';
+    notification.className = 'fixed top-24 right-6 z-50 max-w-md animate-slide-in';
+
+    const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-cyan-500';
+    const icon = type === 'success'
+        ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+        : type === 'error'
+            ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+            : '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+
+    notification.innerHTML = `
+        <div class="${bgColor} text-white px-6 py-4 rounded-lg shadow-2xl flex items-center gap-4">
+            <div class="flex-shrink-0">
+                ${icon}
+            </div>
+            <div class="flex-1">
+                <p class="font-medium">${message}</p>
+            </div>
+            <button onclick="this.parentElement.parentElement.remove()" class="flex-shrink-0 hover:bg-white/20 rounded-full p-1 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(notification);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification && notification.parentElement) {
+            notification.style.animation = 'slide-out 0.3s ease-out';
+            setTimeout(() => notification.remove(), 300);
+        }
+    }, 5000);
+}
+
 // Export for debugging
 window.CertiCredia = {
     state,
     scrollToTop,
-    getScrollPosition
+    getScrollPosition,
+    showNotification
 };
