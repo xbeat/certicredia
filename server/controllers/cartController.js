@@ -116,7 +116,10 @@ export const addToCart = async (req, res) => {
         );
       } catch (conflictError) {
         if (conflictError.code === '42P10') {
-          // No matching constraint - use manual upsert
+          // No matching constraint - rollback and use manual upsert
+          await client.query('ROLLBACK');
+          await client.query('BEGIN');
+
           const existing = await client.query(
             'SELECT id, quantity FROM cart WHERE user_id = $1 AND product_id = $2',
             [req.user.id, product_id]
@@ -162,7 +165,10 @@ export const addToCart = async (req, res) => {
         );
       } catch (conflictError) {
         if (conflictError.code === '42P10') {
-          // No matching constraint - use manual upsert
+          // No matching constraint - rollback and use manual upsert
+          await client.query('ROLLBACK');
+          await client.query('BEGIN');
+
           const existing = await client.query(
             'SELECT id, quantity FROM cart WHERE session_id = $1 AND product_id = $2',
             [sessionId, product_id]
