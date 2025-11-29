@@ -20,18 +20,28 @@ const createTransporter = () => {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
+    connectionTimeout: 10000, // 10 secondi timeout per connessione
+    greetingTimeout: 5000, // 5 secondi timeout per greeting
+    socketTimeout: 10000, // 10 secondi timeout per socket
     tls: {
       rejectUnauthorized: process.env.NODE_ENV === 'production'
-    }
+    },
+    pool: true, // Usa connection pooling
+    maxConnections: 5,
+    maxMessages: 100
   });
 
-  // Verify transporter configuration
-  transporter.verify((error, success) => {
-    if (error) {
-      logger.error('❌ Errore configurazione email:', error);
-    } else {
-      logger.info('✅ Server email pronto per inviare messaggi');
-    }
+  // Verify transporter configuration in modo non-bloccante
+  // Non blocca l'avvio del server se SMTP non è raggiungibile
+  setImmediate(() => {
+    transporter.verify((error, success) => {
+      if (error) {
+        logger.error('❌ Errore configurazione email:', error.message);
+        logger.warn('⚠️  Il server continuerà senza supporto email. Controlla SMTP_HOST e porta firewall.');
+      } else {
+        logger.info('✅ Server email pronto per inviare messaggi');
+      }
+    });
   });
 
   return transporter;

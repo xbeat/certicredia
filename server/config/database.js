@@ -144,7 +144,7 @@ const initDatabase = async () => {
         quantity INTEGER NOT NULL DEFAULT 1,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        CONSTRAINT unique_cart_user_product UNIQUE (user_id, product_id)
+        CHECK ((user_id IS NOT NULL AND session_id IS NULL) OR (user_id IS NULL AND session_id IS NOT NULL))
       );
     `);
 
@@ -194,10 +194,30 @@ const initDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at DESC);
     `);
 
+    // Migrate cart table: remove old constraint if exists
+    await client.query(`
+      DO $$ BEGIN
+        ALTER TABLE cart DROP CONSTRAINT IF EXISTS unique_cart_user_product;
+      EXCEPTION
+        WHEN undefined_object THEN NULL;
+      END $$;
+    `);
+
     // Create indices for cart
     await client.query(`
       CREATE INDEX IF NOT EXISTS idx_cart_user_id ON cart(user_id);
       CREATE INDEX IF NOT EXISTS idx_cart_session_id ON cart(session_id);
+    `);
+
+    // Create partial unique indexes for cart (authenticated and guest users)
+    await client.query(`
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_cart_unique_user_product
+      ON cart(user_id, product_id)
+      WHERE user_id IS NOT NULL;
+
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_cart_unique_session_product
+      ON cart(session_id, product_id)
+      WHERE session_id IS NOT NULL;
     `);
 
     // Create indices for user_certifications
