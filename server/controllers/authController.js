@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { pool } from '../config/database.js';
 import { generateAccessToken, generateRefreshToken, createUserPayload } from '../config/auth.js';
+import { resend } from '../config/email.js';
 import logger from '../utils/logger.js';
 
 const SALT_ROUNDS = 12;
@@ -50,6 +51,65 @@ export const register = async (req, res) => {
     const refreshToken = generateRefreshToken(userPayload);
 
     logger.info(`✅ Nuovo utente registrato: ${email}`);
+
+    // Send welcome email (non-blocking)
+    if (resend) {
+      try {
+        await resend.emails.send({
+          from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+          to: email,
+          subject: '🎉 Benvenuto su CertiCredia Italia!',
+          html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                .content { background: #f8fafc; padding: 30px; }
+                .footer { background: #1e293b; color: white; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; }
+                .button { display: inline-block; padding: 12px 30px; background: #0891b2; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <h1 style="margin: 0;">🛡️ CertiCredia Italia</h1>
+                </div>
+                <div class="content">
+                  <h2 style="color: #0891b2;">Benvenuto ${name}!</h2>
+                  <p>Grazie per esserti registrato su <strong>CertiCredia Italia</strong>!</p>
+                  <p>Il tuo account è stato creato con successo. Ora puoi:</p>
+                  <ul>
+                    <li>Sfogliare il nostro catalogo di certificazioni</li>
+                    <li>Aggiungere prodotti al carrello</li>
+                    <li>Effettuare ordini e gestire le tue certificazioni</li>
+                  </ul>
+                  <div style="text-align: center;">
+                    <a href="https://certicredia.onrender.com" class="button">Inizia Subito</a>
+                  </div>
+                  <p style="margin-top: 30px; color: #64748b; font-size: 14px;">
+                    Per qualsiasi domanda, contattaci a
+                    <a href="mailto:${process.env.NOTIFICATION_EMAIL || 'request@certicredia.org'}" style="color: #0891b2;">
+                      ${process.env.NOTIFICATION_EMAIL || 'request@certicredia.org'}
+                    </a>
+                  </p>
+                </div>
+                <div class="footer">
+                  <p>© 2025 CertiCredia Italia S.r.l. - Certificazioni Cybersecurity</p>
+                </div>
+              </div>
+            </body>
+            </html>
+          `
+        });
+        logger.info(`✅ Email di benvenuto inviata a: ${email}`);
+      } catch (emailError) {
+        logger.error(`❌ Errore invio email di benvenuto a ${email}:`, emailError);
+        // Don't fail registration if email fails
+      }
+    }
 
     // Set cookie (optional - can also use localStorage on frontend)
     res.cookie('token', accessToken, {
