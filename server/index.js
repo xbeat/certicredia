@@ -2,10 +2,15 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import contactRoutes from './routes/contact.js';
+import authRoutes from './routes/auth.js';
+import productRoutes from './routes/products.js';
+import cartRoutes from './routes/cart.js';
+import orderRoutes from './routes/orders.js';
 import { pool } from './config/database.js';
 import logger from './utils/logger.js';
 
@@ -26,11 +31,14 @@ app.use(helmet({
 // CORS configuration
 const corsOptions = {
   origin: process.env.CORS_ORIGIN || '*',
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
 app.use(cors(corsOptions));
+
+// Cookie parser
+app.use(cookieParser());
 
 // Rate limiting
 const limiter = rateLimit({
@@ -51,6 +59,10 @@ app.use(express.static(path.join(__dirname, '..')));
 
 // API Routes
 app.use('/api/contact', contactRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
