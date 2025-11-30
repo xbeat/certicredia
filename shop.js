@@ -162,7 +162,7 @@ async function init() {
     updateAuthUI();
     try { const c = await getCart(); updateCartBadge(c.count); } catch {}
     const p = location.pathname;
-    if (p.includes('shop.html')) await initShop();
+    if (p.includes('shop.html') || p === '/shop') await initShop();
     else if (p.includes('cart.html')) await initCart();
     else if (p.includes('auth.html')) initAuth();
     else if (p.includes('checkout.html')) await initCheckout();
