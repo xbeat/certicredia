@@ -257,6 +257,256 @@ Output atteso:
 
 ---
 
+## 🌐 Testing da Browser
+
+### 1. Avvia il Server
+
+Assicurati che il server sia in esecuzione:
+
+```bash
+npm run dev
+```
+
+### 2. Apri il Browser
+
+Vai su **http://localhost:3000** nel tuo browser.
+
+### 3. Pagine Disponibili
+
+#### Homepage Principale
+- **URL**: `http://localhost:3000/`
+- **Descrizione**: Landing page con link a tutte le sezioni
+- **Funzionalità**:
+  - Health check automatico del sistema
+  - Link rapidi a Login/Registrazione
+  - Panoramica dashboard disponibili
+  - Documentazione API
+
+#### Registrazione
+- **URL**: `http://localhost:3000/pages/register.html`
+- **Funzionalità**:
+  - Crea nuovo account (Ente o Specialist Candidato)
+  - Validazione password in tempo reale
+  - Controllo forza password
+  - Accettazione termini e condizioni
+
+**Test rapido**:
+```
+Nome: Mario
+Cognome: Rossi
+Email: mario.rossi@test.com
+Phone: +39 123 456 7890
+Password: TestPassword123!@#
+Tipologia: Ente/Organizzazione (Amministratore)
+```
+
+#### Login
+- **URL**: `http://localhost:3000/pages/login.html`
+- **Funzionalità**:
+  - Login con email e password
+  - Supporto MFA/TOTP (se abilitato per il ruolo)
+  - Link recupero password
+  - Redirect automatico al pannello corretto in base al ruolo
+
+**Flusso MFA**:
+1. Inserisci email e password
+2. Se MFA richiesto, appare form per codice TOTP
+3. Usa app autenticatore (Google Authenticator, Authy) per il codice
+4. Reindirizzamento automatico
+
+#### Recupero Password
+- **URL**: `http://localhost:3000/pages/forgot-password.html`
+- **Funzionalità**:
+  - Richiesta reset password via email
+  - Token valido 1 ora
+  - Email con link di reset (via Resend API)
+
+#### Dashboard Ente
+- **URL**: `http://localhost:3000/pages/ente/dashboard.html`
+- **Accesso**: Richiede login con ruolo `org_admin` o `org_operative`
+- **Funzionalità**:
+  - Visualizzazione organizzazione
+  - Compilazione assessment (domande dinamiche)
+  - Upload evidenze (documenti, screenshot)
+  - Generazione token per assegnazione specialist
+  - Tracking progresso (percentuale completamento)
+  - Salvataggio bozza automatico
+  - Invio per revisione
+
+#### Pannello Specialist
+- **URL**: `http://localhost:3000/pages/specialist/dashboard.html`
+- **Accesso**: Richiede login con ruolo `specialist` o `candidate_specialist`
+- **Funzionalità**:
+  - Lista assessment assegnati
+  - Accettazione incarichi via token
+  - Revisione assessment con commenti
+  - Registrazione ore CPE (formazione continua)
+  - Statistiche personali (ore CPE, assessment completati)
+  - Download evidenze
+
+**Flusso Specialist**:
+1. Login come specialist
+2. Accetta incarico inserendo token ricevuto dall'Ente
+3. Revisiona assessment
+4. Aggiungi commenti e valutazioni
+5. Approva/Richiedi modifiche/Rifiuta
+
+#### Admin Panel
+- **URL**: `http://localhost:3000/pages/admin/index.html`
+- **Accesso**: Richiede login con ruolo `super_admin` o `admin`
+- **Funzionalità**:
+  - Dashboard overview con statistiche
+  - Gestione organizzazioni (CRUD)
+  - Gestione specialist (approvazione, sospensione)
+  - Gestione template assessment
+  - Visualizzazione audit logs
+  - Gestione utenti sistema
+
+### 4. Flusso Completo di Test
+
+#### Test Scenario 1: Ente che completa un Assessment
+
+```
+1. Registrazione (register.html)
+   - Crea account come "Ente/Organizzazione (Amministratore)"
+   - Email: ente@test.com
+   - Password: TestPassword123!@#
+
+2. Login (login.html)
+   - Accedi con le credenziali create
+   - Verrai reindirizzato a /pages/ente/dashboard.html
+
+3. Dashboard Ente (ente/dashboard.html)
+   - Crea nuova organizzazione (se non esiste)
+   - Avvia nuovo assessment
+   - Compila le domande del framework
+   - Carica evidenze (file PDF, immagini)
+   - Salva bozza (auto-save ogni 30 secondi)
+   - Quando pronto, clicca "Invia per Revisione"
+
+4. Genera Token Specialist
+   - Nella dashboard, vai alla sezione "Specialist"
+   - Clicca "Genera Token Assegnazione"
+   - Copia il token (es. ACC-1234567890-ABCD)
+   - Invia il token allo specialist (email, chat, etc.)
+```
+
+#### Test Scenario 2: Specialist che Revisiona
+
+```
+1. Registrazione (register.html)
+   - Crea account come "Specialist (Candidato)"
+   - Email: specialist@test.com
+   - Password: TestPassword123!@#
+
+2. Login (login.html)
+   - Accedi con le credenziali create
+   - Verrai reindirizzato a /pages/specialist/dashboard.html
+
+3. Dashboard Specialist (specialist/dashboard.html)
+   - Clicca "Accetta Incarico"
+   - Inserisci il token ricevuto dall'Ente
+   - L'assessment apparirà nella tua lista
+
+4. Revisiona Assessment
+   - Clicca sull'assessment assegnato
+   - Leggi le risposte dell'Ente
+   - Scarica le evidenze caricate
+   - Aggiungi commenti alle domande
+   - Seleziona severità (info, warning, critical)
+   - Approva o richiedi modifiche
+
+5. Registra CPE (Formazione)
+   - Vai alla sezione CPE
+   - Aggiungi ore di formazione
+   - Carica certificati di partecipazione
+```
+
+#### Test Scenario 3: Admin che Gestisce il Sistema
+
+```
+1. Login come Admin
+   - Usa credenziali admin (create manualmente via SQL o seed)
+   - Verrai reindirizzato a /pages/admin/index.html
+
+2. Admin Panel (admin/index.html)
+   - Visualizza statistiche: n° organizzazioni, specialist, assessment
+   - Approva specialist candidati (dopo superamento esame)
+   - Crea/modifica template assessment
+   - Visualizza audit logs per compliance
+   - Gestisci utenti (cambio ruoli, sospensione)
+```
+
+### 5. Testing API Diretti (Opzionale)
+
+Se vuoi testare le API senza interfaccia:
+
+#### Con cURL
+
+```bash
+# Health Check
+curl http://localhost:3000/api/health
+
+# Register
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "first_name": "Mario",
+    "last_name": "Rossi",
+    "email": "mario@test.com",
+    "password": "TestPassword123!@#",
+    "role": "org_admin"
+  }'
+
+# Login
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "mario@test.com",
+    "password": "TestPassword123!@#"
+  }'
+```
+
+#### Con Postman/Insomnia
+
+1. Importa collection da `/docs/postman_collection.json` (se disponibile)
+2. Configura environment: `BASE_URL = http://localhost:3000/api`
+3. Testa tutti gli endpoint con esempi pre-compilati
+
+### 6. Troubleshooting Testing
+
+**Problema**: Pagina bianca o errore 404
+
+**Soluzione**:
+- Verifica che il server sia in esecuzione (`npm run dev`)
+- Controlla che l'URL sia corretto: `http://localhost:3000` (non `localhost:3001`)
+- Guarda la console browser (F12) per errori JavaScript
+
+**Problema**: Login non funziona
+
+**Soluzione**:
+- Verifica che il database sia configurato e le migrazioni eseguite
+- Controlla che l'account esista (registrati prima)
+- Verifica password policy rispettata (min 12 char, uppercase, lowercase, numbers, special)
+- Guarda i log del server per errori
+
+**Problema**: MFA richiesto ma non ho il QR code
+
+**Soluzione**:
+- Dopo la registrazione, vai a `/api/auth/mfa/setup` per ottenere il QR code
+- Scansiona con Google Authenticator o Authy
+- Salva i backup codes mostrati
+
+**Problema**: Upload file non funziona
+
+**Soluzione**:
+- Verifica configurazione S3/Cloudflare R2 in `.env`
+- Controlla credenziali `STORAGE_ACCESS_KEY` e `STORAGE_SECRET_KEY`
+- Verifica che il bucket esista e abbia permessi corretti
+- Limite dimensione file: 50MB (configurabile in `.env`)
+
+---
+
 ## 📡 API Endpoints
 
 ### Auth & Security
