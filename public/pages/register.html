@@ -20,7 +20,7 @@
   <!-- Header -->
   <header class="gradient-bg text-white py-6">
     <div class="max-w-4xl mx-auto px-4">
-      <a href="/" class="text-sm text-purple-200 hover:text-white mb-2 inline-block">← Torna alla Home</a>
+      <a href="/public/app.html" class="text-sm text-purple-200 hover:text-white mb-2 inline-block">← Torna alla Home Gestionale</a>
       <h1 class="text-3xl font-bold">Registrati a CertiCredia</h1>
     </div>
   </header>
@@ -165,7 +165,7 @@
       <div class="mt-8 pt-6 border-t border-gray-200 text-center">
         <p class="text-gray-600">
           Hai già un account?
-          <a href="/pages/login.html" class="text-cyan-600 hover:text-cyan-700 font-semibold">
+          <a href="/public/pages/login.html" class="text-cyan-600 hover:text-cyan-700 font-semibold">
             Accedi
           </a>
         </p>
@@ -313,7 +313,7 @@
 
         // Redirect to login after 2 seconds
         setTimeout(() => {
-          window.location.href = '/pages/login.html';
+          window.location.href = '/public/pages/login.html';
         }, 2000);
 
       } catch (error) {

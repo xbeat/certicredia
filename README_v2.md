@@ -267,23 +267,36 @@ Assicurati che il server sia in esecuzione:
 npm run dev
 ```
 
-### 2. Apri il Browser
+### 2. Struttura Accessi
 
-Vai su **http://localhost:3000** nel tuo browser.
+Il sistema ha **2 entry point separati**:
+
+#### A) Landing Page Marketing
+- **URL**: `http://localhost:3000/`
+- **File**: `/index.html`
+- **Scopo**: Presentazione pubblica di CertiCredia
+- **Funzionalità**: Info per prospect, specialist e aziende interessate
+- **Link**: Bottone "Area Gestionale" nel navbar → porta alla webapp
+
+#### B) Webapp Gestionale
+- **URL**: `http://localhost:3000/public/app.html`
+- **File**: `/public/app.html`
+- **Scopo**: Entry point per utenti autenticati
+- **Funzionalità**: Access rapido a Login, Registrazione e Dashboard
 
 ### 3. Pagine Disponibili
 
-#### Homepage Principale
-- **URL**: `http://localhost:3000/`
-- **Descrizione**: Landing page con link a tutte le sezioni
+#### Homepage Gestionale (Entry Point Webapp)
+- **URL**: `http://localhost:3000/public/app.html`
+- **Descrizione**: Homepage dell'area gestionale con link a tutte le sezioni
 - **Funzionalità**:
   - Health check automatico del sistema
   - Link rapidi a Login/Registrazione
   - Panoramica dashboard disponibili
-  - Documentazione API
+  - Link al sito pubblico
 
 #### Registrazione
-- **URL**: `http://localhost:3000/pages/register.html`
+- **URL**: `http://localhost:3000/public/pages/register.html`
 - **Funzionalità**:
   - Crea nuovo account (Ente o Specialist Candidato)
   - Validazione password in tempo reale
@@ -301,7 +314,7 @@ Tipologia: Ente/Organizzazione (Amministratore)
 ```
 
 #### Login
-- **URL**: `http://localhost:3000/pages/login.html`
+- **URL**: `http://localhost:3000/public/pages/login.html`
 - **Funzionalità**:
   - Login con email e password
   - Supporto MFA/TOTP (se abilitato per il ruolo)
@@ -315,14 +328,14 @@ Tipologia: Ente/Organizzazione (Amministratore)
 4. Reindirizzamento automatico
 
 #### Recupero Password
-- **URL**: `http://localhost:3000/pages/forgot-password.html`
+- **URL**: `http://localhost:3000/public/pages/forgot-password.html`
 - **Funzionalità**:
   - Richiesta reset password via email
   - Token valido 1 ora
   - Email con link di reset (via Resend API)
 
 #### Dashboard Ente
-- **URL**: `http://localhost:3000/pages/ente/dashboard.html`
+- **URL**: `http://localhost:3000/public/pages/ente/dashboard.html`
 - **Accesso**: Richiede login con ruolo `org_admin` o `org_operative`
 - **Funzionalità**:
   - Visualizzazione organizzazione
@@ -334,7 +347,7 @@ Tipologia: Ente/Organizzazione (Amministratore)
   - Invio per revisione
 
 #### Pannello Specialist
-- **URL**: `http://localhost:3000/pages/specialist/dashboard.html`
+- **URL**: `http://localhost:3000/public/pages/specialist/dashboard.html`
 - **Accesso**: Richiede login con ruolo `specialist` o `candidate_specialist`
 - **Funzionalità**:
   - Lista assessment assegnati
@@ -352,7 +365,7 @@ Tipologia: Ente/Organizzazione (Amministratore)
 5. Approva/Richiedi modifiche/Rifiuta
 
 #### Admin Panel
-- **URL**: `http://localhost:3000/pages/admin/index.html`
+- **URL**: `http://localhost:3000/public/pages/admin/index.html`
 - **Accesso**: Richiede login con ruolo `super_admin` o `admin`
 - **Funzionalità**:
   - Dashboard overview con statistiche
@@ -367,16 +380,22 @@ Tipologia: Ente/Organizzazione (Amministratore)
 #### Test Scenario 1: Ente che completa un Assessment
 
 ```
-1. Registrazione (register.html)
+1. Homepage Marketing
+   - Vai su http://localhost:3000/
+   - Clicca "Area Gestionale" nel navbar
+   - Vieni reindirizzato a http://localhost:3000/public/app.html
+
+2. Registrazione (public/pages/register.html)
+   - Clicca "Registrazione"
    - Crea account come "Ente/Organizzazione (Amministratore)"
    - Email: ente@test.com
    - Password: TestPassword123!@#
 
-2. Login (login.html)
+3. Login (public/pages/login.html)
    - Accedi con le credenziali create
-   - Verrai reindirizzato a /pages/ente/dashboard.html
+   - Verrai reindirizzato a /public/pages/ente/dashboard.html
 
-3. Dashboard Ente (ente/dashboard.html)
+4. Dashboard Ente (public/pages/ente/dashboard.html)
    - Crea nuova organizzazione (se non esiste)
    - Avvia nuovo assessment
    - Compila le domande del framework
@@ -384,7 +403,7 @@ Tipologia: Ente/Organizzazione (Amministratore)
    - Salva bozza (auto-save ogni 30 secondi)
    - Quando pronto, clicca "Invia per Revisione"
 
-4. Genera Token Specialist
+5. Genera Token Specialist
    - Nella dashboard, vai alla sezione "Specialist"
    - Clicca "Genera Token Assegnazione"
    - Copia il token (es. ACC-1234567890-ABCD)
@@ -394,16 +413,17 @@ Tipologia: Ente/Organizzazione (Amministratore)
 #### Test Scenario 2: Specialist che Revisiona
 
 ```
-1. Registrazione (register.html)
+1. Registrazione (public/pages/register.html)
+   - Da http://localhost:3000/public/app.html clicca "Registrazione"
    - Crea account come "Specialist (Candidato)"
    - Email: specialist@test.com
    - Password: TestPassword123!@#
 
-2. Login (login.html)
+2. Login (public/pages/login.html)
    - Accedi con le credenziali create
-   - Verrai reindirizzato a /pages/specialist/dashboard.html
+   - Verrai reindirizzato a /public/pages/specialist/dashboard.html
 
-3. Dashboard Specialist (specialist/dashboard.html)
+3. Dashboard Specialist (public/pages/specialist/dashboard.html)
    - Clicca "Accetta Incarico"
    - Inserisci il token ricevuto dall'Ente
    - L'assessment apparirà nella tua lista
@@ -426,10 +446,11 @@ Tipologia: Ente/Organizzazione (Amministratore)
 
 ```
 1. Login come Admin
+   - Vai su http://localhost:3000/public/pages/login.html
    - Usa credenziali admin (create manualmente via SQL o seed)
-   - Verrai reindirizzato a /pages/admin/index.html
+   - Verrai reindirizzato a /public/pages/admin/index.html
 
-2. Admin Panel (admin/index.html)
+2. Admin Panel (public/pages/admin/index.html)
    - Visualizza statistiche: n° organizzazioni, specialist, assessment
    - Approva specialist candidati (dopo superamento esame)
    - Crea/modifica template assessment

@@ -16,7 +16,7 @@
   <!-- Header -->
   <header class="gradient-bg text-white py-6">
     <div class="max-w-4xl mx-auto px-4">
-      <a href="/" class="text-sm text-purple-200 hover:text-white mb-2 inline-block">← Torna alla Home</a>
+      <a href="/public/app.html" class="text-sm text-purple-200 hover:text-white mb-2 inline-block">← Torna alla Home Gestionale</a>
       <h1 class="text-3xl font-bold">Accedi a CertiCredia</h1>
     </div>
   </header>
@@ -66,7 +66,7 @@
             <input type="checkbox" id="rememberMe" class="mr-2">
             <span class="text-sm text-gray-600">Ricordami</span>
           </label>
-          <a href="/pages/forgot-password.html" class="text-sm text-cyan-600 hover:text-cyan-700">
+          <a href="/public/pages/forgot-password.html" class="text-sm text-cyan-600 hover:text-cyan-700">
             Password dimenticata?
           </a>
         </div>
@@ -118,7 +118,7 @@
       <div class="mt-8 pt-6 border-t border-gray-200 text-center">
         <p class="text-gray-600">
           Non hai un account?
-          <a href="/pages/register.html" class="text-cyan-600 hover:text-cyan-700 font-semibold">
+          <a href="/public/pages/register.html" class="text-cyan-600 hover:text-cyan-700 font-semibold">
             Registrati
           </a>
         </p>
@@ -267,18 +267,18 @@
       switch (role) {
         case 'super_admin':
         case 'admin':
-          window.location.href = '/pages/admin/index.html';
+          window.location.href = '/public/pages/admin/index.html';
           break;
         case 'specialist':
         case 'candidate_specialist':
-          window.location.href = '/pages/specialist/dashboard.html';
+          window.location.href = '/public/pages/specialist/dashboard.html';
           break;
         case 'org_admin':
         case 'org_operative':
-          window.location.href = '/pages/ente/dashboard.html';
+          window.location.href = '/public/pages/ente/dashboard.html';
           break;
         default:
-          window.location.href = '/pages/ente/dashboard.html';
+          window.location.href = '/public/pages/ente/dashboard.html';
       }
     }
 
