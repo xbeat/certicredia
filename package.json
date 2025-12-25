@@ -8,6 +8,9 @@
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
     "seed": "node server/utils/seedProducts.js",
+    "migrate": "node core/database/migrations/migrate.js up",
+    "migrate:down": "node core/database/migrations/migrate.js down",
+    "migrate:status": "node core/database/migrations/migrate.js status",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
