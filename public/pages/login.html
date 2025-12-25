@@ -262,24 +262,36 @@
       }
     });
 
-    // Redirect based on user role
-    function redirectBasedOnRole(role) {
+    // Get return URL from query params or determine based on role
+    function getReturnUrl(role) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const returnUrl = urlParams.get('returnUrl');
+
+      // If there's a return URL, use it
+      if (returnUrl) {
+        return decodeURIComponent(returnUrl);
+      }
+
+      // Otherwise, redirect based on role
       switch (role) {
         case 'super_admin':
         case 'admin':
-          window.location.href = '/public/pages/admin/index.html';
-          break;
+          return '/public/pages/admin/index.html';
         case 'specialist':
         case 'candidate_specialist':
-          window.location.href = '/public/pages/specialist/dashboard.html';
-          break;
+          return '/public/pages/specialist/dashboard.html';
         case 'org_admin':
         case 'org_operative':
-          window.location.href = '/public/pages/ente/dashboard.html';
-          break;
+          return '/public/pages/ente/dashboard.html';
         default:
-          window.location.href = '/public/pages/ente/dashboard.html';
+          return '/public/pages/ente/dashboard.html';
       }
+    }
+
+    // Redirect based on user role
+    function redirectBasedOnRole(role) {
+      const targetUrl = getReturnUrl(role);
+      window.location.href = targetUrl;
     }
 
     // Auto-format MFA token input (numbers only)
