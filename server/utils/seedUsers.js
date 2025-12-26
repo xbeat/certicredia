@@ -16,35 +16,35 @@ const SALT_ROUNDS = 12;
 
 const TEST_USERS = [
   {
-    first_name: 'Admin',
-    last_name: 'System',
+    name: 'Admin System',
     email: 'admin@certicredia.test',
     password: 'Admin123!@#',
     role: 'super_admin',
+    company: 'CertiCredia',
     description: 'Super admin con accesso completo al sistema'
   },
   {
-    first_name: 'Mario',
-    last_name: 'Rossi',
+    name: 'Mario Rossi',
     email: 'ente@certicredia.test',
     password: 'Ente123!@#',
     role: 'org_admin',
+    company: 'Acme Corp',
     description: 'Amministratore di organizzazione'
   },
   {
-    first_name: 'Giulia',
-    last_name: 'Verdi',
+    name: 'Giulia Verdi',
     email: 'specialist@certicredia.test',
     password: 'Specialist123!@#',
     role: 'specialist',
+    company: null,
     description: 'Specialist certificato attivo'
   },
   {
-    first_name: 'Luca',
-    last_name: 'Bianchi',
+    name: 'Luca Bianchi',
     email: 'candidate@certicredia.test',
     password: 'Candidate123!@#',
     role: 'candidate_specialist',
+    company: null,
     description: 'Specialist candidato (non ancora certificato)'
   }
 ];
@@ -79,10 +79,10 @@ async function seedUsers() {
 
       // Insert user
       const result = await client.query(
-        `INSERT INTO users (first_name, last_name, email, password, role)
+        `INSERT INTO users (name, email, password_hash, company, role)
          VALUES ($1, $2, $3, $4, $5)
          RETURNING id, email, role`,
-        [userData.first_name, userData.last_name, userData.email, hashedPassword, userData.role]
+        [userData.name, userData.email, hashedPassword, userData.company, userData.role]
       );
 
       const user = result.rows[0];
