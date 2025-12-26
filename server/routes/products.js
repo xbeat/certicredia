@@ -11,14 +11,14 @@ import { authenticate, requireAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Public routes
-router.get('/', getAllProducts);
-router.get('/:slug', getProductBySlug);
-
-// Admin routes
+// Admin routes (must be before /:slug to avoid conflict)
+router.get('/admin/all', authenticate, requireAdmin, getAllProductsAdmin);
 router.post('/', authenticate, requireAdmin, createProduct);
 router.put('/:id', authenticate, requireAdmin, updateProduct);
 router.delete('/:id', authenticate, requireAdmin, deleteProduct);
-router.get('/admin/all', authenticate, requireAdmin, getAllProductsAdmin);
+
+// Public routes (/:slug must be last to avoid matching admin routes)
+router.get('/', getAllProducts);
+router.get('/:slug', getProductBySlug);
 
 export default router;

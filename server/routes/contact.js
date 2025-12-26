@@ -10,6 +10,7 @@ import {
   validate,
   contactRateLimiter
 } from '../middleware/validation.js';
+import { authenticate, requireAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -28,23 +29,23 @@ router.post(
 
 /**
  * @route   GET /api/contact
- * @desc    Get all contacts (admin endpoint - add authentication in production)
- * @access  Admin (currently public - TODO: add auth middleware)
+ * @desc    Get all contacts (admin endpoint)
+ * @access  Admin
  */
-router.get('/', getAllContacts);
+router.get('/', authenticate, requireAdmin, getAllContacts);
 
 /**
  * @route   GET /api/contact/:id
  * @desc    Get contact by ID (admin endpoint)
- * @access  Admin (currently public - TODO: add auth middleware)
+ * @access  Admin
  */
-router.get('/:id', getContactById);
+router.get('/:id', authenticate, requireAdmin, getContactById);
 
 /**
  * @route   PUT /api/contact/:id
  * @desc    Update contact status (admin endpoint)
- * @access  Admin (currently public - TODO: add auth middleware)
+ * @access  Admin
  */
-router.put('/:id', updateContactStatus);
+router.put('/:id', authenticate, requireAdmin, updateContactStatus);
 
 export default router;
