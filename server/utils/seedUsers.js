@@ -19,15 +19,15 @@ const TEST_USERS = [
     name: 'Admin System',
     email: 'admin@certicredia.test',
     password: 'Admin123!@#',
-    role: 'super_admin',
+    role: 'admin',
     company: 'CertiCredia',
-    description: 'Super admin con accesso completo al sistema'
+    description: 'Admin con accesso completo al sistema'
   },
   {
     name: 'Mario Rossi',
     email: 'ente@certicredia.test',
     password: 'Ente123!@#',
-    role: 'org_admin',
+    role: 'organization_admin',
     company: 'Acme Corp',
     description: 'Amministratore di organizzazione'
   },
@@ -43,7 +43,7 @@ const TEST_USERS = [
     name: 'Luca Bianchi',
     email: 'candidate@certicredia.test',
     password: 'Candidate123!@#',
-    role: 'candidate_specialist',
+    role: 'specialist',
     company: null,
     description: 'Specialist candidato (non ancora certificato)'
   }

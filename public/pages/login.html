@@ -144,11 +144,12 @@
 
     <!-- Role Info -->
     <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
-      <h3 class="font-bold text-blue-800 mb-2">Dopo il Login verrai reindirizzato a:</h3>
-      <ul class="text-sm text-blue-700 space-y-1">
-        <li>• <strong>Ente/Organizzazione</strong>: Dashboard compilazione assessment</li>
-        <li>• <strong>Specialist</strong>: Pannello revisione e CPE</li>
-        <li>• <strong>Admin</strong>: Admin panel gestione piattaforma</li>
+      <h3 class="font-bold text-blue-800 mb-2">Credenziali di Test Disponibili:</h3>
+      <ul class="text-sm text-blue-700 space-y-2">
+        <li>• <strong>Admin</strong>: admin@certicredia.test / Admin123!@#</li>
+        <li>• <strong>Ente</strong>: ente@certicredia.test / Ente123!@#</li>
+        <li>• <strong>Specialist</strong>: specialist@certicredia.test / Specialist123!@#</li>
+        <li>• <strong>Candidato</strong>: candidate@certicredia.test / Candidate123!@#</li>
       </ul>
     </div>
 
@@ -290,14 +291,12 @@
 
       // Otherwise, redirect based on role
       switch (role) {
-        case 'super_admin':
         case 'admin':
           return '/public/pages/admin/index.html';
         case 'specialist':
-        case 'candidate_specialist':
           return '/public/pages/specialist/dashboard.html';
-        case 'org_admin':
-        case 'org_operative':
+        case 'organization_admin':
+        case 'organization_operator':
           return '/public/pages/ente/dashboard.html';
         default:
           return '/public/pages/ente/dashboard.html';

@@ -13,9 +13,9 @@
 
   // Route configuration
   const PROTECTED_ROUTES = {
-    '/public/pages/ente/dashboard.html': ['org_admin', 'org_operative'],
-    '/public/pages/specialist/dashboard.html': ['specialist', 'candidate_specialist'],
-    '/public/pages/admin/index.html': ['super_admin', 'admin']
+    '/public/pages/ente/dashboard.html': ['organization_admin', 'organization_operator'],
+    '/public/pages/specialist/dashboard.html': ['specialist'],
+    '/public/pages/admin/index.html': ['admin']
   };
 
   const currentPath = window.location.pathname;
