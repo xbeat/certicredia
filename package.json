@@ -8,6 +8,7 @@
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
     "seed": "node server/utils/seedProducts.js",
+    "seed:users": "node server/utils/seedUsers.js",
     "migrate": "node core/database/migrations/migrate.js up",
     "migrate:down": "node core/database/migrations/migrate.js down",
     "migrate:status": "node core/database/migrations/migrate.js status",
