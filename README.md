@@ -906,7 +906,7 @@ Per assistenza:
 
 ## 📄 License
 
-Copyright © 2025 CertiCredia
+Copyright © 2026 CertiCredia
 
 ---
 
