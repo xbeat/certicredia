@@ -9,6 +9,10 @@
     "dev": "node --watch server/index.js",
     "seed": "node server/utils/seedProducts.js",
     "seed:demo": "node server/utils/seedDemoData.js",
+    "seed:users": "node server/utils/seedUsers.js",
+    "migrate": "node core/database/migrations/migrate.js up",
+    "migrate:down": "node core/database/migrations/migrate.js down",
+    "migrate:status": "node core/database/migrations/migrate.js status",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -19,9 +23,12 @@
   "author": "CertiCredia Italia",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.478.0",
+    "@aws-sdk/s3-request-presigner": "^3.478.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
@@ -29,10 +36,16 @@
     "express-validator": "^7.0.1",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "pdfkit": "^0.14.0",
     "pg": "^8.11.3",
+    "qrcode": "^1.5.3",
     "resend": "^6.5.2",
+    "speakeasy": "^2.0.0",
     "stripe": "^14.9.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

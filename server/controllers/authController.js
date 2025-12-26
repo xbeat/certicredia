@@ -155,6 +155,8 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    logger.info(`🔐 Tentativo di login per: ${email}`);
+
     // Get user
     const result = await pool.query(
       `SELECT id, email, password_hash, name, role, company, active, email_verified
@@ -163,6 +165,7 @@ export const login = async (req, res) => {
     );
 
     if (result.rows.length === 0) {
+      logger.warn(`❌ Login fallito: utente non trovato per ${email}`);
       return res.status(401).json({
         success: false,
         message: 'Email o password non corretti'
@@ -170,9 +173,11 @@ export const login = async (req, res) => {
     }
 
     const user = result.rows[0];
+    logger.info(`👤 Utente trovato: ${user.email} (Role: ${user.role}, ID: ${user.id})`);
 
-    // Check if account is active
-    if (!user.active) {
+    // Check if account is active (only if column exists)
+    if (user.active !== undefined && !user.active) {
+      logger.warn(`⚠️  Account disabilitato per: ${email}`);
       return res.status(403).json({
         success: false,
         message: 'Account disabilitato. Contatta il supporto.'
@@ -180,14 +185,18 @@ export const login = async (req, res) => {
     }
 
     // Verify password
+    logger.info(`🔑 Verifica password per: ${email}`);
     const isValidPassword = await bcrypt.compare(password, user.password_hash);
 
     if (!isValidPassword) {
+      logger.warn(`❌ Password non corretta per: ${email}`);
       return res.status(401).json({
         success: false,
         message: 'Email o password non corretti'
       });
     }
+
+    logger.success(`✅ Password corretta per: ${email}`);
 
     // Update last login
     await pool.query(

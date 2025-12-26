@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrazione - CertiCredia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .password-strength {
+      height: 4px;
+      transition: all 0.3s;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <header class="gradient-bg text-white py-6">
+    <div class="max-w-4xl mx-auto px-4">
+      <a href="/public/app.html" class="text-sm text-purple-200 hover:text-white mb-2 inline-block">← Torna alla Home Gestionale</a>
+      <h1 class="text-3xl font-bold">Registrati a CertiCredia</h1>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-2xl mx-auto px-4 py-12">
+
+    <!-- Registration Form Card -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Crea un Nuovo Account</h2>
+
+      <!-- Error/Success Messages -->
+      <div id="messageBox" class="hidden mb-4 p-4 rounded-lg"></div>
+
+      <!-- Registration Form -->
+      <form id="registerForm">
+
+        <!-- Name Fields -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="firstName" class="block text-gray-700 font-semibold mb-2">Nome *</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+              placeholder="Mario"
+            />
+          </div>
+          <div>
+            <label for="lastName" class="block text-gray-700 font-semibold mb-2">Cognome *</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+              placeholder="Rossi"
+            />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 font-semibold mb-2">Email *</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            placeholder="mario.rossi@example.com"
+          />
+        </div>
+
+        <!-- Phone -->
+        <div class="mb-4">
+          <label for="phone" class="block text-gray-700 font-semibold mb-2">Telefono</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            placeholder="+39 123 456 7890"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="mb-2">
+          <label for="password" class="block text-gray-700 font-semibold mb-2">Password *</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            placeholder="••••••••••••"
+          />
+        </div>
+
+        <!-- Password Strength Bar -->
+        <div class="mb-4">
+          <div class="bg-gray-200 rounded-full overflow-hidden">
+            <div id="strengthBar" class="password-strength bg-gray-300" style="width: 0%"></div>
+          </div>
+          <p id="strengthText" class="text-xs text-gray-500 mt-1">Minimo 12 caratteri, lettere maiuscole, minuscole, numeri e simboli</p>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-6">
+          <label for="confirmPassword" class="block text-gray-700 font-semibold mb-2">Conferma Password *</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            placeholder="••••••••••••"
+          />
+        </div>
+
+        <!-- Role Selection -->
+        <div class="mb-6">
+          <label for="role" class="block text-gray-700 font-semibold mb-2">Tipologia Account *</label>
+          <select
+            id="role"
+            name="role"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          >
+            <option value="">-- Seleziona --</option>
+            <option value="organization_admin">Ente/Organizzazione (Amministratore)</option>
+            <option value="specialist">Specialist (Candidato)</option>
+          </select>
+          <p class="text-xs text-gray-500 mt-1">Gli account Admin vengono creati manualmente</p>
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div class="mb-6">
+          <label class="flex items-start">
+            <input type="checkbox" id="terms" required class="mt-1 mr-2">
+            <span class="text-sm text-gray-600">
+              Accetto i <a href="#" class="text-cyan-600 hover:text-cyan-700">Termini e Condizioni</a>
+              e la <a href="#" class="text-cyan-600 hover:text-cyan-700">Privacy Policy</a> *
+            </span>
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          id="registerBtn"
+          class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg transition-colors"
+        >
+          Registrati
+        </button>
+
+      </form>
+
+      <!-- Divider -->
+      <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+        <p class="text-gray-600">
+          Hai già un account?
+          <a href="/public/pages/login.html" class="text-cyan-600 hover:text-cyan-700 font-semibold">
+            Accedi
+          </a>
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Info Box -->
+    <div class="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+      <h3 class="font-bold text-yellow-800 mb-2">Informazioni Importanti</h3>
+      <ul class="text-sm text-yellow-700 space-y-1">
+        <li>• <strong>Enti/Organizzazioni</strong>: Dopo la registrazione potrai creare la tua organizzazione e iniziare l'assessment</li>
+        <li>• <strong>Specialist</strong>: Dopo la registrazione dovrai superare l'esame di qualificazione (50 domande, 80% per passare)</li>
+        <li>• <strong>MFA</strong>: Alcuni ruoli richiederanno l'attivazione dell'autenticazione a due fattori</li>
+      </ul>
+    </div>
+
+  </main>
+
+  <!-- JavaScript -->
+  <script>
+    const API_BASE = window.location.hostname === 'localhost'
+      ? 'http://localhost:3000/api'
+      : '/api';
+
+    // Show message helper
+    function showMessage(message, type = 'error') {
+      const messageBox = document.getElementById('messageBox');
+      messageBox.className = `mb-4 p-4 rounded-lg ${
+        type === 'error' ? 'bg-red-100 border border-red-400 text-red-700' :
+        type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' :
+        'bg-blue-100 border border-blue-400 text-blue-700'
+      }`;
+      messageBox.textContent = message;
+      messageBox.classList.remove('hidden');
+
+      // Scroll to message
+      messageBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Hide message
+    function hideMessage() {
+      document.getElementById('messageBox').classList.add('hidden');
+    }
+
+    // Password strength checker
+    document.getElementById('password').addEventListener('input', (e) => {
+      const password = e.target.value;
+      const strengthBar = document.getElementById('strengthBar');
+      const strengthText = document.getElementById('strengthText');
+
+      let strength = 0;
+      let feedback = [];
+
+      // Length check
+      if (password.length >= 12) strength++;
+      else feedback.push('almeno 12 caratteri');
+
+      // Uppercase check
+      if (/[A-Z]/.test(password)) strength++;
+      else feedback.push('lettere maiuscole');
+
+      // Lowercase check
+      if (/[a-z]/.test(password)) strength++;
+      else feedback.push('lettere minuscole');
+
+      // Number check
+      if (/[0-9]/.test(password)) strength++;
+      else feedback.push('numeri');
+
+      // Special char check
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+      else feedback.push('simboli speciali');
+
+      // Update bar
+      const percentage = (strength / 5) * 100;
+      strengthBar.style.width = percentage + '%';
+
+      if (strength <= 2) {
+        strengthBar.className = 'password-strength bg-red-500';
+        strengthText.textContent = 'Password debole. Mancano: ' + feedback.join(', ');
+        strengthText.className = 'text-xs text-red-600 mt-1';
+      } else if (strength <= 4) {
+        strengthBar.className = 'password-strength bg-yellow-500';
+        strengthText.textContent = 'Password media. Mancano: ' + feedback.join(', ');
+        strengthText.className = 'text-xs text-yellow-600 mt-1';
+      } else {
+        strengthBar.className = 'password-strength bg-green-500';
+        strengthText.textContent = 'Password forte!';
+        strengthText.className = 'text-xs text-green-600 mt-1';
+      }
+    });
+
+    // Form Submit
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideMessage();
+
+      const formData = {
+        first_name: document.getElementById('firstName').value.trim(),
+        last_name: document.getElementById('lastName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim() || null,
+        password: document.getElementById('password').value,
+        role: document.getElementById('role').value
+      };
+
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Validation
+      if (formData.password !== confirmPassword) {
+        showMessage('Le password non corrispondono', 'error');
+        return;
+      }
+
+      if (!formData.role) {
+        showMessage('Seleziona una tipologia di account', 'error');
+        return;
+      }
+
+      if (!document.getElementById('terms').checked) {
+        showMessage('Devi accettare i Termini e Condizioni', 'error');
+        return;
+      }
+
+      const registerBtn = document.getElementById('registerBtn');
+
+      try {
+        registerBtn.disabled = true;
+        registerBtn.textContent = 'Registrazione in corso...';
+
+        const response = await fetch(`${API_BASE}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Errore durante la registrazione');
+        }
+
+        showMessage('Registrazione completata! Reindirizzamento al login...', 'success');
+
+        // Redirect to login after 2 seconds
+        setTimeout(() => {
+          window.location.href = '/public/pages/login.html';
+        }, 2000);
+
+      } catch (error) {
+        showMessage(error.message, 'error');
+        registerBtn.disabled = false;
+        registerBtn.textContent = 'Registrati';
+      }
+    });
+  </script>
+
+</body>
+</html>

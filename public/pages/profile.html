@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <!-- CRITICAL: Auth check BEFORE any rendering -->
+  <script src="/public/js/inline-auth-check.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Il Mio Profilo - CertiCredia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <span class="text-xl font-bold text-cyan-600">CertiCredia</span>
+          <span class="ml-3 text-gray-600">Il Mio Profilo</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button id="backBtn" class="text-sm text-gray-600 hover:text-gray-800">← Torna alla Dashboard</button>
+          <button id="logoutBtn" class="text-sm text-red-600 hover:text-red-800">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Il Mio Profilo</h1>
+      <p class="mt-2 text-gray-600">Gestisci le tue informazioni personali</p>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="mb-6 hidden"></div>
+
+    <!-- Profile Form -->
+    <div class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Informazioni Account</h2>
+      </div>
+
+      <form id="profileForm" class="p-6 space-y-6">
+        <!-- Name -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nome Completo *</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          >
+        </div>
+
+        <!-- Email (read-only) -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            readonly
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
+          >
+          <p class="mt-1 text-xs text-gray-500">L'email non può essere modificata</p>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <label for="company" class="block text-sm font-medium text-gray-700 mb-2">Azienda/Organizzazione</label>
+          <input
+            type="text"
+            id="company"
+            name="company"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          >
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Telefono</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          >
+        </div>
+
+        <!-- Address -->
+        <div>
+          <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Indirizzo</label>
+          <textarea
+            id="address"
+            name="address"
+            rows="3"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          ></textarea>
+        </div>
+
+        <!-- City and Postal Code -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="city" class="block text-sm font-medium text-gray-700 mb-2">Città</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            >
+          </div>
+          <div>
+            <label for="postal_code" class="block text-sm font-medium text-gray-700 mb-2">CAP</label>
+            <input
+              type="text"
+              id="postal_code"
+              name="postal_code"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            >
+          </div>
+        </div>
+
+        <!-- Country -->
+        <div>
+          <label for="country" class="block text-sm font-medium text-gray-700 mb-2">Paese</label>
+          <input
+            type="text"
+            id="country"
+            name="country"
+            value="Italia"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          >
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+          <button
+            type="button"
+            id="cancelBtn"
+            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+          >
+            Annulla
+          </button>
+          <button
+            type="submit"
+            id="saveBtn"
+            class="px-6 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700"
+          >
+            Salva Modifiche
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Change Password Section -->
+    <div class="mt-8 bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Cambia Password</h2>
+      </div>
+
+      <form id="passwordForm" class="p-6 space-y-6">
+        <!-- Current Password -->
+        <div>
+          <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-2">Password Attuale *</label>
+          <input
+            type="password"
+            id="currentPassword"
+            name="currentPassword"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          >
+        </div>
+
+        <!-- New Password -->
+        <div>
+          <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-2">Nuova Password *</label>
+          <input
+            type="password"
+            id="newPassword"
+            name="newPassword"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          >
+          <p class="mt-1 text-xs text-gray-500">Minimo 12 caratteri, con lettere maiuscole, minuscole, numeri e caratteri speciali</p>
+        </div>
+
+        <!-- Confirm New Password -->
+        <div>
+          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Conferma Nuova Password *</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          >
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end pt-4 border-t border-gray-200">
+          <button
+            type="submit"
+            id="changePasswordBtn"
+            class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+          >
+            Cambia Password
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Common Dashboard Scripts -->
+  <script src="/public/js/dashboard-common.js"></script>
+
+  <!-- Profile Page Script -->
+  <script>
+    const API_BASE = window.location.origin + '/api';
+
+    // Load user profile
+    async function loadProfile() {
+      const user = getCurrentUser();
+      if (!user) return;
+
+      // Populate form with user data
+      document.getElementById('name').value = user.name || '';
+      document.getElementById('email').value = user.email || '';
+      document.getElementById('company').value = user.company || '';
+      document.getElementById('phone').value = user.phone || '';
+      document.getElementById('address').value = user.address || '';
+      document.getElementById('city').value = user.city || '';
+      document.getElementById('postal_code').value = user.postal_code || '';
+      document.getElementById('country').value = user.country || 'Italia';
+    }
+
+    // Show message
+    function showMessage(message, type) {
+      const container = document.getElementById('messageContainer');
+      const bgColor = type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-800';
+
+      container.innerHTML = `
+        <div class="${bgColor} border rounded-lg p-4">
+          <p>${message}</p>
+        </div>
+      `;
+      container.classList.remove('hidden');
+
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        container.classList.add('hidden');
+      }, 5000);
+    }
+
+    // Back button
+    document.getElementById('backBtn').addEventListener('click', () => {
+      const user = getCurrentUser();
+      if (user) {
+        // Redirect based on role
+        switch (user.role) {
+          case 'admin':
+            window.location.href = '/public/pages/admin/index.html';
+            break;
+          case 'specialist':
+            window.location.href = '/public/pages/specialist/dashboard.html';
+            break;
+          case 'organization_admin':
+          case 'organization_operator':
+            window.location.href = '/public/pages/ente/dashboard.html';
+            break;
+          default:
+            window.location.href = '/public/app.html';
+        }
+      }
+    });
+
+    // Cancel button
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      document.getElementById('backBtn').click();
+    });
+
+    // Profile form submit
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const saveBtn = document.getElementById('saveBtn');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Salvataggio...';
+
+      try {
+        const formData = {
+          name: document.getElementById('name').value,
+          company: document.getElementById('company').value,
+          phone: document.getElementById('phone').value,
+          address: document.getElementById('address').value,
+          city: document.getElementById('city').value,
+          postal_code: document.getElementById('postal_code').value,
+          country: document.getElementById('country').value
+        };
+
+        const data = await apiRequest('/auth/profile', {
+          method: 'PUT',
+          body: JSON.stringify(formData)
+        });
+
+        if (data && data.success) {
+          // Update localStorage with new user data
+          const currentUser = getCurrentUser();
+          const updatedUser = { ...currentUser, ...formData };
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+
+          showMessage('Profilo aggiornato con successo!', 'success');
+        }
+
+      } catch (error) {
+        showMessage('Errore durante il salvataggio: ' + error.message, 'error');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Salva Modifiche';
+      }
+    });
+
+    // Password form submit
+    document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const changePasswordBtn = document.getElementById('changePasswordBtn');
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Validate passwords match
+      if (newPassword !== confirmPassword) {
+        showMessage('Le password non coincidono', 'error');
+        return;
+      }
+
+      // Validate password strength
+      if (newPassword.length < 12) {
+        showMessage('La password deve essere di almeno 12 caratteri', 'error');
+        return;
+      }
+
+      changePasswordBtn.disabled = true;
+      changePasswordBtn.textContent = 'Modifica in corso...';
+
+      try {
+        const data = await apiRequest('/auth/password', {
+          method: 'PUT',
+          body: JSON.stringify({
+            currentPassword,
+            newPassword
+          })
+        });
+
+        if (data && data.success) {
+          showMessage('Password modificata con successo!', 'success');
+          document.getElementById('passwordForm').reset();
+        }
+
+      } catch (error) {
+        showMessage('Errore: ' + error.message, 'error');
+      } finally {
+        changePasswordBtn.disabled = false;
+        changePasswordBtn.textContent = 'Cambia Password';
+      }
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProfile();
+    });
+  </script>
+</body>
+</html>

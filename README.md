@@ -1,4 +1,4 @@
-# 🛡️ CertiCredia Italia - Piattaforma Certificazioni Cybersecurity
+# 🛡️ CertiCredia - Piattaforma Certificazioni Cybersecurity
 
 Piattaforma web completa per la gestione delle certificazioni di cybersecurity con backend Node.js, database PostgreSQL e sistema di notifiche email.
 
@@ -381,7 +381,7 @@ kill -9 $(lsof -ti:3000)
 
 ## 📝 License
 
-Copyright © 2025 CertiCredia Italia S.r.l.
+Copyright © 2025 CertiCredia
 
 ---
 
@@ -906,7 +906,7 @@ Per assistenza:
 
 ## 📄 License
 
-Copyright © 2025 CertiCredia Italia S.r.l.
+Copyright © 2025 CertiCredia
 
 ---
 

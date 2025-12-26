@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CertiCredia - Piattaforma Accreditamento Cybersecurity</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <header class="gradient-bg text-white py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <a href="/" class="inline-block text-sm text-purple-200 hover:text-white mb-4">← Torna al Sito</a>
+      <h1 class="text-5xl font-bold mb-4">CertiCredia - Area Gestionale</h1>
+      <p class="text-xl text-purple-100">Piattaforma di Accreditamento Cybersecurity</p>
+      <p class="text-purple-200 mt-2">Sistema di gestione per Enti, Specialist e Amministratori</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 py-12">
+
+    <!-- Status Check -->
+    <div id="statusBanner" class="mb-8 hidden">
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span id="statusText">Sistema online e funzionante</span>
+      </div>
+    </div>
+
+    <!-- Quick Access Cards -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">Accesso Rapido</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Login Card -->
+        <a href="/public/pages/login.html" class="block bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-200">
+          <div class="flex items-center mb-4">
+            <div class="bg-cyan-100 rounded-lg p-3">
+              <svg class="w-8 h-8 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 ml-4">Login</h3>
+          </div>
+          <p class="text-gray-600">Accedi al tuo account esistente</p>
+          <p class="text-sm text-gray-500 mt-2">Per Enti, Specialist e Amministratori</p>
+        </a>
+
+        <!-- Register Card -->
+        <a href="/public/pages/register.html" class="block bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-200">
+          <div class="flex items-center mb-4">
+            <div class="bg-purple-100 rounded-lg p-3">
+              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 ml-4">Registrazione</h3>
+          </div>
+          <p class="text-gray-600">Crea un nuovo account</p>
+          <p class="text-sm text-gray-500 mt-2">Inizia il percorso di accreditamento</p>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Dashboard Links -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">Dashboard Disponibili</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Ente Dashboard -->
+        <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-200">
+          <div class="bg-green-100 rounded-lg p-3 w-fit mb-4">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-2">Dashboard Ente</h3>
+          <p class="text-gray-600 mb-4 text-sm">Compila assessment, carica evidenze, genera token per Specialist</p>
+          <a href="/public/pages/ente/dashboard.html" class="text-green-600 hover:text-green-700 font-semibold text-sm flex items-center">
+            Vai alla Dashboard
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <p class="text-xs text-gray-400 mt-3">Richiede autenticazione</p>
+        </div>
+
+        <!-- Specialist Dashboard -->
+        <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-200">
+          <div class="bg-blue-100 rounded-lg p-3 w-fit mb-4">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-2">Pannello Specialist</h3>
+          <p class="text-gray-600 mb-4 text-sm">Revisiona assessment, registra CPE, accetta incarichi</p>
+          <a href="/public/pages/specialist/dashboard.html" class="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center">
+            Vai al Pannello
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <p class="text-xs text-gray-400 mt-3">Solo per Specialist certificati</p>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-200">
+          <div class="bg-red-100 rounded-lg p-3 w-fit mb-4">
+            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-2">Admin Panel</h3>
+          <p class="text-gray-600 mb-4 text-sm">Gestisci organizzazioni, specialist, template assessment</p>
+          <a href="/public/pages/admin/index.html" class="text-red-600 hover:text-red-700 font-semibold text-sm flex items-center">
+            Vai al Pannello
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <p class="text-xs text-gray-400 mt-3">Solo per Super Admin</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Features Overview -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">Funzionalità Principali</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="text-cyan-600 mb-3">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+          </div>
+          <h3 class="font-bold text-gray-800 mb-2">MFA/TOTP</h3>
+          <p class="text-sm text-gray-600">Autenticazione a due fattori obbligatoria per admin e specialist</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="text-purple-600 mb-3">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <h3 class="font-bold text-gray-800 mb-2">Assessment Completi</h3>
+          <p class="text-sm text-gray-600">Framework versionati con compilazione guidata</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="text-green-600 mb-3">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+            </svg>
+          </div>
+          <h3 class="font-bold text-gray-800 mb-2">Evidence Storage</h3>
+          <p class="text-sm text-gray-600">Upload sicuro su S3/R2 con signed URLs</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="text-red-600 mb-3">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <h3 class="font-bold text-gray-800 mb-2">Audit Trail</h3>
+          <p class="text-sm text-gray-600">Log indelebile per compliance normativa</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- API Documentation Link -->
+    <section class="bg-gray-100 rounded-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Documentazione Tecnica</h2>
+      <p class="text-gray-600 mb-4">Accedi alla documentazione completa delle API e dell'architettura del sistema.</p>
+      <div class="flex flex-wrap gap-4">
+        <a href="/api/health" target="_blank" class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+          Health Check API
+        </a>
+        <a href="https://github.com/xbeat/certicredia" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+          README & Docs
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-gray-300 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="mb-2">&copy; 2025 CertiCredia - Tutti i diritti riservati</p>
+      <p class="text-sm text-gray-400">Piattaforma di Accreditamento Cybersecurity</p>
+      <p class="text-xs text-gray-500 mt-4">Versione 2.0.0</p>
+    </div>
+  </footer>
+
+  <!-- Status Check Script -->
+  <script>
+    // Check API health on page load
+    async function checkHealth() {
+      try {
+        const API_BASE = window.location.hostname === 'localhost'
+          ? 'http://localhost:3000/api'
+          : '/api';
+
+        const response = await fetch(`${API_BASE}/health`);
+        const data = await response.json();
+
+        if (data.status === 'ok' && data.database === 'connected') {
+          document.getElementById('statusBanner').classList.remove('hidden');
+          document.getElementById('statusText').textContent =
+            `Sistema online e funzionante (DB: ${data.database})`;
+        }
+      } catch (error) {
+        console.error('Health check failed:', error);
+        // Don't show banner if health check fails
+      }
+    }
+
+    // Run health check
+    checkHealth();
+  </script>
+
+</body>
+</html>

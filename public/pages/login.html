@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - CertiCredia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <header class="gradient-bg text-white py-6">
+    <div class="max-w-4xl mx-auto px-4">
+      <a href="/public/app.html" class="text-sm text-purple-200 hover:text-white mb-2 inline-block">← Torna alla Home Gestionale</a>
+      <h1 class="text-3xl font-bold">Accedi a CertiCredia</h1>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-md mx-auto px-4 py-12">
+
+    <!-- Login Form Card -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Login</h2>
+
+      <!-- Error/Success Messages -->
+      <div id="messageBox" class="hidden mb-4 p-4 rounded-lg"></div>
+
+      <!-- Login Form -->
+      <form id="loginForm">
+
+        <!-- Email -->
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            placeholder="tua@email.com"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="mb-6">
+          <label for="password" class="block text-gray-700 font-semibold mb-2">Password</label>
+          <div class="relative">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              class="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+              placeholder="••••••••"
+            />
+            <button
+              type="button"
+              id="togglePassword"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              title="Mostra/Nascondi password"
+            >
+              <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              <svg id="eyeSlashIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between mb-6">
+          <label class="flex items-center">
+            <input type="checkbox" id="rememberMe" class="mr-2">
+            <span class="text-sm text-gray-600">Ricordami</span>
+          </label>
+          <a href="/public/pages/forgot-password.html" class="text-sm text-cyan-600 hover:text-cyan-700">
+            Password dimenticata?
+          </a>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          id="loginBtn"
+          class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 rounded-lg transition-colors"
+        >
+          Accedi
+        </button>
+
+      </form>
+
+      <!-- MFA Section (Hidden by default) -->
+      <div id="mfaSection" class="hidden mt-6">
+        <hr class="my-6">
+        <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">Verifica MFA</h3>
+
+        <form id="mfaForm">
+          <div class="mb-4">
+            <label for="mfaToken" class="block text-gray-700 font-semibold mb-2">
+              Codice Autenticazione (6 cifre)
+            </label>
+            <input
+              type="text"
+              id="mfaToken"
+              name="mfaToken"
+              required
+              maxlength="6"
+              pattern="[0-9]{6}"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-center text-2xl tracking-widest"
+              placeholder="000000"
+            />
+          </div>
+
+          <button
+            type="submit"
+            id="mfaBtn"
+            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg transition-colors"
+          >
+            Verifica MFA
+          </button>
+        </form>
+      </div>
+
+      <!-- Divider -->
+      <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+        <p class="text-gray-600">
+          Non hai un account?
+          <a href="/public/pages/register.html" class="text-cyan-600 hover:text-cyan-700 font-semibold">
+            Registrati
+          </a>
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Role Info -->
+    <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <h3 class="font-bold text-blue-800 mb-2">Credenziali di Test Disponibili:</h3>
+      <ul class="text-sm text-blue-700 space-y-2">
+        <li>• <strong>Admin</strong>: admin@certicredia.test / Admin123!@#</li>
+        <li>• <strong>Ente</strong>: ente@certicredia.test / Ente123!@#</li>
+        <li>• <strong>Specialist</strong>: specialist@certicredia.test / Specialist123!@#</li>
+        <li>• <strong>Candidato</strong>: candidate@certicredia.test / Candidate123!@#</li>
+      </ul>
+    </div>
+
+  </main>
+
+  <!-- JavaScript -->
+  <script>
+    const API_BASE = window.location.hostname === 'localhost'
+      ? 'http://localhost:3000/api'
+      : '/api';
+
+    let tempUserId = null; // For MFA flow
+
+    // Show message helper
+    function showMessage(message, type = 'error') {
+      const messageBox = document.getElementById('messageBox');
+      messageBox.className = `mb-4 p-4 rounded-lg ${
+        type === 'error' ? 'bg-red-100 border border-red-400 text-red-700' :
+        type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' :
+        'bg-blue-100 border border-blue-400 text-blue-700'
+      }`;
+      messageBox.textContent = message;
+      messageBox.classList.remove('hidden');
+    }
+
+    // Hide message
+    function hideMessage() {
+      document.getElementById('messageBox').classList.add('hidden');
+    }
+
+    // Login Form Submit
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideMessage();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const loginBtn = document.getElementById('loginBtn');
+
+      try {
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Accesso in corso...';
+
+        const response = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Errore durante il login');
+        }
+
+        // Check if MFA is required
+        if (data.data && data.data.mfaRequired) {
+          tempUserId = data.data.userId;
+          showMessage('Inserisci il codice di autenticazione', 'info');
+          document.getElementById('loginForm').classList.add('hidden');
+          document.getElementById('mfaSection').classList.remove('hidden');
+          document.getElementById('mfaToken').focus();
+          return;
+        }
+
+        // No MFA required - store token and redirect
+        if (data.data && data.data.accessToken) {
+          localStorage.setItem('token', data.data.accessToken);
+          localStorage.setItem('refreshToken', data.data.refreshToken);
+          localStorage.setItem('user', JSON.stringify(data.data.user));
+
+          showMessage('Login effettuato con successo!', 'success');
+
+          // Redirect based on role
+          setTimeout(() => {
+            redirectBasedOnRole(data.data.user.role);
+          }, 1000);
+        }
+
+      } catch (error) {
+        showMessage(error.message, 'error');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Accedi';
+      }
+    });
+
+    // MFA Form Submit
+    document.getElementById('mfaForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideMessage();
+
+      const mfaToken = document.getElementById('mfaToken').value;
+      const mfaBtn = document.getElementById('mfaBtn');
+
+      try {
+        mfaBtn.disabled = true;
+        mfaBtn.textContent = 'Verifica in corso...';
+
+        const response = await fetch(`${API_BASE}/auth/mfa/validate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: tempUserId, token: mfaToken })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Codice MFA non valido');
+        }
+
+        // Store token and user data
+        if (data.data && data.data.accessToken) {
+          localStorage.setItem('token', data.data.accessToken);
+          localStorage.setItem('refreshToken', data.data.refreshToken);
+          localStorage.setItem('user', JSON.stringify(data.data.user));
+
+          showMessage('Autenticazione completata!', 'success');
+
+          // Redirect based on role
+          setTimeout(() => {
+            redirectBasedOnRole(data.data.user.role);
+          }, 1000);
+        }
+
+      } catch (error) {
+        showMessage(error.message, 'error');
+        mfaBtn.disabled = false;
+        mfaBtn.textContent = 'Verifica MFA';
+      }
+    });
+
+    // Get return URL from query params or determine based on role
+    function getReturnUrl(role) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const returnUrl = urlParams.get('returnUrl');
+
+      // If there's a return URL, use it
+      if (returnUrl) {
+        return decodeURIComponent(returnUrl);
+      }
+
+      // Otherwise, redirect based on role
+      switch (role) {
+        case 'admin':
+          return '/public/pages/admin/index.html';
+        case 'specialist':
+          return '/public/pages/specialist/dashboard.html';
+        case 'organization_admin':
+        case 'organization_operator':
+          return '/public/pages/ente/dashboard.html';
+        default:
+          return '/public/pages/ente/dashboard.html';
+      }
+    }
+
+    // Redirect based on user role
+    function redirectBasedOnRole(role) {
+      const targetUrl = getReturnUrl(role);
+      window.location.href = targetUrl;
+    }
+
+    // Auto-format MFA token input (numbers only)
+    document.getElementById('mfaToken').addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    });
+
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', () => {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      const eyeSlashIcon = document.getElementById('eyeSlashIcon');
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.add('hidden');
+        eyeSlashIcon.classList.remove('hidden');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('hidden');
+        eyeSlashIcon.classList.add('hidden');
+      }
+    });
+  </script>
+
+</body>
+</html>
