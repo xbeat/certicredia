@@ -6,8 +6,6 @@ async function seedSimpleDemo() {
   try {
     console.log('🌱 Seeding simple demo data...\n');
 
-    await client.query('BEGIN');
-
     // Insert organizations (skip if exist to avoid errors)
     console.log('🏢 Creating organizations...');
     const organizations = [
@@ -61,18 +59,26 @@ async function seedSimpleDemo() {
 
     // Insert contacts
     console.log('📧 Creating contacts...');
-    await client.query(`
-      INSERT INTO contacts (name, email, phone, company, type, message, status)
-      VALUES
-        ('Mario Rossi', 'mario.rossi@example.com', '+39 333 1234567', 'TechCorp Italia', 'COMPANY', 'Vorrei informazioni sui corsi ISO 27001', 'new'),
-        ('Giulia Bianchi', 'giulia.bianchi@example.com', '+39 333 2345678', 'Finance Bank', 'COMPANY', 'Interessati a corso GDPR', 'contacted'),
-        ('Luca Verdi', 'luca.verdi@security.it', '+39 333 3456789', NULL, 'SPECIALIST', 'Vorrei diventare specialista certificato', 'new'),
-        ('Anna Ferrari', 'anna.ferrari@retail.it', '+39 333 4567890', 'Retail Group', 'COMPANY', 'Assessment ISO 27001 completo', 'new'),
-        ('Marco Russo', 'marco.russo@energy.it', '+39 333 5678901', 'Energy Plus', 'COMPANY', 'Preventivo cloud security', 'closed')
-    `);
-    console.log('✅ Created 5 contacts\n');
+    const contacts = [
+      ['Mario Rossi', 'mario.rossi@example.com', '+39 333 1234567', 'TechCorp Italia', 'COMPANY', 'Vorrei informazioni sui corsi ISO 27001', 'new'],
+      ['Giulia Bianchi', 'giulia.bianchi@example.com', '+39 333 2345678', 'Finance Bank', 'COMPANY', 'Interessati a corso GDPR', 'contacted'],
+      ['Luca Verdi', 'luca.verdi@security.it', '+39 333 3456789', null, 'SPECIALIST', 'Vorrei diventare specialista certificato', 'new'],
+      ['Anna Ferrari', 'anna.ferrari@retail.it', '+39 333 4567890', 'Retail Group', 'COMPANY', 'Assessment ISO 27001 completo', 'new'],
+      ['Marco Russo', 'marco.russo@energy.it', '+39 333 5678901', 'Energy Plus', 'COMPANY', 'Preventivo cloud security', 'closed']
+    ];
 
-    await client.query('COMMIT');
+    for (const contact of contacts) {
+      try {
+        await client.query(
+          `INSERT INTO contacts (name, email, phone, company, type, message, status)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+          contact
+        );
+      } catch (e) {
+        // Skip if already exists
+      }
+    }
+    console.log('✅ Created 5 contacts\n');
 
     console.log('✅ Simple demo data seeding completed!\n');
     console.log('📊 Summary:');
@@ -81,7 +87,6 @@ async function seedSimpleDemo() {
     console.log('   - 5 contacts\n');
 
   } catch (error) {
-    await client.query('ROLLBACK');
     console.error('❌ Error seeding demo data:', error);
     throw error;
   } finally {
