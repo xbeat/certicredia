@@ -1,8 +1,8 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import crypto from 'crypto';
-import { pool } from '../../../core/database/connection.js';
-import logger from '../../../core/utils/logger.js';
+import { pool } from '../../../server/config/database.js';
+import logger from '../../../server/utils/logger.js';
 
 /**
  * Evidence Storage Service

@@ -1,6 +1,6 @@
-import { pool } from '../../../core/database/connection.js';
+import { pool } from '../../../server/config/database.js';
 import { auditLog } from '../../audit/services/auditService.js';
-import logger from '../../../core/utils/logger.js';
+import logger from '../../../server/utils/logger.js';
 import crypto from 'crypto';
 
 /**
@@ -208,9 +208,141 @@ export const acceptAssignment = async (token, specialistId) => {
   }
 };
 
+/**
+ * Assign specialist to assessment
+ */
+export const assignSpecialist = async (assignmentData) => {
+  const client = await pool.connect();
+
+  try {
+    const { assessmentId, specialistId, assignedBy, expiresInDays = 30 } = assignmentData;
+
+    const token = `ACC-${Date.now()}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+    const expiresAt = new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000);
+
+    await client.query('BEGIN');
+
+    const result = await client.query(
+      `INSERT INTO specialist_assignments (
+        assessment_id, specialist_id, assigned_by, access_token, expires_at, status
+      ) VALUES ($1, $2, $3, $4, $5, 'active')
+      RETURNING *`,
+      [assessmentId, specialistId, assignedBy, token, expiresAt]
+    );
+
+    await client.query('COMMIT');
+
+    logger.info(`✅ Specialist ${specialistId} assigned to assessment ${assessmentId}`);
+
+    return result.rows[0];
+
+  } catch (error) {
+    await client.query('ROLLBACK');
+    logger.error('Error assigning specialist:', error);
+    throw error;
+  } finally {
+    client.release();
+  }
+};
+
+/**
+ * Get assignment by token
+ */
+export const getAssignmentByToken = async (token) => {
+  try {
+    const result = await pool.query(
+      `SELECT sa.*, a.organization_id, o.name as organization_name
+       FROM specialist_assignments sa
+       LEFT JOIN assessments a ON sa.assessment_id = a.id
+       LEFT JOIN organizations o ON a.organization_id = o.id
+       WHERE sa.access_token = $1 AND sa.expires_at > NOW()`,
+      [token]
+    );
+
+    return result.rows[0] || null;
+
+  } catch (error) {
+    logger.error('Error getting assignment by token:', error);
+    throw error;
+  }
+};
+
+/**
+ * Revoke assignment
+ */
+export const revokeAssignment = async (assignmentId) => {
+  try {
+    await pool.query(
+      `UPDATE specialist_assignments
+       SET status = 'revoked', revoked_at = NOW()
+       WHERE id = $1`,
+      [assignmentId]
+    );
+
+    logger.info(`✅ Assignment ${assignmentId} revoked`);
+
+    return { success: true };
+
+  } catch (error) {
+    logger.error('Error revoking assignment:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all assignments with filters
+ */
+export const getAllAssignments = async (filters = {}) => {
+  try {
+    let query = `
+      SELECT sa.*,
+        a.id as assessment_id,
+        o.name as organization_name,
+        u.name as specialist_name
+      FROM specialist_assignments sa
+      LEFT JOIN assessments a ON sa.assessment_id = a.id
+      LEFT JOIN organizations o ON a.organization_id = o.id
+      LEFT JOIN users u ON sa.specialist_id = u.id
+      WHERE 1=1
+    `;
+
+    const params = [];
+    let paramCount = 1;
+
+    if (filters.assessmentId) {
+      query += ` AND sa.assessment_id = $${paramCount++}`;
+      params.push(filters.assessmentId);
+    }
+
+    if (filters.specialistId) {
+      query += ` AND sa.specialist_id = $${paramCount++}`;
+      params.push(filters.specialistId);
+    }
+
+    if (filters.status) {
+      query += ` AND sa.status = $${paramCount++}`;
+      params.push(filters.status);
+    }
+
+    query += ` ORDER BY sa.assigned_at DESC`;
+
+    const result = await pool.query(query, params);
+
+    return result.rows;
+
+  } catch (error) {
+    logger.error('Error getting all assignments:', error);
+    throw error;
+  }
+};
+
 export default {
   createAssessment,
   updateAssessmentStatus,
   generateAssignmentToken,
-  acceptAssignment
+  acceptAssignment,
+  assignSpecialist,
+  getAssignmentByToken,
+  revokeAssignment,
+  getAllAssignments
 };

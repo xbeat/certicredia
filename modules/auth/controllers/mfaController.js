@@ -7,8 +7,8 @@ import {
   regenerateBackupCodes
 } from '../services/mfaService.js';
 import bcrypt from 'bcrypt';
-import { pool } from '../../../core/database/connection.js';
-import logger from '../../../core/utils/logger.js';
+import { pool } from '../../../server/config/database.js';
+import logger from '../../../server/utils/logger.js';
 
 /**
  * MFA Controller

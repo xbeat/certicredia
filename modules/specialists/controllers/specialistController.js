@@ -5,7 +5,7 @@ import {
   addCPERecord,
   getSpecialistDashboard
 } from '../services/specialistService.js';
-import logger from '../../../core/utils/logger.js';
+import logger from '../../../server/utils/logger.js';
 
 export const registerCandidate = async (req, res) => {
   try {

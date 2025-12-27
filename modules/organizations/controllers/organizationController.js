@@ -8,7 +8,7 @@ import {
   getOrganizationUsers,
   removeUserFromOrganization
 } from '../services/organizationService.js';
-import logger from '../../../core/utils/logger.js';
+import logger from '../../../server/utils/logger.js';
 
 /**
  * POST /api/organizations

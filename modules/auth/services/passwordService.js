@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
-import { pool } from '../../../core/database/connection.js';
+import { pool } from '../../../server/config/database.js';
 import { resend } from '../../../core/config/email.js';
-import logger from '../../../core/utils/logger.js';
+import logger from '../../../server/utils/logger.js';
 
 const SALT_ROUNDS = 12;
 

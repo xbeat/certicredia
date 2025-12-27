@@ -1,6 +1,6 @@
-import { pool } from '../../../core/database/connection.js';
+import { pool } from '../../../server/config/database.js';
 import { auditLog } from '../../audit/services/auditService.js';
-import logger from '../../../core/utils/logger.js';
+import logger from '../../../server/utils/logger.js';
 
 /**
  * Review Comments Service

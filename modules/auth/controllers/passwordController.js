@@ -4,7 +4,7 @@ import {
   resetPassword,
   validatePasswordStrength
 } from '../services/passwordService.js';
-import logger from '../../../core/utils/logger.js';
+import logger from '../../../server/utils/logger.js';
 
 /**
  * Password Recovery Controller
