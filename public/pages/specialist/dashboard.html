@@ -10,94 +10,174 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; }
+    .matrix-cell {
+      width: 30px;
+      height: 30px;
+      border-radius: 3px;
+      transition: transform 0.2s;
+    }
+    .matrix-cell:hover {
+      transform: scale(1.15);
+      cursor: pointer;
+    }
   </style>
 </head>
-<body class="bg-gray-50">
-  <nav class="bg-white shadow-sm">
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen">
+  <!-- Navigation -->
+  <nav class="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex items-center">
-          <span class="text-xl font-bold text-cyan-600">CertiCredia</span>
-          <span class="ml-3 text-gray-600">Pannello Specialist</span>
+          <span class="text-xl font-bold text-cyan-400">CertiCredia</span>
+          <span class="ml-3 text-slate-300">Dashboard Specialist</span>
         </div>
         <div class="flex items-center space-x-4">
-          <span id="specialistName" class="text-sm text-gray-700"></span>
-          <a href="/public/pages/profile.html" class="text-sm text-gray-600 hover:text-gray-800">Il Mio Profilo</a>
-          <button id="logoutBtn" class="text-sm text-red-600 hover:text-red-800">Logout</button>
+          <span id="specialistName" class="text-sm text-slate-300"></span>
+          <a href="/public/pages/profile.html" class="text-sm text-slate-400 hover:text-slate-200">Il Mio Profilo</a>
+          <button id="logoutBtn" class="text-sm text-red-400 hover:text-red-300">Logout</button>
         </div>
       </div>
     </div>
   </nav>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Dashboard Specialist</h1>
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold">Dashboard Specialist</h1>
+      <p class="mt-2 text-slate-400">Gestisci i tuoi incarichi di accreditamento</p>
+    </div>
 
-    <!-- Stats -->
+    <!-- Specialist Info Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-sm text-gray-600">Assessments Attivi</p>
-        <p id="activeCount" class="text-3xl font-bold text-cyan-600">0</p>
+      <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+        <div class="flex items-center">
+          <div class="flex-1">
+            <p class="text-sm text-slate-400">Esperienza</p>
+            <p id="specExperience" class="text-lg font-bold text-cyan-400">-</p>
+          </div>
+          <div class="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+            </svg>
+          </div>
+        </div>
       </div>
-      <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-sm text-gray-600">Completati</p>
-        <p id="completedCount" class="text-3xl font-bold text-green-600">0</p>
+
+      <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+        <div class="flex items-center">
+          <div class="flex-1">
+            <p class="text-sm text-slate-400">CPE Totali</p>
+            <p id="specCPE" class="text-lg font-bold text-green-400">-</p>
+          </div>
+          <div class="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+          </div>
+        </div>
       </div>
-      <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-sm text-gray-600">CPE Anno Corrente</p>
-        <p id="cpeHours" class="text-3xl font-bold text-purple-600">0h</p>
+
+      <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+        <div class="flex items-center">
+          <div class="flex-1">
+            <p class="text-sm text-slate-400">Organizzazioni</p>
+            <p id="orgCount" class="text-lg font-bold text-blue-400">0</p>
+          </div>
+          <div class="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+          </div>
+        </div>
       </div>
-      <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-sm text-gray-600">Status</p>
-        <p id="status" class="text-lg font-semibold text-gray-900">Attivo</p>
+
+      <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+        <div class="flex items-center">
+          <div class="flex-1">
+            <p class="text-sm text-slate-400">Stato Certificazione</p>
+            <p id="specStatus" class="text-lg font-bold">-</p>
+          </div>
+          <div class="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="bg-white rounded-lg shadow">
-      <div class="border-b border-gray-200">
-        <nav class="flex space-x-8 px-6" aria-label="Tabs">
-          <button class="tab-btn border-b-2 border-cyan-600 py-4 px-1 text-sm font-medium text-cyan-600">Assessments</button>
-          <button class="tab-btn border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">CPE</button>
-          <button class="tab-btn border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">Profilo</button>
-        </nav>
-      </div>
-
-      <div class="p-6">
-        <!-- Assessments List -->
-        <div id="assessmentsList">
-          <h3 class="text-lg font-semibold mb-4">Assessments Assegnati</h3>
-          <div class="space-y-4">
-            <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
-              <div class="flex justify-between items-start">
-                <div>
-                  <h4 class="font-semibold text-gray-900">Acme Corp S.r.l.</h4>
-                  <p class="text-sm text-gray-600">Framework v1.0 • Completamento: 85%</p>
-                </div>
-                <span class="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                  In Revisione
-                </span>
-              </div>
-              <div class="mt-4 flex space-x-3">
-                <button class="text-sm text-cyan-600 hover:text-cyan-800">Rivedi</button>
-                <button class="text-sm text-gray-600 hover:text-gray-800">Commenti</button>
+    <!-- Main Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Organizations List with Assessments -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Organizations List -->
+        <div class="bg-slate-800 rounded-lg shadow-lg border border-slate-700">
+          <div class="px-6 py-4 border-b border-slate-700">
+            <h2 class="text-lg font-semibold">Organizzazioni Assegnate</h2>
+          </div>
+          <div class="p-6">
+            <div id="organizationsList" class="space-y-6">
+              <!-- Populated by JS -->
+              <div class="text-center py-8 text-slate-400">
+                <p>Nessuna organizzazione assegnata</p>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="mt-6">
-            <button id="acceptTokenBtn" class="bg-cyan-600 text-white px-6 py-2 rounded-lg hover:bg-cyan-700">
-              Accetta Nuovo Assessment (Token)
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <!-- Accept Invitation -->
+        <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+          <h3 class="text-lg font-semibold mb-4">Accetta Invito</h3>
+          <p class="text-sm text-slate-400 mb-4">Ricevuto un invito via email? Inserisci il token qui</p>
+          <form id="acceptInvitationForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-400 mb-2">Token Invito</label>
+              <input
+                type="text"
+                id="invitationToken"
+                required
+                placeholder="ABC123XYZ456"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-mono"
+              >
+            </div>
+            <button
+              type="submit"
+              class="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold px-4 py-2 rounded-lg transition-colors"
+            >
+              Accetta Invito
             </button>
+          </form>
+        </div>
+
+        <!-- Specialist Details -->
+        <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+          <h3 class="text-lg font-semibold mb-4">I Miei Dettagli</h3>
+          <div class="space-y-3 text-sm">
+            <div>
+              <p class="text-slate-400">Email</p>
+              <p id="specEmail" class="font-medium">-</p>
+            </div>
+            <div>
+              <p class="text-slate-400">Competenze</p>
+              <p id="specBio" class="font-medium text-sm">-</p>
+            </div>
+            <div>
+              <p class="text-slate-400">Data Certificazione</p>
+              <p id="specCertDate" class="font-medium">-</p>
+            </div>
           </div>
         </div>
 
-        <!-- CPE Section -->
-        <div id="cpeSection" class="hidden">
-          <h3 class="text-lg font-semibold mb-4">Formazione Continua (CPE)</h3>
-          <form id="cpeForm" class="space-y-4 max-w-2xl">
+        <!-- CPE Management -->
+        <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+          <h3 class="text-lg font-semibold mb-4">Registra CPE</h3>
+          <form id="cpeForm" class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Tipo Attività</label>
-              <select class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+              <label class="block text-sm font-medium text-slate-400 mb-2">Tipo Attività</label>
+              <select id="cpeType" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                 <option value="training">Training/Corso</option>
                 <option value="audit">Audit</option>
                 <option value="research">Ricerca</option>
@@ -106,23 +186,36 @@
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Titolo</label>
-              <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+              <label class="block text-sm font-medium text-slate-400 mb-2">Crediti</label>
+              <input
+                type="number"
+                id="cpeCredits"
+                step="0.5"
+                min="0"
+                required
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
+              >
             </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Ore</label>
-                <input type="number" step="0.5" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Crediti</label>
-                <input type="number" step="0.5" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
-              </div>
-            </div>
-            <button type="submit" class="bg-cyan-600 text-white px-6 py-2 rounded-lg hover:bg-cyan-700">
+            <button
+              type="submit"
+              class="w-full bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors text-sm"
+            >
               Registra CPE
             </button>
           </form>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+          <h3 class="text-lg font-semibold mb-4">Azioni Rapide</h3>
+          <div class="space-y-3">
+            <button class="w-full bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors text-sm">
+              Scarica Report Attività
+            </button>
+            <button class="w-full bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors text-sm">
+              Visualizza Storico CPE
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -133,12 +226,220 @@
 
   <!-- Specialist Dashboard Script -->
   <script>
+    const API_BASE = window.location.origin;
+    let currentSpecialist = null;
+    let assignedOrganizations = [];
+
+    // Generate 10x10 Assessment Matrix with random colors (smaller for org cards)
+    function generateAssessmentMatrix(containerId) {
+      const matrix = document.getElementById(containerId);
+      if (!matrix) return;
+
+      const colors = ['bg-green-500', 'bg-blue-500', 'bg-red-500', 'bg-slate-600'];
+
+      for (let row = 0; row < 10; row++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'flex gap-1';
+
+        for (let col = 0; col < 10; col++) {
+          const cell = document.createElement('div');
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
+          cell.className = `matrix-cell ${randomColor}`;
+          cell.title = `Area ${row + 1}-${col + 1}`;
+          rowDiv.appendChild(cell);
+        }
+
+        matrix.appendChild(rowDiv);
+      }
+    }
+
+    // Load specialist data
+    async function loadSpecialistData() {
+      try {
+        const token = localStorage.getItem('authToken');
+        const user = getCurrentUser();
+
+        if (!user || !user.specialistId) {
+          console.error('No specialist ID found');
+          return;
+        }
+
+        const response = await fetch(`${API_BASE}/api/specialists/${user.specialistId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          currentSpecialist = data.data;
+          displaySpecialistData(currentSpecialist);
+          loadAssignedOrganizations();
+        }
+      } catch (error) {
+        console.error('Load specialist error:', error);
+      }
+    }
+
+    // Display specialist data
+    function displaySpecialistData(spec) {
+      const name = spec.name || spec.user_name || 'Specialist';
+      document.getElementById('specialistName').textContent = name;
+      document.getElementById('specExperience').textContent = `${spec.experience_years || 0} anni`;
+      document.getElementById('specCPE').textContent = spec.total_cpe_credits || '0';
+      document.getElementById('specStatus').textContent = formatStatus(spec.certification_status);
+      document.getElementById('specEmail').textContent = spec.email || spec.user_email || '-';
+      document.getElementById('specBio').textContent = spec.bio || 'Nessuna bio disponibile';
+
+      if (spec.certification_date) {
+        const date = new Date(spec.certification_date);
+        document.getElementById('specCertDate').textContent = date.toLocaleDateString('it-IT');
+      } else {
+        document.getElementById('specCertDate').textContent = 'N/D';
+      }
+    }
+
+    // Format certification status
+    function formatStatus(status) {
+      const statuses = {
+        'pending': 'Candidato',
+        'certified': 'Certificato',
+        'suspended': 'Sospeso',
+        'expired': 'Scaduto'
+      };
+      return statuses[status] || status;
+    }
+
+    // Load assigned organizations
+    async function loadAssignedOrganizations() {
+      try {
+        const token = localStorage.getItem('authToken');
+
+        // TODO: Replace with actual API endpoint when specialist-organization linking is implemented
+        // For now, show placeholder
+        const container = document.getElementById('organizationsList');
+        container.innerHTML = '<div class="text-center py-8 text-slate-400"><p>Nessuna organizzazione assegnata</p><p class="text-sm mt-2">Accetta un invito per iniziare</p></div>';
+
+        document.getElementById('orgCount').textContent = '0';
+
+        // Example of what it would look like with data:
+        // assignedOrganizations = data.data;
+        // document.getElementById('orgCount').textContent = assignedOrganizations.length;
+        //
+        // container.innerHTML = assignedOrganizations.map((org, index) => `
+        //   <div class="bg-slate-900 rounded-lg border border-slate-700 p-6">
+        //     <div class="flex justify-between items-start mb-4">
+        //       <div>
+        //         <h3 class="text-lg font-bold">${org.name}</h3>
+        //         <p class="text-sm text-slate-400">${org.organization_type} • ${org.city || 'N/D'}</p>
+        //       </div>
+        //       <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/20 text-green-400">Attivo</span>
+        //     </div>
+        //     <div class="mb-4">
+        //       <p class="text-sm text-slate-400 mb-2">Assessment Matrix</p>
+        //       <div id="matrix-${index}" class="flex flex-col gap-1"></div>
+        //     </div>
+        //     <div class="flex gap-3">
+        //       <button class="flex-1 bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold py-2 px-4 rounded-lg transition-colors text-sm">
+        //         Apri Assessment
+        //       </button>
+        //       <button class="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2 px-4 rounded-lg transition-colors text-sm">
+        //         Dettagli
+        //       </button>
+        //     </div>
+        //   </div>
+        // `).join('');
+        //
+        // // Generate matrices for each organization
+        // assignedOrganizations.forEach((org, index) => {
+        //   generateAssessmentMatrix(`matrix-${index}`);
+        // });
+      } catch (error) {
+        console.error('Load organizations error:', error);
+      }
+    }
+
+    // Handle invitation acceptance
+    document.getElementById('acceptInvitationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const token = document.getElementById('invitationToken').value.trim();
+
+      try {
+        const authToken = localStorage.getItem('authToken');
+
+        // TODO: Implement invitation acceptance API
+        // For now, show success message
+        alert(`Token "${token}" ricevuto!\n\nQuando il sistema di inviti sarà attivo, sarai automaticamente assegnato all'organizzazione.`);
+
+        document.getElementById('acceptInvitationForm').reset();
+
+        // const response = await fetch(`${API_BASE}/api/specialists/accept-invitation`, {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': `Bearer ${authToken}`
+        //   },
+        //   body: JSON.stringify({ token })
+        // });
+        //
+        // const data = await response.json();
+        //
+        // if (data.success) {
+        //   alert('Invito accettato con successo!');
+        //   loadAssignedOrganizations();
+        // } else {
+        //   alert(data.message || 'Errore nell\'accettazione dell\'invito');
+        // }
+
+      } catch (error) {
+        console.error('Accept invitation error:', error);
+        alert('Errore nell\'accettazione dell\'invito');
+      }
+    });
+
+    // Handle CPE registration
+    document.getElementById('cpeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const type = document.getElementById('cpeType').value;
+      const credits = parseFloat(document.getElementById('cpeCredits').value);
+
+      try {
+        const token = localStorage.getItem('authToken');
+        const user = getCurrentUser();
+
+        // TODO: Implement CPE registration API
+        alert(`CPE registrato: ${credits} crediti (${type})\n\nQuando il sistema CPE sarà attivo, verrà aggiunto al tuo totale.`);
+
+        document.getElementById('cpeForm').reset();
+
+        // const response = await fetch(`${API_BASE}/api/specialists/${user.specialistId}/cpe`, {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': `Bearer ${token}`
+        //   },
+        //   body: JSON.stringify({ type, credits })
+        // });
+
+      } catch (error) {
+        console.error('Register CPE error:', error);
+        alert('Errore nella registrazione CPE');
+      }
+    });
+
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUser');
+      window.location.href = '/public/pages/app-landing.html';
+    });
+
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
-      const user = getCurrentUser();
-      console.log('Specialist dashboard initialized for:', user);
-
-      // TODO: Load specialist data when API is ready
+      loadSpecialistData();
     });
   </script>
 </body>

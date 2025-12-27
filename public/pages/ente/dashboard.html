@@ -10,21 +10,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; }
+    .matrix-cell {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      transition: transform 0.2s;
+    }
+    .matrix-cell:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+    }
   </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen">
   <!-- Navigation -->
-  <nav class="bg-white shadow-sm">
+  <nav class="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex items-center">
-          <span class="text-xl font-bold text-cyan-600">CertiCredia</span>
-          <span class="ml-3 text-gray-600">Dashboard Ente</span>
+          <span class="text-xl font-bold text-cyan-400">CertiCredia</span>
+          <span class="ml-3 text-slate-300">Dashboard Organizzazione</span>
         </div>
         <div class="flex items-center space-x-4">
-          <span id="orgName" class="text-sm text-gray-700"></span>
-          <a href="/public/pages/profile.html" class="text-sm text-gray-600 hover:text-gray-800">Il Mio Profilo</a>
-          <button id="logoutBtn" class="text-sm text-red-600 hover:text-red-800">Logout</button>
+          <span id="orgName" class="text-sm text-slate-300"></span>
+          <a href="/public/pages/profile.html" class="text-sm text-slate-400 hover:text-slate-200">Il Mio Profilo</a>
+          <button id="logoutBtn" class="text-sm text-red-400 hover:text-red-300">Logout</button>
         </div>
       </div>
     </div>
@@ -33,49 +43,64 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Dashboard Accreditamento</h1>
-      <p class="mt-2 text-gray-600">Gestisci il tuo processo di accreditamento cybersecurity</p>
+      <h1 class="text-3xl font-bold">Dashboard Accreditamento</h1>
+      <p class="mt-2 text-slate-400">Gestisci il tuo processo di accreditamento cybersecurity</p>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div class="bg-white rounded-lg shadow p-6">
+    <!-- Organization Info Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
         <div class="flex items-center">
           <div class="flex-1">
-            <p class="text-sm text-gray-600">Status Assessment</p>
-            <p id="assessmentStatus" class="text-2xl font-bold text-gray-900">-</p>
+            <p class="text-sm text-slate-400">Tipo Organizzazione</p>
+            <p id="orgType" class="text-lg font-bold text-cyan-400">-</p>
           </div>
-          <div class="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+        <div class="flex items-center">
+          <div class="flex-1">
+            <p class="text-sm text-slate-400">P.IVA</p>
+            <p id="orgVat" class="text-lg font-bold">-</p>
+          </div>
+          <div class="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+        <div class="flex items-center">
+          <div class="flex-1">
+            <p class="text-sm text-slate-400">Città</p>
+            <p id="orgCity" class="text-lg font-bold">-</p>
+          </div>
+          <div class="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+        <div class="flex items-center">
+          <div class="flex-1">
+            <p class="text-sm text-slate-400">Stato</p>
+            <p id="orgStatus" class="text-lg font-bold">-</p>
+          </div>
+          <div class="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex items-center">
-          <div class="flex-1">
-            <p class="text-sm text-gray-600">Completamento</p>
-            <p id="completionPercentage" class="text-2xl font-bold text-gray-900">0%</p>
-          </div>
-          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex items-center">
-          <div class="flex-1">
-            <p class="text-sm text-gray-600">Specialist Assegnato</p>
-            <p id="specialistName" class="text-sm font-medium text-gray-900">Non assegnato</p>
-          </div>
-          <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
           </div>
         </div>
@@ -84,17 +109,58 @@
 
     <!-- Main Content -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Assessment Form -->
-      <div class="lg:col-span-2">
-        <div class="bg-white rounded-lg shadow">
-          <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">Questionario Accreditamento</h2>
+      <!-- Assessment Matrix & Specialists -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Assessment Matrix -->
+        <div class="bg-slate-800 rounded-lg shadow-lg border border-slate-700">
+          <div class="px-6 py-4 border-b border-slate-700">
+            <h2 class="text-lg font-semibold">Assessment Cybersecurity - Matrice 10x10</h2>
+            <p class="text-sm text-slate-400 mt-1">Dashboard completa disponibile su piattaforma dedicata</p>
           </div>
-          <div id="assessmentContent" class="p-6">
-            <!-- Dynamic content loaded here -->
-            <div class="text-center py-12">
-              <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600"></div>
-              <p class="mt-4 text-gray-600">Caricamento assessment...</p>
+          <div class="p-6">
+            <div id="assessmentMatrix" class="flex flex-col gap-2 items-center">
+              <!-- 10x10 Matrix generated by JS -->
+            </div>
+            <div class="mt-6 text-center">
+              <a href="#" target="_blank" class="inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold py-3 px-6 rounded-lg transition-colors">
+                <span>Apri Dashboard Assessment Completa</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+              </a>
+            </div>
+            <div class="mt-4 flex justify-center gap-4 text-sm">
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-green-500 rounded"></div>
+                <span class="text-slate-400">Completato</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-blue-500 rounded"></div>
+                <span class="text-slate-400">In corso</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-red-500 rounded"></div>
+                <span class="text-slate-400">Critico</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-slate-600 rounded"></div>
+                <span class="text-slate-400">Non iniziato</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assigned Specialists List -->
+        <div class="bg-slate-800 rounded-lg shadow-lg border border-slate-700">
+          <div class="px-6 py-4 border-b border-slate-700">
+            <h2 class="text-lg font-semibold">Specialist Assegnati</h2>
+          </div>
+          <div class="p-6">
+            <div id="specialistsList" class="space-y-3">
+              <!-- Populated by JS -->
+              <div class="text-center py-8 text-slate-400">
+                <p>Nessuno specialist assegnato</p>
+              </div>
             </div>
           </div>
         </div>
@@ -102,74 +168,74 @@
 
       <!-- Sidebar -->
       <div class="space-y-6">
-        <!-- Actions -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Azioni</h3>
-          <div class="space-y-3">
-            <button id="saveBtn" class="w-full bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition">
-              Salva Bozza
-            </button>
-            <button id="submitBtn" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition" disabled>
-              Invia per Revisione
-            </button>
-            <button id="generateTokenBtn" class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
-              Genera Token Specialist
-            </button>
-          </div>
-        </div>
-
-        <!-- Evidence Upload -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Carica Evidence</h3>
-          <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-            <input type="file" id="fileInput" class="hidden" multiple>
-            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-            </svg>
-            <p class="mt-2 text-sm text-gray-600">Clicca per caricare file</p>
-            <p class="text-xs text-gray-500">PDF, DOC, XLS, IMG fino a 50MB</p>
-            <button id="uploadBtn" class="mt-4 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition text-sm">
-              Seleziona File
-            </button>
-          </div>
-          <div id="fileList" class="mt-4 space-y-2"></div>
-        </div>
-
-        <!-- Progress -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Progresso</h3>
-          <div class="space-y-3">
+        <!-- Request Specialist -->
+        <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+          <h3 class="text-lg font-semibold mb-4">Richiedi Specialist</h3>
+          <p class="text-sm text-slate-400 mb-4">Invia una richiesta di affiancamento via email</p>
+          <form id="requestSpecialistForm" class="space-y-4">
             <div>
-              <div class="flex justify-between text-sm mb-1">
-                <span class="text-gray-600">Domande compilate</span>
-                <span id="progressText" class="font-medium">0/50</span>
-              </div>
-              <div class="w-full bg-gray-200 rounded-full h-2">
-                <div id="progressBar" class="bg-cyan-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-              </div>
+              <label class="block text-sm font-medium text-slate-400 mb-2">Email Specialist</label>
+              <input
+                type="email"
+                id="specialistEmail"
+                required
+                placeholder="specialist@example.com"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              >
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-400 mb-2">Messaggio (opzionale)</label>
+              <textarea
+                id="specialistMessage"
+                rows="3"
+                placeholder="Descrivi brevemente le tue esigenze..."
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              class="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold px-4 py-2 rounded-lg transition-colors"
+            >
+              Invia Richiesta
+            </button>
+          </form>
+        </div>
+
+        <!-- Organization Details -->
+        <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+          <h3 class="text-lg font-semibold mb-4">Dettagli Organizzazione</h3>
+          <div class="space-y-3 text-sm">
+            <div>
+              <p class="text-slate-400">Email</p>
+              <p id="orgEmail" class="font-medium">-</p>
+            </div>
+            <div>
+              <p class="text-slate-400">Telefono</p>
+              <p id="orgPhone" class="font-medium">-</p>
+            </div>
+            <div>
+              <p class="text-slate-400">Indirizzo</p>
+              <p id="orgAddress" class="font-medium">-</p>
+            </div>
+            <div>
+              <p class="text-slate-400">Data Registrazione</p>
+              <p id="orgCreatedAt" class="font-medium">-</p>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Token Modal -->
-  <div id="tokenModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-      <h3 class="text-xl font-bold text-gray-900 mb-4">Token Specialist Generato</h3>
-      <p class="text-gray-600 mb-4">Condividi questo codice con lo Specialist per dargli accesso alla tua dashboard:</p>
-      <div class="bg-gray-100 rounded-lg p-4 mb-4">
-        <code id="tokenCode" class="text-2xl font-mono text-cyan-600 block text-center"></code>
-      </div>
-      <p class="text-sm text-gray-500 mb-6">Il token scade tra 72 ore</p>
-      <div class="flex space-x-3">
-        <button id="copyTokenBtn" class="flex-1 bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition">
-          Copia Token
-        </button>
-        <button id="closeModalBtn" class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
-          Chiudi
-        </button>
+        <!-- Quick Actions -->
+        <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+          <h3 class="text-lg font-semibold mb-4">Azioni Rapide</h3>
+          <div class="space-y-3">
+            <button class="w-full bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors text-sm">
+              Scarica Report PDF
+            </button>
+            <button class="w-full bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors text-sm">
+              Visualizza Storico
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -177,18 +243,176 @@
   <!-- Common Dashboard Scripts -->
   <script src="/public/js/dashboard-common.js"></script>
 
-  <!-- Ente Dashboard Script -->
+  <!-- Organization Dashboard Script -->
   <script>
+    const API_BASE = window.location.origin;
+    let currentOrg = null;
+
+    // Generate 10x10 Assessment Matrix with random colors
+    function generateAssessmentMatrix() {
+      const matrix = document.getElementById('assessmentMatrix');
+      const colors = ['bg-green-500', 'bg-blue-500', 'bg-red-500', 'bg-slate-600'];
+
+      for (let row = 0; row < 10; row++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'flex gap-2';
+
+        for (let col = 0; col < 10; col++) {
+          const cell = document.createElement('div');
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
+          cell.className = `matrix-cell ${randomColor}`;
+          cell.title = `Area ${row + 1}-${col + 1}`;
+          rowDiv.appendChild(cell);
+        }
+
+        matrix.appendChild(rowDiv);
+      }
+    }
+
+    // Load organization data
+    async function loadOrganizationData() {
+      try {
+        const token = localStorage.getItem('authToken');
+        const user = getCurrentUser();
+
+        if (!user || !user.organizationId) {
+          console.error('No organization ID found');
+          return;
+        }
+
+        const response = await fetch(`${API_BASE}/api/organizations/${user.organizationId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          currentOrg = data.data;
+          displayOrganizationData(currentOrg);
+          loadAssignedSpecialists();
+        }
+      } catch (error) {
+        console.error('Load organization error:', error);
+      }
+    }
+
+    // Display organization data
+    function displayOrganizationData(org) {
+      document.getElementById('orgName').textContent = org.name || '-';
+      document.getElementById('orgType').textContent = formatOrgType(org.organization_type);
+      document.getElementById('orgVat').textContent = org.vat_number || 'N/D';
+      document.getElementById('orgCity').textContent = org.city || 'N/D';
+      document.getElementById('orgStatus').textContent = formatStatus(org.status);
+      document.getElementById('orgEmail').textContent = org.email || '-';
+      document.getElementById('orgPhone').textContent = org.phone || 'N/D';
+
+      const address = [org.address, org.city, org.province, org.postal_code]
+        .filter(Boolean)
+        .join(', ') || 'N/D';
+      document.getElementById('orgAddress').textContent = address;
+
+      if (org.created_at) {
+        const date = new Date(org.created_at);
+        document.getElementById('orgCreatedAt').textContent = date.toLocaleDateString('it-IT');
+      }
+    }
+
+    // Format organization type
+    function formatOrgType(type) {
+      const types = {
+        'PUBLIC_ENTITY': 'Ente Pubblico',
+        'PRIVATE_COMPANY': 'Azienda Privata',
+        'NON_PROFIT': 'No Profit'
+      };
+      return types[type] || type;
+    }
+
+    // Format status
+    function formatStatus(status) {
+      const statuses = {
+        'pending': 'In attesa',
+        'active': 'Attivo',
+        'suspended': 'Sospeso',
+        'inactive': 'Inattivo'
+      };
+      return statuses[status] || status;
+    }
+
+    // Load assigned specialists
+    async function loadAssignedSpecialists() {
+      try {
+        const token = localStorage.getItem('authToken');
+        const user = getCurrentUser();
+
+        // TODO: Replace with actual API endpoint when available
+        // For now, show placeholder
+        const container = document.getElementById('specialistsList');
+        container.innerHTML = '<div class="text-center py-8 text-slate-400"><p>Nessuno specialist assegnato</p></div>';
+
+        // Example of what it would look like with data:
+        // container.innerHTML = specialists.map(spec => `
+        //   <div class="flex items-center gap-3 p-3 bg-slate-900 rounded-lg border border-slate-700">
+        //     <div class="w-10 h-10 bg-cyan-500/10 rounded-full flex items-center justify-center">
+        //       <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        //         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        //       </svg>
+        //     </div>
+        //     <div class="flex-1">
+        //       <p class="font-medium">${spec.name}</p>
+        //       <p class="text-sm text-slate-400">${spec.email}</p>
+        //     </div>
+        //   </div>
+        // `).join('');
+      } catch (error) {
+        console.error('Load specialists error:', error);
+      }
+    }
+
+    // Handle specialist request form
+    document.getElementById('requestSpecialistForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('specialistEmail').value;
+      const message = document.getElementById('specialistMessage').value;
+
+      try {
+        const token = localStorage.getItem('authToken');
+        const user = getCurrentUser();
+
+        // TODO: Implement specialist invitation API
+        // For now, show success message
+        alert(`Richiesta inviata a ${email}\n\nQuando lo specialist accetterà, verrà automaticamente assegnato alla tua organizzazione.`);
+
+        document.getElementById('requestSpecialistForm').reset();
+
+        // const response = await fetch(`${API_BASE}/api/organizations/${user.organizationId}/invite-specialist`, {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': `Bearer ${token}`
+        //   },
+        //   body: JSON.stringify({ email, message })
+        // });
+
+      } catch (error) {
+        console.error('Request specialist error:', error);
+        alert('Errore nell\'invio della richiesta');
+      }
+    });
+
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUser');
+      window.location.href = '/public/pages/app-landing.html';
+    });
+
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
-      const user = getCurrentUser();
-      if (user && user.company) {
-        const orgNameEl = document.getElementById('orgName');
-        if (orgNameEl) orgNameEl.textContent = user.company;
-      }
-
-      // TODO: Load assessment data when API is ready
-      console.log('Ente dashboard initialized');
+      generateAssessmentMatrix();
+      loadOrganizationData();
     });
   </script>
 </body>
