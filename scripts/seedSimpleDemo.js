@@ -11,18 +11,18 @@ async function seedSimpleDemo() {
     // Insert organizations
     console.log('🏢 Creating organizations...');
     await client.query(`
-      INSERT INTO organizations (name, type, vat_number, address, city, postal_code, country, status, contact_email)
+      INSERT INTO organizations (name, organization_type, vat_number, address, city, postal_code, country, status, email)
       VALUES
-        ('TechCorp Italia SpA', 'corporate', 'IT12345678901', 'Via Roma 123', 'Milano', '20100', 'IT', 'active', 'info@techcorp.it'),
-        ('Finance Bank SRL', 'corporate', 'IT98765432109', 'Corso Vittorio 45', 'Roma', '00100', 'IT', 'active', 'contact@financebank.it'),
-        ('HealthSys Italia', 'corporate', 'IT11223344556', 'Via Torino 78', 'Torino', '10100', 'IT', 'active', 'info@healthsys.it'),
-        ('Retail Group SpA', 'corporate', 'IT66778899001', 'Piazza Maggiore 12', 'Bologna', '40100', 'IT', 'active', 'contact@retailgroup.it'),
-        ('Energy Plus SRL', 'corporate', 'IT55443322110', 'Via Napoli 34', 'Napoli', '80100', 'IT', 'suspended', 'info@energyplus.it'),
-        ('Ministero Difesa', 'government', 'IT00000000001', 'Via XX Settembre 8', 'Roma', '00187', 'IT', 'active', 'dip@difesa.it'),
-        ('Regione Lombardia', 'government', 'IT11111111112', 'Piazza Città di Lombardia 1', 'Milano', '20124', 'IT', 'active', 'info@regione.lombardia.it'),
-        ('Università Bologna', 'non_profit', 'IT22222222223', 'Via Zamboni 33', 'Bologna', '40126', 'IT', 'active', 'info@unibo.it'),
-        ('Croce Rossa Italiana', 'non_profit', 'IT33333333334', 'Via Ramazzini 22', 'Roma', '00151', 'IT', 'active', 'info@cri.it'),
-        ('StartupInnovation SRL', 'corporate', 'IT44444444445', 'Via Startup 1', 'Milano', '20100', 'IT', 'pending', 'hello@startup.it')
+        ('TechCorp Italia SpA', 'PRIVATE_COMPANY', 'IT12345678901', 'Via Roma 123', 'Milano', '20100', 'Italia', 'active', 'info@techcorp.it'),
+        ('Finance Bank SRL', 'PRIVATE_COMPANY', 'IT98765432109', 'Corso Vittorio 45', 'Roma', '00100', 'Italia', 'active', 'contact@financebank.it'),
+        ('HealthSys Italia', 'PRIVATE_COMPANY', 'IT11223344556', 'Via Torino 78', 'Torino', '10100', 'Italia', 'active', 'info@healthsys.it'),
+        ('Retail Group SpA', 'PRIVATE_COMPANY', 'IT66778899001', 'Piazza Maggiore 12', 'Bologna', '40100', 'Italia', 'active', 'contact@retailgroup.it'),
+        ('Energy Plus SRL', 'PRIVATE_COMPANY', 'IT55443322110', 'Via Napoli 34', 'Napoli', '80100', 'Italia', 'suspended', 'info@energyplus.it'),
+        ('Ministero Difesa', 'PUBLIC_ENTITY', 'IT00000000001', 'Via XX Settembre 8', 'Roma', '00187', 'Italia', 'active', 'dip@difesa.it'),
+        ('Regione Lombardia', 'PUBLIC_ENTITY', 'IT11111111112', 'Piazza Città di Lombardia 1', 'Milano', '20124', 'Italia', 'active', 'info@regione.lombardia.it'),
+        ('Università Bologna', 'NON_PROFIT', 'IT22222222223', 'Via Zamboni 33', 'Bologna', '40126', 'Italia', 'active', 'info@unibo.it'),
+        ('Croce Rossa Italiana', 'NON_PROFIT', 'IT33333333334', 'Via Ramazzini 22', 'Roma', '00151', 'Italia', 'active', 'info@cri.it'),
+        ('StartupInnovation SRL', 'PRIVATE_COMPANY', 'IT44444444445', 'Via Startup 1', 'Milano', '20100', 'Italia', 'pending', 'hello@startup.it')
       ON CONFLICT (vat_number) DO NOTHING
     `);
     console.log('✅ Created 10 organizations\n');
