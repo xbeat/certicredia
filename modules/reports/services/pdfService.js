@@ -111,6 +111,73 @@ export const generateAccreditationCertificate = async (assessmentId) => {
   }
 };
 
+/**
+ * Generate assessment report PDF
+ */
+export const generateAssessmentReport = async (assessmentData) => {
+  try {
+    const doc = new PDFDocument({ size: 'A4', margin: 50 });
+    const chunks = [];
+
+    doc.on('data', chunk => chunks.push(chunk));
+
+    // Header
+    doc.fontSize(20).font('Helvetica-Bold').text('REPORT DI ASSESSMENT', { align: 'center' });
+    doc.moveDown();
+    doc.fontSize(14).font('Helvetica').text(assessmentData.organization_name, { align: 'center' });
+    doc.moveDown(2);
+
+    // Details
+    doc.fontSize(12).font('Helvetica-Bold').text('Informazioni Assessment:');
+    doc.font('Helvetica').text(`Template: ${assessmentData.template_name}`);
+    doc.text(`Tipo: ${assessmentData.template_type}`);
+    doc.text(`Stato: ${assessmentData.status}`);
+    doc.text(`Data Creazione: ${new Date(assessmentData.created_at).toLocaleDateString('it-IT')}`);
+    if (assessmentData.submitted_at) {
+      doc.text(`Data Sottomissione: ${new Date(assessmentData.submitted_at).toLocaleDateString('it-IT')}`);
+    }
+    if (assessmentData.approved_at) {
+      doc.text(`Data Approvazione: ${new Date(assessmentData.approved_at).toLocaleDateString('it-IT')}`);
+    }
+    doc.moveDown(2);
+
+    // Organization info
+    doc.font('Helvetica-Bold').text('Organizzazione:');
+    doc.font('Helvetica').text(assessmentData.organization_name);
+    if (assessmentData.vat_number) doc.text(`P.IVA: ${assessmentData.vat_number}`);
+    if (assessmentData.address) doc.text(`Indirizzo: ${assessmentData.address}`);
+    if (assessmentData.city) doc.text(`Città: ${assessmentData.city}`);
+    doc.moveDown(2);
+
+    // Footer
+    doc.fontSize(10).font('Helvetica').text(
+      `Report generato il ${new Date().toLocaleString('it-IT')}`,
+      50, 700,
+      { align: 'center' }
+    );
+
+    doc.end();
+
+    return new Promise((resolve, reject) => {
+      doc.on('end', () => {
+        resolve(Buffer.concat(chunks));
+      });
+      doc.on('error', reject);
+    });
+
+  } catch (error) {
+    logger.error('Error generating assessment report:', error);
+    throw error;
+  }
+};
+
+/**
+ * Generate certificate PDF (alias)
+ */
+export const generateCertificate = generateAccreditationCertificate;
+
 export default {
-  generateAccreditationCertificate
+  generateAccreditationCertificate,
+  generateAssessmentReport,
+  generateCertificate
 };
