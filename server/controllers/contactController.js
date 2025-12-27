@@ -11,17 +11,13 @@ export const submitContact = async (req, res) => {
   try {
     const { userType, name, email, company, linkedin, message } = req.body;
 
-    // Extract IP address and user agent
-    const ipAddress = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    const userAgent = req.headers['user-agent'];
-
     // Start transaction
     await client.query('BEGIN');
 
     // Insert contact into database
     const insertQuery = `
-      INSERT INTO contacts (user_type, name, email, company, linkedin, message, ip_address, user_agent, status)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'new')
+      INSERT INTO contacts (user_type, name, email, company, linkedin, message, status)
+      VALUES ($1, $2, $3, $4, $5, $6, 'new')
       RETURNING id, created_at
     `;
 
@@ -31,9 +27,7 @@ export const submitContact = async (req, res) => {
       email,
       company || null,
       linkedin || null,
-      message || null,
-      ipAddress,
-      userAgent
+      message || null
     ];
 
     const result = await client.query(insertQuery, values);
@@ -202,11 +196,11 @@ export const getContactById = async (req, res) => {
 export const updateContactStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status, notes } = req.body;
+    const { status } = req.body;
 
     const result = await pool.query(
-      'UPDATE contacts SET status = $1, notes = $2 WHERE id = $3 RETURNING *',
-      [status, notes || null, id]
+      'UPDATE contacts SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
+      [status, id]
     );
 
     if (result.rows.length === 0) {

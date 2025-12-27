@@ -82,19 +82,16 @@ export const createProduct = async (req, res) => {
       short_description,
       price,
       category,
-      image_url,
-      features,
       duration_months,
-      certification_type,
-      stock
+      metadata
     } = req.body;
 
     const result = await pool.query(
       `INSERT INTO products (
         name, slug, description, short_description, price, category,
-        image_url, features, duration_months, certification_type, stock, active
+        duration_months, metadata, active
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, true)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, true)
       RETURNING *`,
       [
         name,
@@ -103,11 +100,8 @@ export const createProduct = async (req, res) => {
         short_description,
         price,
         category,
-        image_url || null,
-        features ? JSON.stringify(features) : null,
         duration_months || null,
-        certification_type || null,
-        stock || -1
+        metadata ? JSON.stringify(metadata) : null
       ]
     );
 
@@ -149,11 +143,8 @@ export const updateProduct = async (req, res) => {
       short_description,
       price,
       category,
-      image_url,
-      features,
       duration_months,
-      certification_type,
-      stock,
+      metadata,
       active
     } = req.body;
 
@@ -165,14 +156,11 @@ export const updateProduct = async (req, res) => {
            short_description = COALESCE($4, short_description),
            price = COALESCE($5, price),
            category = COALESCE($6, category),
-           image_url = COALESCE($7, image_url),
-           features = COALESCE($8, features),
-           duration_months = COALESCE($9, duration_months),
-           certification_type = COALESCE($10, certification_type),
-           stock = COALESCE($11, stock),
-           active = COALESCE($12, active),
+           duration_months = COALESCE($7, duration_months),
+           metadata = COALESCE($8, metadata),
+           active = COALESCE($9, active),
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = $13
+       WHERE id = $10
        RETURNING *`,
       [
         name,
@@ -181,11 +169,8 @@ export const updateProduct = async (req, res) => {
         short_description,
         price,
         category,
-        image_url,
-        features ? JSON.stringify(features) : null,
         duration_months,
-        certification_type,
-        stock,
+        metadata ? JSON.stringify(metadata) : undefined,
         active,
         id
       ]

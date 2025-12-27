@@ -30,8 +30,7 @@ export const createOrder = async (req, res) => {
       billing_city,
       billing_postal_code,
       billing_country,
-      payment_method = 'bank_transfer',
-      notes
+      payment_method = 'bank_transfer'
     } = req.body;
 
     if (!req.user) {
@@ -60,28 +59,29 @@ export const createOrder = async (req, res) => {
     }
 
     // Calculate total
-    const totalAmount = cartResult.rows.reduce((sum, item) => {
+    const subtotalAmount = cartResult.rows.reduce((sum, item) => {
       return sum + (parseFloat(item.price) * item.quantity);
     }, 0);
+
+    const taxAmount = subtotalAmount * 0.22; // IVA 22%
+    const totalAmount = subtotalAmount + taxAmount;
 
     // Create order
     const orderNumber = generateOrderNumber();
 
     const orderResult = await client.query(
       `INSERT INTO orders (
-        user_id, order_number, status, total_amount, currency,
+        user_id, order_number, status, subtotal_amount, tax_amount, total_amount, currency,
         payment_method, payment_status,
         billing_name, billing_email, billing_phone,
-        billing_address, billing_city, billing_postal_code, billing_country,
-        notes
+        billing_address, billing_city, billing_postal_code, billing_country
       )
-      VALUES ($1, $2, 'pending', $3, 'EUR', $4, 'pending', $5, $6, $7, $8, $9, $10, $11, $12)
+      VALUES ($1, $2, 'pending', $3, $4, $5, 'EUR', $6, 'pending', $7, $8, $9, $10, $11, $12, $13)
       RETURNING *`,
       [
-        req.user.id, orderNumber, totalAmount, payment_method,
+        req.user.id, orderNumber, subtotalAmount, taxAmount, totalAmount, payment_method,
         billing_name, billing_email, billing_phone,
-        billing_address, billing_city, billing_postal_code, billing_country || 'Italia',
-        notes || null
+        billing_address, billing_city, billing_postal_code, billing_country || 'Italia'
       ]
     );
 
@@ -190,10 +190,14 @@ export const getOrderById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const orderResult = await pool.query(
-      'SELECT * FROM orders WHERE id = $1 AND user_id = $2',
-      [id, req.user.id]
-    );
+    // Admin can see all orders, users can only see their own
+    const query = req.user.role === 'admin'
+      ? 'SELECT * FROM orders WHERE id = $1'
+      : 'SELECT * FROM orders WHERE id = $1 AND user_id = $2';
+
+    const params = req.user.role === 'admin' ? [id] : [id, req.user.id];
+
+    const orderResult = await pool.query(query, params);
 
     if (orderResult.rows.length === 0) {
       return res.status(404).json({
@@ -272,18 +276,16 @@ export const getAllOrders = async (req, res) => {
 export const updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status, payment_status, notes } = req.body;
+    const { status, payment_status } = req.body;
 
     const result = await pool.query(
       `UPDATE orders
        SET status = COALESCE($1, status),
            payment_status = COALESCE($2, payment_status),
-           notes = COALESCE($3, notes),
-           updated_at = CURRENT_TIMESTAMP,
-           completed_at = CASE WHEN $1 = 'completed' THEN CURRENT_TIMESTAMP ELSE completed_at END
-       WHERE id = $4
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $3
        RETURNING *`,
-      [status, payment_status, notes, id]
+      [status, payment_status, id]
     );
 
     if (result.rows.length === 0) {
