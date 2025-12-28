@@ -422,6 +422,32 @@ export const removeUserFromOrganization = async (organizationId, userId, removed
   }
 };
 
+/**
+ * Get organization by user ID (for organization_admin/operator users)
+ */
+export const getOrganizationByUserId = async (userId) => {
+  try {
+    const result = await pool.query(
+      `SELECT o.*
+       FROM organizations o
+       INNER JOIN organization_users ou ON o.id = ou.organization_id
+       WHERE ou.user_id = $1
+       LIMIT 1`,
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      throw new Error('Nessuna organizzazione associata a questo utente');
+    }
+
+    return result.rows[0];
+
+  } catch (error) {
+    logger.error('Errore recupero organizzazione per utente:', error);
+    throw error;
+  }
+};
+
 export default {
   createOrganization,
   getOrganizationById,
@@ -430,5 +456,6 @@ export default {
   changeOrganizationStatus,
   addUserToOrganization,
   getOrganizationUsers,
-  removeUserFromOrganization
+  removeUserFromOrganization,
+  getOrganizationByUserId
 };

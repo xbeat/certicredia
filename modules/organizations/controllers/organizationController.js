@@ -6,7 +6,8 @@ import {
   changeOrganizationStatus,
   addUserToOrganization,
   getOrganizationUsers,
-  removeUserFromOrganization
+  removeUserFromOrganization,
+  getOrganizationByUserId
 } from '../services/organizationService.js';
 import logger from '../../../server/utils/logger.js';
 
@@ -240,6 +241,31 @@ export const removeUserHandler = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || 'Errore durante la rimozione dell\'utente'
+    });
+  }
+};
+
+/**
+ * GET /api/organizations/me
+ * Get current user's organization
+ */
+export const getMyOrganizationHandler = async (req, res) => {
+  try {
+    const organization = await getOrganizationByUserId(req.user.id);
+
+    res.json({
+      success: true,
+      data: organization
+    });
+
+  } catch (error) {
+    logger.error('Errore recupero organizzazione utente:', error);
+
+    const statusCode = error.message.includes('Nessuna organizzazione') ? 404 : 500;
+
+    res.status(statusCode).json({
+      success: false,
+      message: error.message || 'Errore durante il recupero dell\'organizzazione'
     });
   }
 };

@@ -377,7 +377,8 @@ async function toggleProductStatus(productId, newStatus) {
 // Orders Management
 async function loadOrders() {
     try {
-        const response = await apiCall('/api/orders/admin/all');
+        const { page, perPage } = state.pagination.orders;
+        const response = await apiCall(`/api/orders/admin/all?page=${page}&limit=${perPage}`);
         if (!response) return;
 
         const data = await response.json();
@@ -407,6 +408,11 @@ async function loadOrders() {
                 </td>
             </tr>
         `).join('');
+
+        // Render pagination controls if pagination data is available
+        if (data.pagination) {
+            renderPaginationControls('orders-pagination', 'orders', data.pagination);
+        }
 
     } catch (error) {
         console.error('Load orders error:', error);
@@ -522,11 +528,11 @@ function closeOrderModal() {
 // Users Management
 async function loadUsers() {
     try {
-        // Since we don't have a users endpoint yet, we'll fetch from a workaround
-        const response = await apiCall('/api/auth/users');
+        const { page, perPage } = state.pagination.users;
+        const response = await apiCall(`/api/auth/users?page=${page}&limit=${perPage}`);
         if (!response) {
             // Fallback: show empty state
-            document.getElementById('users-table-body').innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-400">Endpoint utenti non ancora implementato</td></tr>';
+            document.getElementById('users-table-body').innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Endpoint utenti non ancora implementato</td></tr>';
             return;
         }
 
@@ -560,16 +566,22 @@ async function loadUsers() {
             </tr>
         `).join('');
 
+        // Render pagination controls if pagination data is available
+        if (data.pagination) {
+            renderPaginationControls('users-pagination', 'users', data.pagination);
+        }
+
     } catch (error) {
         console.error('Load users error:', error);
-        document.getElementById('users-table-body').innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-400">Nessun utente</td></tr>';
+        document.getElementById('users-table-body').innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Nessun utente</td></tr>';
     }
 }
 
 // Contacts Management
 async function loadContacts() {
     try {
-        const response = await apiCall('/api/contact');
+        const { page, perPage } = state.pagination.contacts;
+        const response = await apiCall(`/api/contact?page=${page}&limit=${perPage}`);
         if (!response) return;
 
         const data = await response.json();
@@ -605,6 +617,11 @@ async function loadContacts() {
                 </td>
             </tr>
         `).join('');
+
+        // Render pagination controls if pagination data is available
+        if (data.pagination) {
+            renderPaginationControls('contacts-pagination', 'contacts', data.pagination);
+        }
 
     } catch (error) {
         console.error('Load contacts error:', error);

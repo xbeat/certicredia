@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrazione Organizzazione - CertiCredia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <header class="gradient-bg text-white py-6">
+    <div class="max-w-4xl mx-auto px-4">
+      <a href="/public/pages/app-landing.html" class="text-sm text-purple-200 hover:text-white mb-2 inline-block">← Torna alla Home</a>
+      <h1 class="text-3xl font-bold">Registrazione Organizzazione</h1>
+      <p class="text-purple-100 mt-2">Crea il tuo account organizzazione per accedere al sistema di assessment</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-3xl mx-auto px-4 py-12">
+
+    <!-- Registration Form Card -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Dati Organizzazione</h2>
+
+      <!-- Error/Success Messages -->
+      <div id="messageBox" class="hidden mb-4 p-4 rounded-lg"></div>
+
+      <!-- Registration Form -->
+      <form id="registerForm">
+
+        <!-- Organization Type -->
+        <div class="mb-6 bg-purple-50 border border-purple-200 rounded-lg p-4">
+          <label for="organizationType" class="block text-gray-700 font-semibold mb-2">Tipo Organizzazione *</label>
+          <select
+            id="organizationType"
+            name="organizationType"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          >
+            <option value="">-- Seleziona --</option>
+            <option value="PUBLIC_ENTITY">Ente Pubblico</option>
+            <option value="PRIVATE_COMPANY">Azienda Privata</option>
+            <option value="NON_PROFIT">Organizzazione No Profit</option>
+          </select>
+        </div>
+
+        <h3 class="text-lg font-bold text-gray-700 mb-4 border-b pb-2">Informazioni Organizzazione</h3>
+
+        <!-- Organization Name -->
+        <div class="mb-4">
+          <label for="organizationName" class="block text-gray-700 font-semibold mb-2">Nome Organizzazione *</label>
+          <input
+            type="text"
+            id="organizationName"
+            name="organizationName"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            placeholder="Es: Comune di Milano, Azienda XYZ S.r.l."
+          />
+        </div>
+
+        <!-- VAT & Fiscal Code -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="vatNumber" class="block text-gray-700 font-semibold mb-2">Partita IVA</label>
+            <input
+              type="text"
+              id="vatNumber"
+              name="vatNumber"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="IT12345678901"
+            />
+          </div>
+          <div>
+            <label for="fiscalCode" class="block text-gray-700 font-semibold mb-2">Codice Fiscale</label>
+            <input
+              type="text"
+              id="fiscalCode"
+              name="fiscalCode"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="12345678901"
+            />
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="mb-4">
+          <label for="address" class="block text-gray-700 font-semibold mb-2">Indirizzo *</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            placeholder="Via Roma 123"
+          />
+        </div>
+
+        <!-- City & Postal Code -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="city" class="block text-gray-700 font-semibold mb-2">Città *</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="Milano"
+            />
+          </div>
+          <div>
+            <label for="postalCode" class="block text-gray-700 font-semibold mb-2">CAP *</label>
+            <input
+              type="text"
+              id="postalCode"
+              name="postalCode"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="20100"
+            />
+          </div>
+        </div>
+
+        <!-- Contact Email & Phone -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div>
+            <label for="email" class="block text-gray-700 font-semibold mb-2">Email Organizzazione *</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="info@organizzazione.it"
+            />
+          </div>
+          <div>
+            <label for="phone" class="block text-gray-700 font-semibold mb-2">Telefono</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="+39 02 1234567"
+            />
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-gray-700 mb-4 border-b pb-2">Responsabile Account</h3>
+
+        <!-- Contact Person Name -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="contactFirstName" class="block text-gray-700 font-semibold mb-2">Nome Responsabile *</label>
+            <input
+              type="text"
+              id="contactFirstName"
+              name="contactFirstName"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="Mario"
+            />
+          </div>
+          <div>
+            <label for="contactLastName" class="block text-gray-700 font-semibold mb-2">Cognome Responsabile *</label>
+            <input
+              type="text"
+              id="contactLastName"
+              name="contactLastName"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="Rossi"
+            />
+          </div>
+        </div>
+
+        <!-- Contact Email & Phone -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="contactEmail" class="block text-gray-700 font-semibold mb-2">Email Responsabile *</label>
+            <input
+              type="email"
+              id="contactEmail"
+              name="contactEmail"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="mario.rossi@organizzazione.it"
+            />
+          </div>
+          <div>
+            <label for="contactPhone" class="block text-gray-700 font-semibold mb-2">Telefono Responsabile</label>
+            <input
+              type="tel"
+              id="contactPhone"
+              name="contactPhone"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="+39 333 1234567"
+            />
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-gray-700 mb-4 border-b pb-2">Credenziali Accesso</h3>
+
+        <!-- Password -->
+        <div class="mb-4">
+          <label for="password" class="block text-gray-700 font-semibold mb-2">Password *</label>
+          <div class="relative">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              class="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="••••••••••••••••••••••••"
+            />
+            <button
+              type="button"
+              id="togglePassword"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </button>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">Minimo 12 caratteri, lettere maiuscole, minuscole, numeri e simboli</p>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-6">
+          <label for="confirmPassword" class="block text-gray-700 font-semibold mb-2">Conferma Password *</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            placeholder="••••••••••••••••••••••••"
+          />
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div class="mb-6">
+          <label class="flex items-start">
+            <input type="checkbox" id="terms" required class="mt-1 mr-2">
+            <span class="text-sm text-gray-600">
+              Accetto i <a href="#" class="text-purple-600 hover:text-purple-700">Termini e Condizioni</a>
+              e la <a href="#" class="text-purple-600 hover:text-purple-700">Privacy Policy</a> *
+            </span>
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          id="registerBtn"
+          class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg transition-colors"
+        >
+          Registra Organizzazione
+        </button>
+
+      </form>
+
+      <!-- Divider -->
+      <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+        <p class="text-gray-600">
+          Hai già un account?
+          <a href="/public/pages/app-landing.html" class="text-purple-600 hover:text-purple-700 font-semibold">
+            Accedi
+          </a>
+        </p>
+        <p class="text-gray-600 mt-2">
+          Sei uno specialist?
+          <a href="/public/pages/register-specialist.html" class="text-cyan-600 hover:text-cyan-700 font-semibold">
+            Registrati come Specialist
+          </a>
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Info Box -->
+    <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <h3 class="font-bold text-blue-800 mb-2">Cosa succede dopo la registrazione?</h3>
+      <ul class="text-sm text-blue-700 space-y-1">
+        <li>✓ L'account verrà verificato dal nostro team</li>
+        <li>✓ Riceverai una email di conferma</li>
+        <li>✓ Potrai accedere alla dashboard organizzazione</li>
+        <li>✓ Potrai richiedere un assessment cybersecurity</li>
+      </ul>
+    </div>
+
+  </main>
+
+  <!-- JavaScript -->
+  <script>
+    const API_BASE = window.location.hostname === 'localhost'
+      ? 'http://localhost:3000/api'
+      : '/api';
+
+    // Show message helper
+    function showMessage(message, type = 'error') {
+      const messageBox = document.getElementById('messageBox');
+      messageBox.className = `mb-4 p-4 rounded-lg ${
+        type === 'error' ? 'bg-red-100 border border-red-400 text-red-700' :
+        type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' :
+        'bg-blue-100 border border-blue-400 text-blue-700'
+      }`;
+      messageBox.textContent = message;
+      messageBox.classList.remove('hidden');
+      messageBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideMessage() {
+      document.getElementById('messageBox').classList.add('hidden');
+    }
+
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', () => {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>';
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+      }
+    });
+
+    // Form Submit
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideMessage();
+
+      const formData = {
+        organizationType: document.getElementById('organizationType').value,
+        organizationName: document.getElementById('organizationName').value.trim(),
+        vatNumber: document.getElementById('vatNumber').value.trim() || null,
+        fiscalCode: document.getElementById('fiscalCode').value.trim() || null,
+        address: document.getElementById('address').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        postalCode: document.getElementById('postalCode').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim() || null,
+        contactFirstName: document.getElementById('contactFirstName').value.trim(),
+        contactLastName: document.getElementById('contactLastName').value.trim(),
+        contactEmail: document.getElementById('contactEmail').value.trim(),
+        contactPhone: document.getElementById('contactPhone').value.trim() || null,
+        password: document.getElementById('password').value
+      };
+
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Validation
+      if (formData.password !== confirmPassword) {
+        showMessage('Le password non corrispondono', 'error');
+        return;
+      }
+
+      if (!formData.organizationType) {
+        showMessage('Seleziona il tipo di organizzazione', 'error');
+        return;
+      }
+
+      if (!document.getElementById('terms').checked) {
+        showMessage('Devi accettare i Termini e Condizioni', 'error');
+        return;
+      }
+
+      const registerBtn = document.getElementById('registerBtn');
+
+      try {
+        registerBtn.disabled = true;
+        registerBtn.textContent = 'Registrazione in corso...';
+
+        const response = await fetch(`${API_BASE}/organizations/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Errore durante la registrazione');
+        }
+
+        showMessage('Registrazione completata! Il tuo account è in attesa di verifica. Reindirizzamento al login...', 'success');
+
+        setTimeout(() => {
+          window.location.href = '/public/pages/app-landing.html';
+        }, 3000);
+
+      } catch (error) {
+        showMessage(error.message, 'error');
+        registerBtn.disabled = false;
+        registerBtn.textContent = 'Registra Organizzazione';
+      }
+    });
+  </script>
+
+</body>
+</html>

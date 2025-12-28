@@ -10,7 +10,8 @@ import {
   changeStatusHandler,
   addUserHandler,
   getOrganizationUsersHandler,
-  removeUserHandler
+  removeUserHandler,
+  getMyOrganizationHandler
 } from '../controllers/organizationController.js';
 
 const router = express.Router();
@@ -41,6 +42,13 @@ router.post(
  * @access  Private (admin)
  */
 router.get('/', authenticate, getAllOrganizationsHandler);
+
+/**
+ * @route   GET /api/organizations/me
+ * @desc    Get current user's organization
+ * @access  Private (organization users)
+ */
+router.get('/me', authenticate, getMyOrganizationHandler);
 
 /**
  * @route   GET /api/organizations/:id

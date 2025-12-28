@@ -283,14 +283,8 @@
     async function loadOrganizationData() {
       try {
         const token = localStorage.getItem('authToken');
-        const user = getCurrentUser();
 
-        if (!user || !user.organizationId) {
-          console.error('No organization ID found');
-          return;
-        }
-
-        const response = await fetch(`${API_BASE}/api/organizations/${user.organizationId}`, {
+        const response = await fetch(`${API_BASE}/api/organizations/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -302,6 +296,8 @@
           currentOrg = data.data;
           displayOrganizationData(currentOrg);
           loadAssignedSpecialists();
+        } else {
+          console.error('Errore caricamento organizzazione:', data.message);
         }
       } catch (error) {
         console.error('Load organization error:', error);
