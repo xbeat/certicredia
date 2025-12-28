@@ -157,7 +157,7 @@ function initAuth() {
 
 async function initCheckout() {
     const form = document.getElementById('checkout-form');
-    if (!form || !getToken()) { location.href = '/auth.html'; return; }
+    if (!form || !getToken()) { location.href = '/public/pages/app-landing.html'; return; }
     try {
         const [cart, user] = await Promise.all([getCart(), getProfile()]);
         if (cart.count === 0) { location.href = '/cart.html'; return; }
@@ -173,7 +173,7 @@ async function initCheckout() {
 }
 
 async function initDashboard() {
-    if (!getToken()) { location.href = '/auth.html'; return; }
+    if (!getToken()) { location.href = '/public/pages/app-landing.html'; return; }
     try {
         const [user, orders] = await Promise.all([getProfile(), getOrders()]);
         document.getElementById('total-orders').textContent = orders.count || 0;
@@ -199,7 +199,7 @@ async function init() {
     const p = location.pathname;
     if (p.includes('shop.html') || p === '/shop') await initShop();
     else if (p.includes('cart.html')) await initCart();
-    else if (p.includes('auth.html')) initAuth();
+    else if (p.includes('app-landing.html')) initAuth();
     else if (p.includes('checkout.html')) await initCheckout();
     else if (p.includes('dashboard.html')) await initDashboard();
     document.getElementById('logout-btn')?.addEventListener('click', handleLogout);

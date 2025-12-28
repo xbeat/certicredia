@@ -29,7 +29,7 @@ async function checkAuth() {
     try {
         const token = localStorage.getItem('token');
         if (!token) {
-            window.location.href = '/auth.html';
+            window.location.href = '/public/pages/app-landing.html';
             return;
         }
 
@@ -58,7 +58,7 @@ async function checkAuth() {
     } catch (error) {
         console.error('Auth error:', error);
         localStorage.removeItem('token');
-        window.location.href = '/auth.html';
+        window.location.href = '/public/pages/app-landing.html';
     }
 }
 
@@ -539,7 +539,7 @@ async function loadContacts() {
 async function apiCall(endpoint, options = {}) {
     const token = localStorage.getItem('token');
     if (!token) {
-        window.location.href = '/auth.html';
+        window.location.href = '/public/pages/app-landing.html';
         return null;
     }
 
@@ -556,7 +556,7 @@ async function apiCall(endpoint, options = {}) {
         if (!response.ok) {
             if (response.status === 401) {
                 localStorage.removeItem('token');
-                window.location.href = '/auth.html';
+                window.location.href = '/public/pages/app-landing.html';
                 return null;
             }
             throw new Error(`HTTP ${response.status}`);

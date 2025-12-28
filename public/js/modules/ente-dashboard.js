@@ -23,7 +23,7 @@ async function loadUser() {
   try {
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = '/auth.html';
+      window.location.href = '/public/pages/app-landing.html';
       return;
     }
 
@@ -40,7 +40,7 @@ async function loadUser() {
   } catch (error) {
     console.error('Error loading user:', error);
     localStorage.removeItem('token');
-    window.location.href = '/auth.html';
+    window.location.href = '/public/pages/app-landing.html';
   }
 }
 
@@ -287,7 +287,7 @@ function setupEventListeners() {
 
   document.getElementById('logoutBtn').addEventListener('click', () => {
     localStorage.removeItem('token');
-    window.location.href = '/auth.html';
+    window.location.href = '/public/pages/app-landing.html';
   });
 }
 
