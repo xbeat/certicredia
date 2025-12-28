@@ -188,7 +188,48 @@ async function seedSpecialistAssignments() {
       specialistIds.push(userId);
     }
 
-    // Step 3: Create demo assessments for organizations
+    // Step 3: Create demo assessment template if needed
+    console.log('\n📝 Creating assessment template...');
+
+    let templateId;
+    const existingTemplate = await client.query(
+      `SELECT id FROM assessment_templates WHERE version = $1`,
+      ['v1.0-demo']
+    );
+
+    if (existingTemplate.rows.length > 0) {
+      templateId = existingTemplate.rows[0].id;
+      console.log(`ℹ️  Template already exists (ID: ${templateId})`);
+    } else {
+      const templateResult = await client.query(
+        `INSERT INTO assessment_templates (
+          version,
+          name,
+          description,
+          structure,
+          status,
+          active
+        )
+        VALUES ($1, $2, $3, $4, 'active', true)
+        RETURNING id`,
+        [
+          'v1.0-demo',
+          'Assessment Cybersecurity Standard v1.0',
+          'Template standard per la valutazione della sicurezza informatica delle organizzazioni',
+          JSON.stringify({
+            sections: [
+              { id: 1, title: 'Governance', questions: 10 },
+              { id: 2, title: 'Risk Management', questions: 15 },
+              { id: 3, title: 'Technical Controls', questions: 20 }
+            ]
+          })
+        ]
+      );
+      templateId = templateResult.rows[0].id;
+      console.log(`✅ Created template (ID: ${templateId})`);
+    }
+
+    // Step 4: Create demo assessments for organizations
     console.log('\n📋 Creating demo assessments...');
     const assessmentIds = [];
 
@@ -210,15 +251,12 @@ async function seedSpecialistAssignments() {
         const assessmentResult = await client.query(
           `INSERT INTO assessments (
             organization_id,
-            assessment_type,
-            status,
-            start_date,
-            target_completion_date,
-            scope_description
-           )
-           VALUES ($1, 'full', 'in_progress', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '60 days', $2)
-           RETURNING id`,
-          [orgId, `Assessment cybersecurity completo per ${orgName}`]
+            template_id,
+            status
+          )
+          VALUES ($1, $2, 'in_progress')
+          RETURNING id`,
+          [orgId, templateId]
         );
         assessmentId = assessmentResult.rows[0].id;
         console.log(`✅ Created assessment for ${orgName} (Assessment ID: ${assessmentId})`);
@@ -231,7 +269,7 @@ async function seedSpecialistAssignments() {
       });
     }
 
-    // Step 4: Create specialist assignments
+    // Step 5: Create specialist assignments
     console.log('\n🔗 Creating specialist assignments...');
 
     let assignmentCount = 0;
