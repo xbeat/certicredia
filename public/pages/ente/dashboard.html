@@ -31,10 +31,20 @@
           <span class="text-xl font-bold text-cyan-400">CertiCredia</span>
           <span class="ml-3 text-slate-300">Dashboard Organizzazione</span>
         </div>
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-3">
           <span id="orgName" class="text-sm text-slate-300"></span>
-          <a href="/public/pages/profile.html" class="text-sm text-slate-400 hover:text-slate-200">Il Mio Profilo</a>
-          <button id="logoutBtn" class="text-sm text-red-400 hover:text-red-300">Logout</button>
+          <a href="/public/pages/profile.html" class="bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white px-3 py-2 rounded-lg transition-colors flex items-center gap-2 border border-slate-600 text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+            Profilo
+          </a>
+          <button id="logoutBtn" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 px-3 py-2 rounded-lg transition-colors flex items-center gap-2 border border-red-500/30 text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            Logout
+          </button>
         </div>
       </div>
     </div>
@@ -404,8 +414,12 @@
 
     // Logout handler
     document.getElementById('logoutBtn').addEventListener('click', () => {
+      // Clear all possible token/user storage keys
       localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
       localStorage.removeItem('currentUser');
+      localStorage.removeItem('user');
+      localStorage.removeItem('refreshToken');
       window.location.href = '/public/pages/app-landing.html';
     });
 
