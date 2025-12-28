@@ -243,14 +243,29 @@ export const deleteProduct = async (req, res) => {
  */
 export const getAllProductsAdmin = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = (page - 1) * limit;
+
+    // Get total count
+    const countResult = await pool.query('SELECT COUNT(*) FROM products');
+    const total = parseInt(countResult.rows[0].count);
+
+    // Get paginated results
     const result = await pool.query(
-      'SELECT * FROM products ORDER BY created_at DESC'
+      'SELECT * FROM products ORDER BY created_at DESC LIMIT $1 OFFSET $2',
+      [limit, offset]
     );
 
     res.json({
       success: true,
-      count: result.rows.length,
-      data: result.rows
+      data: result.rows,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
     });
 
   } catch (error) {

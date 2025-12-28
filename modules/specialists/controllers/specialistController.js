@@ -3,7 +3,8 @@ import {
   generateExam,
   submitExam,
   addCPERecord,
-  getSpecialistDashboard
+  getSpecialistDashboard,
+  getAllSpecialists
 } from '../services/specialistService.js';
 import logger from '../../../server/utils/logger.js';
 
@@ -78,6 +79,27 @@ export const getDashboard = async (req, res) => {
     });
   } catch (error) {
     logger.error('Error getting dashboard:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getAllSpecialistsHandler = async (req, res) => {
+  try {
+    const filters = {
+      status: req.query.status,
+      search: req.query.search,
+      limit: parseInt(req.query.limit) || 50,
+      offset: parseInt(req.query.offset) || 0
+    };
+
+    const result = await getAllSpecialists(filters);
+
+    res.json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    logger.error('Error getting specialists:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

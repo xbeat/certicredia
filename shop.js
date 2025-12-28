@@ -41,14 +41,35 @@ function notify(msg, type = 'info') {
     setTimeout(() => n.remove(), 5000);
 }
 
-function price(p) { return `€${parseFloat(p).toFixed(2)}`; }
+function price(p) {
+    const formatted = parseFloat(p).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return `€${formatted}`;
+}
 function updateCartBadge(c) { const b = document.getElementById('cart-badge'); if (b) { b.textContent = c; b.classList.toggle('hidden', c === 0); } }
 function updateAuthUI() {
     const target = document.getElementById('auth-buttons') || document.getElementById('auth-nav');
     if (!target) return;
     target.innerHTML = getToken() && state.user ?
-        `<a href="/dashboard.html" class="text-slate-300 hover:text-white">${state.user.name}</a><button onclick="handleLogout()" class="text-red-400">Logout</button>` :
-        `<a href="/auth.html" class="btn-outline">Accedi</a>`;
+        `<span class="text-sm text-slate-400">${state.user.name}</span>
+         <a href="/dashboard.html" class="bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2 border border-slate-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+            </svg>
+            Dashboard
+         </a>
+         <a href="/public/pages/profile.html" class="bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2 border border-slate-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+            Profilo
+         </a>
+         <button onclick="handleLogout()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 px-4 py-2 rounded-lg transition-colors flex items-center gap-2 border border-red-500/30">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            Logout
+         </button>` :
+        `<a href="/public/pages/app-landing.html" class="btn-outline">Accedi</a>`;
 }
 
 async function initShop() {
@@ -157,7 +178,7 @@ function initAuth() {
 
 async function initCheckout() {
     const form = document.getElementById('checkout-form');
-    if (!form || !getToken()) { location.href = '/auth.html'; return; }
+    if (!form || !getToken()) { location.href = '/public/pages/app-landing.html'; return; }
     try {
         const [cart, user] = await Promise.all([getCart(), getProfile()]);
         if (cart.count === 0) { location.href = '/cart.html'; return; }
@@ -173,16 +194,35 @@ async function initCheckout() {
 }
 
 async function initDashboard() {
-    if (!getToken()) { location.href = '/auth.html'; return; }
+    if (!getToken()) { location.href = '/public/pages/app-landing.html'; return; }
     try {
         const [user, orders] = await Promise.all([getProfile(), getOrders()]);
-        document.getElementById('total-orders').textContent = orders.count || 0;
+
+        // Update user name in header
+        const userName = document.getElementById('user-name');
+        if (userName) userName.textContent = user.data.name || user.data.email;
+
+        // Calculate stats
+        const totalOrders = orders.count || 0;
+        const totalSpent = orders.data.reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0);
+        const avgOrder = totalOrders > 0 ? totalSpent / totalOrders : 0;
+
+        document.getElementById('total-orders').textContent = totalOrders;
+        if (document.getElementById('total-spent')) document.getElementById('total-spent').textContent = price(totalSpent);
+        if (document.getElementById('avg-order')) document.getElementById('avg-order').textContent = price(avgOrder);
+
         const ol = document.getElementById('orders-list');
         if (orders.count === 0) { ol.classList.add('hidden'); document.getElementById('no-orders')?.classList.remove('hidden'); }
         else {
-            ol.innerHTML = orders.data.map(o => `<div class="bg-slate-700 rounded-lg p-4 flex justify-between"><div><div class="font-bold">${o.order_number}</div><div class="text-sm text-slate-400">${new Date(o.created_at).toLocaleDateString('it-IT')}</div></div><div class="text-right"><div class="font-bold text-cyan-400">${price(o.total_amount)}</div></div></div>`).join('');
+            ol.innerHTML = orders.data.map(o => `<div class="bg-slate-700 rounded-lg p-4 flex justify-between"><div><div class="font-bold">${o.order_number}</div><div class="text-sm text-slate-400">${new Date(o.created_at).toLocaleDateString('it-IT')}</div></div><div class="text-right"><div class="font-bold text-cyan-400">${price(o.total_amount)}</div><div class="text-xs text-slate-400 capitalize">${o.status}</div></div></div>`).join('');
         }
-        document.getElementById('profile-info').innerHTML = `<div class="space-y-3 text-sm"><div>Nome: ${user.data.name}</div><div>Email: ${user.data.email}</div></div>`;
+
+        // Update profile info
+        document.getElementById('user-email').textContent = user.data.email || '-';
+        document.getElementById('user-phone').textContent = user.data.phone || '-';
+        document.getElementById('user-company').textContent = user.data.company || '-';
+        const address = [user.data.address, user.data.city, user.data.postal_code].filter(Boolean).join(', ');
+        document.getElementById('user-address').textContent = address || '-';
     } catch (e) { notify(e.message, 'error'); }
 }
 
@@ -199,7 +239,7 @@ async function init() {
     const p = location.pathname;
     if (p.includes('shop.html') || p === '/shop') await initShop();
     else if (p.includes('cart.html')) await initCart();
-    else if (p.includes('auth.html')) initAuth();
+    else if (p.includes('app-landing.html')) initAuth();
     else if (p.includes('checkout.html')) await initCheckout();
     else if (p.includes('dashboard.html')) await initDashboard();
     document.getElementById('logout-btn')?.addEventListener('click', handleLogout);

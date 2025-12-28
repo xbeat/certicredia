@@ -11,8 +11,79 @@ const state = {
     orders: [],
     users: [],
     contacts: [],
-    currentSection: 'dashboard'
+    currentSection: 'dashboard',
+    pagination: {
+        products: { page: 1, perPage: 20 },
+        orders: { page: 1, perPage: 20 },
+        users: { page: 1, perPage: 20 },
+        contacts: { page: 1, perPage: 20 }
+    }
 };
+
+// Pagination helpers
+function paginateArray(array, page, perPage) {
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+    return {
+        items: array.slice(start, end),
+        total: array.length,
+        page: page,
+        perPage: perPage,
+        totalPages: Math.ceil(array.length / perPage)
+    };
+}
+
+function renderPaginationControls(containerId, type, paginationData) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const { page, limit, total, totalPages } = paginationData;
+
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const startItem = (page - 1) * limit + 1;
+    const endItem = Math.min(page * limit, total);
+
+    container.innerHTML = `
+        <div class="flex items-center justify-between px-4 py-3 bg-slate-800/50 border-t border-slate-700">
+            <div class="flex items-center text-sm text-slate-400">
+                <span>Mostrando <span class="font-medium text-white">${startItem}</span> - <span class="font-medium text-white">${endItem}</span> di <span class="font-medium text-white">${total}</span> risultati</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button
+                    onclick="changePage('${type}', ${page - 1})"
+                    ${page === 1 ? 'disabled' : ''}
+                    class="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                >
+                    Precedente
+                </button>
+                <span class="text-sm text-slate-400">
+                    Pagina <span class="font-medium text-white">${page}</span> di <span class="font-medium text-white">${totalPages}</span>
+                </span>
+                <button
+                    onclick="changePage('${type}', ${page + 1})"
+                    ${page === totalPages ? 'disabled' : ''}
+                    class="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                >
+                    Successiva
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function changePage(type, newPage) {
+    state.pagination[type].page = newPage;
+    switch(type) {
+        case 'products': loadProducts(); break;
+        case 'orders': loadOrders(); break;
+        case 'users': loadUsers(); break;
+        case 'contacts': loadContacts(); break;
+    }
+}
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
@@ -29,7 +100,7 @@ async function checkAuth() {
     try {
         const token = localStorage.getItem('token');
         if (!token) {
-            window.location.href = '/auth.html';
+            window.location.href = '/public/pages/app-landing.html';
             return;
         }
 
@@ -58,7 +129,7 @@ async function checkAuth() {
     } catch (error) {
         console.error('Auth error:', error);
         localStorage.removeItem('token');
-        window.location.href = '/auth.html';
+        window.location.href = '/public/pages/app-landing.html';
     }
 }
 
@@ -178,7 +249,8 @@ function showSection(sectionName) {
 // Products Management
 async function loadProducts() {
     try {
-        const response = await apiCall('/api/products/admin/all');
+        const { page, perPage } = state.pagination.products;
+        const response = await apiCall(`/api/products/admin/all?page=${page}&limit=${perPage}`);
         if (!response) return;
 
         const data = await response.json();
@@ -208,6 +280,11 @@ async function loadProducts() {
                 </td>
             </tr>
         `).join('');
+
+        // Render pagination controls if pagination data is available
+        if (data.pagination) {
+            renderPaginationControls('products-pagination', 'products', data.pagination);
+        }
 
     } catch (error) {
         console.error('Load products error:', error);
@@ -539,7 +616,7 @@ async function loadContacts() {
 async function apiCall(endpoint, options = {}) {
     const token = localStorage.getItem('token');
     if (!token) {
-        window.location.href = '/auth.html';
+        window.location.href = '/public/pages/app-landing.html';
         return null;
     }
 
@@ -556,7 +633,7 @@ async function apiCall(endpoint, options = {}) {
         if (!response.ok) {
             if (response.status === 401) {
                 localStorage.removeItem('token');
-                window.location.href = '/auth.html';
+                window.location.href = '/public/pages/app-landing.html';
                 return null;
             }
             throw new Error(`HTTP ${response.status}`);
@@ -787,7 +864,7 @@ async function loadOrganizations() {
         const data = await response.json();
 
         if (data.success) {
-            allOrganizations = data.data;
+            allOrganizations = data.data.organizations || data.data || [];
             displayOrganizations(allOrganizations);
         } else {
             notify(data.message || 'Errore caricamento organizzazioni', 'error');
@@ -1001,7 +1078,7 @@ async function loadSpecialists() {
         const data = await response.json();
 
         if (data.success) {
-            allSpecialists = data.data;
+            allSpecialists = data.data.specialists || data.data || [];
             displaySpecialists(allSpecialists);
         } else {
             notify(data.message || 'Errore caricamento specialist', 'error');

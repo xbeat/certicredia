@@ -301,8 +301,8 @@
                     } else if (role === 'organization_admin') {
                         window.location.href = '/public/pages/ente/dashboard.html';
                     } else {
-                        // Default: ecommerce user
-                        window.location.href = '/shop.html';
+                        // Default: ecommerce user - go to dashboard
+                        window.location.href = '/dashboard.html';
                     }
                 } else {
                     errorDiv.textContent = data.message || 'Credenziali non valide';

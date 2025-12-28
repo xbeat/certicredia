@@ -30,7 +30,9 @@ export const createOrder = async (req, res) => {
       billing_city,
       billing_postal_code,
       billing_country,
-      payment_method = 'bank_transfer'
+      billing_vat,
+      payment_method = 'bank_transfer',
+      notes
     } = req.body;
 
     if (!req.user) {
@@ -45,7 +47,7 @@ export const createOrder = async (req, res) => {
     // Get cart items
     const cartResult = await client.query(
       `SELECT c.*, p.name, p.price, p.slug
-       FROM cart c
+       FROM cart_items c
        JOIN products p ON c.product_id = p.id
        WHERE c.user_id = $1 AND p.active = true`,
       [req.user.id]
@@ -71,17 +73,19 @@ export const createOrder = async (req, res) => {
 
     const orderResult = await client.query(
       `INSERT INTO orders (
-        user_id, order_number, status, subtotal_amount, tax_amount, total_amount, currency,
+        user_id, order_number, status, subtotal_amount, tax_amount, total_amount,
         payment_method, payment_status,
         billing_name, billing_email, billing_phone,
-        billing_address, billing_city, billing_postal_code, billing_country
+        billing_address, billing_city, billing_postal_code, billing_country, billing_vat,
+        customer_notes
       )
-      VALUES ($1, $2, 'pending', $3, $4, $5, 'EUR', $6, 'pending', $7, $8, $9, $10, $11, $12, $13)
+      VALUES ($1, $2, 'pending', $3, $4, $5, $6, 'pending', $7, $8, $9, $10, $11, $12, $13, $14, $15)
       RETURNING *`,
       [
         req.user.id, orderNumber, subtotalAmount, taxAmount, totalAmount, payment_method,
         billing_name, billing_email, billing_phone,
-        billing_address, billing_city, billing_postal_code, billing_country || 'Italia'
+        billing_address, billing_city, billing_postal_code, billing_country || 'Italia', billing_vat,
+        notes
       ]
     );
 
@@ -91,7 +95,7 @@ export const createOrder = async (req, res) => {
     for (const item of cartResult.rows) {
       await client.query(
         `INSERT INTO order_items (
-          order_id, product_id, product_name, product_description,
+          order_id, product_id, product_name, product_slug,
           quantity, unit_price, total_price
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
@@ -109,7 +113,7 @@ export const createOrder = async (req, res) => {
 
     // Clear cart
     await client.query(
-      'DELETE FROM cart WHERE user_id = $1',
+      'DELETE FROM cart_items WHERE user_id = $1',
       [req.user.id]
     );
 
@@ -159,7 +163,7 @@ export const getUserOrders = async (req, res) => {
     }
 
     const result = await pool.query(
-      `SELECT id, order_number, status, total_amount, currency,
+      `SELECT id, order_number, status, total_amount,
               payment_method, payment_status, created_at
        FROM orders
        WHERE user_id = $1
@@ -237,8 +241,24 @@ export const getOrderById = async (req, res) => {
  */
 export const getAllOrders = async (req, res) => {
   try {
-    const { status, limit = 50, offset = 0 } = req.query;
+    const { status } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = (page - 1) * limit;
 
+    // Build count query
+    let countQuery = 'SELECT COUNT(*) FROM orders WHERE 1=1';
+    const countParams = [];
+    if (status) {
+      countQuery += ' AND status = $1';
+      countParams.push(status);
+    }
+
+    // Get total count
+    const countResult = await pool.query(countQuery, countParams);
+    const total = parseInt(countResult.rows[0].count);
+
+    // Build data query
     let query = 'SELECT * FROM orders WHERE 1=1';
     const params = [];
     let paramIndex = 1;
@@ -256,8 +276,13 @@ export const getAllOrders = async (req, res) => {
 
     res.json({
       success: true,
-      count: result.rows.length,
-      data: result.rows
+      data: result.rows,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
     });
 
   } catch (error) {

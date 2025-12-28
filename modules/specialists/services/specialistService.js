@@ -7,6 +7,74 @@ import logger from '../../../server/utils/logger.js';
  * Complete specialist management: registration, exams, CPE
  */
 
+/**
+ * Get all specialists (admin)
+ */
+export const getAllSpecialists = async (filters = {}) => {
+  try {
+    const {
+      status,
+      search,
+      limit = 50,
+      offset = 0
+    } = filters;
+
+    let whereConditions = [];
+    let params = [];
+    let paramCount = 1;
+
+    if (status) {
+      whereConditions.push(`sp.status = $${paramCount++}`);
+      params.push(status);
+    }
+
+    if (search) {
+      whereConditions.push(`(u.name ILIKE $${paramCount} OR u.email ILIKE $${paramCount})`);
+      params.push(`%${search}%`);
+      paramCount++;
+    }
+
+    const whereClause = whereConditions.length > 0
+      ? `WHERE ${whereConditions.join(' AND ')}`
+      : '';
+
+    const query = `
+      SELECT sp.*, u.name, u.email, u.phone
+      FROM specialist_profiles sp
+      JOIN users u ON sp.user_id = u.id
+      ${whereClause}
+      ORDER BY sp.created_at DESC
+      LIMIT $${paramCount++} OFFSET $${paramCount++}
+    `;
+
+    params.push(limit, offset);
+
+    const result = await pool.query(query, params);
+
+    // Count total
+    const countQuery = `
+      SELECT COUNT(*)
+      FROM specialist_profiles sp
+      JOIN users u ON sp.user_id = u.id
+      ${whereClause}
+    `;
+    const countResult = await pool.query(countQuery, params.slice(0, params.length - 2));
+    const total = parseInt(countResult.rows[0].count);
+
+    return {
+      specialists: result.rows,
+      total,
+      limit,
+      offset,
+      hasMore: total > (offset + limit)
+    };
+
+  } catch (error) {
+    logger.error('Error getting specialists:', error);
+    throw error;
+  }
+};
+
 const EXAM_CONFIG = {
   questionsCount: parseInt(process.env.SPECIALIST_EXAM_QUESTIONS_COUNT) || 50,
   passingScore: parseInt(process.env.SPECIALIST_EXAM_PASS_SCORE) || 80,

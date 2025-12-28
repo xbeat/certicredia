@@ -14,7 +14,12 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash VARCHAR(255) NOT NULL,
   name VARCHAR(255) NOT NULL,
   company VARCHAR(255),
+  vat_number VARCHAR(50),
   phone VARCHAR(50),
+  address TEXT,
+  city VARCHAR(100),
+  postal_code VARCHAR(20),
+  country VARCHAR(100) DEFAULT 'Italia',
   role VARCHAR(50) DEFAULT 'user',
   active BOOLEAN DEFAULT true,
   email_verified BOOLEAN DEFAULT false,
@@ -133,7 +138,7 @@ CREATE INDEX IF NOT EXISTS idx_order_items_product_id ON order_items(product_id)
 
 CREATE TABLE IF NOT EXISTS cart_items (
   id SERIAL PRIMARY KEY,
-  session_id VARCHAR(255) NOT NULL,
+  session_id VARCHAR(255),
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   quantity INTEGER NOT NULL DEFAULT 1,
@@ -141,7 +146,8 @@ CREATE TABLE IF NOT EXISTS cart_items (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   UNIQUE(session_id, product_id),
-  UNIQUE(user_id, product_id)
+  UNIQUE(user_id, product_id),
+  CHECK (session_id IS NOT NULL OR user_id IS NOT NULL)
 );
 
 CREATE INDEX IF NOT EXISTS idx_cart_items_session_id ON cart_items(session_id);

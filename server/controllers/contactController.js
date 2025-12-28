@@ -119,8 +119,32 @@ export const submitContact = async (req, res) => {
  */
 export const getAllContacts = async (req, res) => {
   try {
-    const { status, userType, limit = 50, offset = 0 } = req.query;
+    const { status, userType } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = (page - 1) * limit;
 
+    // Build count query
+    let countQuery = 'SELECT COUNT(*) FROM contacts WHERE 1=1';
+    const countParams = [];
+    let countParamIndex = 1;
+
+    if (status) {
+      countQuery += ` AND status = $${countParamIndex}`;
+      countParams.push(status);
+      countParamIndex++;
+    }
+
+    if (userType) {
+      countQuery += ` AND user_type = $${countParamIndex}`;
+      countParams.push(userType);
+    }
+
+    // Get total count
+    const countResult = await pool.query(countQuery, countParams);
+    const total = parseInt(countResult.rows[0].count);
+
+    // Build data query
     let query = 'SELECT * FROM contacts WHERE 1=1';
     const params = [];
     let paramIndex = 1;
@@ -144,8 +168,13 @@ export const getAllContacts = async (req, res) => {
 
     res.json({
       success: true,
-      count: result.rows.length,
-      data: result.rows
+      data: result.rows,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
     });
 
   } catch (error) {

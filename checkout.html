@@ -51,6 +51,10 @@
                             <label class="block text-sm mb-2">Paese</label>
                             <input type="text" name="billing_country" value="Italia" class="form-input w-full bg-slate-800 border-slate-700 rounded px-4 py-3">
                         </div>
+                        <div>
+                            <label class="block text-sm mb-2">Partita IVA</label>
+                            <input type="text" name="billing_vat" placeholder="IT12345678901" class="form-input w-full bg-slate-800 border-slate-700 rounded px-4 py-3">
+                        </div>
                     </div>
 
                     <div class="pt-4">
@@ -86,5 +90,36 @@
     </main>
 
     <script src="shop.js"></script>
+    <script>
+        // Pre-compile checkout form with user profile data
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${API_BASE || ''}/auth/profile`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const user = result.data;
+                    const form = document.querySelector('#checkout-form');
+
+                    // Pre-fill form fields
+                    if (user.name) form.billing_name.value = user.name;
+                    if (user.email) form.billing_email.value = user.email;
+                    if (user.phone) form.billing_phone.value = user.phone;
+                    if (user.address) form.billing_address.value = user.address;
+                    if (user.city) form.billing_city.value = user.city;
+                    if (user.postal_code) form.billing_postal_code.value = user.postal_code;
+                    if (user.country) form.billing_country.value = user.country;
+                    if (user.vat_number) form.billing_vat.value = user.vat_number;
+                }
+            } catch (e) {
+                console.error('Failed to load profile:', e);
+            }
+        });
+    </script>
 </body>
 </html>

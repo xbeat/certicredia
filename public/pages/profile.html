@@ -92,6 +92,18 @@
             >
           </div>
 
+          <!-- VAT Number -->
+          <div>
+            <label for="vat_number" class="block text-sm font-medium text-slate-400 mb-2">Partita IVA</label>
+            <input
+              type="text"
+              id="vat_number"
+              name="vat_number"
+              placeholder="IT12345678901"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors"
+            >
+          </div>
+
           <!-- Phone -->
           <div>
             <label for="phone" class="block text-sm font-medium text-slate-400 mb-2">Telefono</label>
@@ -239,16 +251,33 @@
     // Load user profile
     async function loadProfile() {
       try {
-        const user = getCurrentUser();
-        if (!user) {
-          console.error('No user found');
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          window.location.href = '/public/pages/app-landing.html';
           return;
         }
 
+        // Fetch profile data from API
+        const response = await fetch(`${API_BASE}/auth/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+          throw new Error(result.message || 'Errore caricamento profilo');
+        }
+
+        const user = result.data;
+
         // Populate form with user data
-        document.getElementById('name').value = user.name || (user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : '');
+        document.getElementById('name').value = user.name || '';
         document.getElementById('email').value = user.email || '';
         document.getElementById('company').value = user.company || '';
+        document.getElementById('vat_number').value = user.vat_number || '';
         document.getElementById('phone').value = user.phone || '';
         document.getElementById('address').value = user.address || '';
         document.getElementById('city').value = user.city || '';
@@ -300,7 +329,8 @@
             window.location.href = '/public/pages/ente/dashboard.html';
             break;
           default:
-            window.location.href = '/public/pages/app-landing.html';
+            // Regular user - go to user dashboard
+            window.location.href = '/dashboard.html';
         }
       } else {
         window.location.href = '/public/pages/app-landing.html';
@@ -334,6 +364,7 @@
         const formData = {
           name: document.getElementById('name').value,
           company: document.getElementById('company').value,
+          vat_number: document.getElementById('vat_number').value,
           phone: document.getElementById('phone').value,
           address: document.getElementById('address').value,
           city: document.getElementById('city').value,
