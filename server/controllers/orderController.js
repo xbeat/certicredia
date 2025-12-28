@@ -30,7 +30,8 @@ export const createOrder = async (req, res) => {
       billing_city,
       billing_postal_code,
       billing_country,
-      payment_method = 'bank_transfer'
+      payment_method = 'bank_transfer',
+      notes
     } = req.body;
 
     if (!req.user) {
@@ -74,14 +75,16 @@ export const createOrder = async (req, res) => {
         user_id, order_number, status, subtotal_amount, tax_amount, total_amount,
         payment_method, payment_status,
         billing_name, billing_email, billing_phone,
-        billing_address, billing_city, billing_postal_code, billing_country
+        billing_address, billing_city, billing_postal_code, billing_country,
+        customer_notes
       )
-      VALUES ($1, $2, 'pending', $3, $4, $5, $6, 'pending', $7, $8, $9, $10, $11, $12, $13)
+      VALUES ($1, $2, 'pending', $3, $4, $5, $6, 'pending', $7, $8, $9, $10, $11, $12, $13, $14)
       RETURNING *`,
       [
         req.user.id, orderNumber, subtotalAmount, taxAmount, totalAmount, payment_method,
         billing_name, billing_email, billing_phone,
-        billing_address, billing_city, billing_postal_code, billing_country || 'Italia'
+        billing_address, billing_city, billing_postal_code, billing_country || 'Italia',
+        notes
       ]
     );
 
