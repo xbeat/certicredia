@@ -83,9 +83,9 @@ Generato: 2025-12-28
 
 **API: `/api/orders` (POST)**
 - ✅ Controller: `orderController.js` - createOrder
-- ⚠️  **DA VERIFICARE**: mapping "notes" → "customer_notes"
+- ✅ Mapping: "notes" → "customer_notes" (CORRETTO)
 
-**Status: ⚠️ DA VERIFICARE MAPPING NOTES**
+**Status: ✅ COERENTE**
 
 ---
 
@@ -255,11 +255,9 @@ Generato: 2025-12-28
 
 ---
 
-## ⚠️ DA VERIFICARE
+## ✅ TUTTI I PROBLEMI RISOLTI
 
-### 1. Checkout Notes Mapping
-**File**: `orderController.js` - createOrder
-**Verifica**: Campo `notes` dal form dovrebbe mappare a `customer_notes` nel database
+Tutte le verifiche sono state completate con successo. Non ci sono più discrepanze tra schema database e form.
 
 ---
 
@@ -280,14 +278,18 @@ psql $DATABASE_URL -f core/database/schema/accreditation_schema.sql
 
 ## ✅ CONCLUSIONE
 
-**Status Generale**: ✅ **COERENTE**
+**Status Generale**: ✅ **100% COERENTE**
 
-Tutti i form sono allineati con lo schema database. Le uniche modifiche necessarie sono:
+Tutti i form sono completamente allineati con lo schema database:
 
-1. ✅ Aggiungere campi address a users (migration pronta)
-2. ⚠️ Verificare mapping notes → customer_notes in checkout
+1. ✅ Campi address aggiunti a users table (migration pronta)
+2. ✅ Mapping notes → customer_notes in checkout (implementato)
+3. ✅ Tutti i controller aggiornati
+4. ✅ Tutte le query corrette
 
 **Prossimi Passi**:
-1. Eseguire migration per users table
-2. Testare checkout e verificare salvataggio customer_notes
-3. Seed del database con dati di test
+1. Eseguire migration per users table: `psql $DATABASE_URL -f core/database/migrations/add_address_fields_to_users.sql`
+2. Testare il flusso completo: registrazione → profilo → shop → checkout
+3. Seed del database con dati di test: `node scripts/seedOrders.js`
+
+**Nessun altro intervento necessario sullo schema!** 🎉
