@@ -285,7 +285,7 @@
         const token = localStorage.getItem('authToken');
         console.log('🔍 Loading organization data...');
 
-        const response = await fetch(`${API_BASE}/api/organizations/me`, {
+        const response = await fetch(`${API_BASE}/organizations/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

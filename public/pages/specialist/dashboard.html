@@ -269,7 +269,7 @@
         const token = localStorage.getItem('authToken');
         console.log('🔍 Loading specialist data...');
 
-        const response = await fetch(`${API_BASE}/api/specialists/dashboard`, {
+        const response = await fetch(`${API_BASE}/specialists/dashboard`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
