@@ -3,7 +3,7 @@ import pkg from 'bcrypt';
 const { hash } = pkg;
 import logger from '../server/utils/logger.js';
 
-const SALT_ROUNDS = 12;
+const SALT_ROUNDS = 4;  // Low for demo speed
 
 async function seedEnhancedDemoData() {
   const client = await pool.connect();
