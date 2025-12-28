@@ -11,10 +11,34 @@ import {
   addUserHandler,
   getOrganizationUsersHandler,
   removeUserHandler,
-  getMyOrganizationHandler
+  getMyOrganizationHandler,
+  registerOrganizationHandler
 } from '../controllers/organizationController.js';
 
 const router = express.Router();
+
+/**
+ * @route   POST /api/organizations/register
+ * @desc    Public organization registration
+ * @access  Public
+ */
+router.post(
+  '/register',
+  [
+    body('organizationType').isIn(['PUBLIC_ENTITY', 'PRIVATE_COMPANY', 'NON_PROFIT']).withMessage('Tipo organizzazione non valido'),
+    body('organizationName').trim().notEmpty().withMessage('Nome organizzazione obbligatorio'),
+    body('email').isEmail().withMessage('Email non valida'),
+    body('contactFirstName').trim().notEmpty().withMessage('Nome responsabile obbligatorio'),
+    body('contactLastName').trim().notEmpty().withMessage('Cognome responsabile obbligatorio'),
+    body('contactEmail').isEmail().withMessage('Email responsabile non valida'),
+    body('password').isLength({ min: 12 }).withMessage('Password min 12 caratteri'),
+    body('address').trim().notEmpty().withMessage('Indirizzo obbligatorio'),
+    body('city').trim().notEmpty().withMessage('Città obbligatoria'),
+    body('postalCode').trim().notEmpty().withMessage('CAP obbligatorio')
+  ],
+  validate,
+  registerOrganizationHandler
+);
 
 /**
  * @route   POST /api/organizations

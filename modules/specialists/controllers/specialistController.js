@@ -7,6 +7,10 @@ import {
   getAllSpecialists
 } from '../services/specialistService.js';
 import logger from '../../../server/utils/logger.js';
+import bcrypt from 'bcrypt';
+import pool from '../../../server/config/database.js';
+
+const SALT_ROUNDS = 10;
 
 export const registerCandidate = async (req, res) => {
   try {
@@ -101,5 +105,100 @@ export const getAllSpecialistsHandler = async (req, res) => {
   } catch (error) {
     logger.error('Error getting specialists:', error);
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
+ * POST /api/specialists/register
+ * Public registration endpoint for specialists
+ * Creates user + specialist profile in one transaction
+ */
+export const registerSpecialistPublicHandler = async (req, res) => {
+  const client = await pool.connect();
+
+  try {
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      experienceYears,
+      bio,
+      password
+    } = req.body;
+
+    // Validation
+    if (!firstName || !lastName || !email || !password || experienceYears === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: 'Campi obbligatori mancanti'
+      });
+    }
+
+    await client.query('BEGIN');
+
+    // Check if user already exists
+    const existingUser = await client.query(
+      'SELECT id FROM users WHERE email = $1',
+      [email]
+    );
+
+    if (existingUser.rows.length > 0) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({
+        success: false,
+        message: 'Email già registrata'
+      });
+    }
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+
+    // Create user
+    const userResult = await client.query(
+      `INSERT INTO users (email, password_hash, name, role, phone, active, email_verified)
+       VALUES ($1, $2, $3, 'specialist', $4, true, false)
+       RETURNING id`,
+      [email, passwordHash, `${firstName} ${lastName}`, phone || null]
+    );
+
+    const userId = userResult.rows[0].id;
+
+    // Create specialist profile
+    await client.query(
+      `INSERT INTO specialist_profiles (
+        user_id,
+        experience_years,
+        bio,
+        status,
+        exam_attempts,
+        exam_passed
+      )
+      VALUES ($1, $2, $3, 'candidate', 0, false)`,
+      [userId, experienceYears, bio || null]
+    );
+
+    await client.query('COMMIT');
+
+    logger.info(`Nuovo specialist registrato: ${firstName} ${lastName} (User ID: ${userId})`);
+
+    res.status(201).json({
+      success: true,
+      message: 'Registrazione completata! Il tuo account è in attesa di verifica. Dovrai sostenere l\'esame di qualificazione.',
+      data: {
+        userId: userId
+      }
+    });
+
+  } catch (error) {
+    await client.query('ROLLBACK');
+    logger.error('Errore registrazione specialist:', error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Errore durante la registrazione'
+    });
+  } finally {
+    client.release();
   }
 };

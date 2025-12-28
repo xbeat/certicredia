@@ -8,14 +8,25 @@ import {
   submitExamHandler,
   addCPE,
   getDashboard,
-  getAllSpecialistsHandler
+  getAllSpecialistsHandler,
+  registerSpecialistPublicHandler
 } from '../controllers/specialistController.js';
 
 const router = express.Router();
 
 router.get('/', authenticate, getAllSpecialistsHandler);
 
-router.post('/register', authenticate, [
+// Public registration endpoint
+router.post('/register', [
+  body('firstName').trim().notEmpty().withMessage('Nome obbligatorio'),
+  body('lastName').trim().notEmpty().withMessage('Cognome obbligatorio'),
+  body('email').isEmail().withMessage('Email non valida'),
+  body('password').isLength({ min: 12 }).withMessage('Password min 12 caratteri'),
+  body('experienceYears').isInt({ min: 0 }).withMessage('Anni esperienza obbligatori')
+], validate, registerSpecialistPublicHandler);
+
+// Authenticated endpoint for existing users to create specialist profile
+router.post('/register-profile', authenticate, [
   body('experienceYears').isInt({ min: 0 }).withMessage('Years of experience required'),
   body('bio').optional().trim()
 ], validate, registerCandidate);

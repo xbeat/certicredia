@@ -10,6 +10,10 @@ import {
   getOrganizationByUserId
 } from '../services/organizationService.js';
 import logger from '../../../server/utils/logger.js';
+import bcrypt from 'bcrypt';
+import pool from '../../../server/config/database.js';
+
+const SALT_ROUNDS = 10;
 
 /**
  * POST /api/organizations
@@ -267,5 +271,142 @@ export const getMyOrganizationHandler = async (req, res) => {
       success: false,
       message: error.message || 'Errore durante il recupero dell\'organizzazione'
     });
+  }
+};
+
+/**
+ * POST /api/organizations/register
+ * Public registration endpoint for organizations
+ * Creates user + organization + association in one transaction
+ */
+export const registerOrganizationHandler = async (req, res) => {
+  const client = await pool.connect();
+
+  try {
+    const {
+      // Organization data
+      organizationType,
+      organizationName,
+      vatNumber,
+      fiscalCode,
+      address,
+      city,
+      postalCode,
+      email,
+      phone,
+      // Contact person data
+      contactFirstName,
+      contactLastName,
+      contactEmail,
+      contactPhone,
+      // Credentials
+      password
+    } = req.body;
+
+    // Validation
+    if (!organizationType || !organizationName || !email || !contactFirstName || !contactLastName || !contactEmail || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Campi obbligatori mancanti'
+      });
+    }
+
+    await client.query('BEGIN');
+
+    // Check if user already exists
+    const existingUser = await client.query(
+      'SELECT id FROM users WHERE email = $1',
+      [contactEmail]
+    );
+
+    if (existingUser.rows.length > 0) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({
+        success: false,
+        message: 'Email già registrata'
+      });
+    }
+
+    // Check if organization email already exists
+    const existingOrg = await client.query(
+      'SELECT id FROM organizations WHERE email = $1',
+      [email]
+    );
+
+    if (existingOrg.rows.length > 0) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({
+        success: false,
+        message: 'Email organizzazione già registrata'
+      });
+    }
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+
+    // Create user
+    const userResult = await client.query(
+      `INSERT INTO users (email, password_hash, name, role, active, email_verified)
+       VALUES ($1, $2, $3, 'organization_admin', true, false)
+       RETURNING id`,
+      [contactEmail, passwordHash, `${contactFirstName} ${contactLastName}`]
+    );
+
+    const userId = userResult.rows[0].id;
+
+    // Create organization
+    const orgResult = await client.query(
+      `INSERT INTO organizations (
+        name, organization_type, vat_number, fiscal_code,
+        address, city, postal_code, country,
+        email, phone, status, verified
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, 'Italia', $8, $9, 'pending', false)
+      RETURNING id`,
+      [
+        organizationName,
+        organizationType,
+        vatNumber || null,
+        fiscalCode || null,
+        address,
+        city,
+        postalCode,
+        email,
+        phone || null
+      ]
+    );
+
+    const orgId = orgResult.rows[0].id;
+
+    // Associate user with organization
+    await client.query(
+      `INSERT INTO organization_users (organization_id, user_id, role)
+       VALUES ($1, $2, 'admin')`,
+      [orgId, userId]
+    );
+
+    await client.query('COMMIT');
+
+    logger.info(`Nuova organizzazione registrata: ${organizationName} (ID: ${orgId}, User: ${userId})`);
+
+    res.status(201).json({
+      success: true,
+      message: 'Registrazione completata! Il tuo account è in attesa di verifica.',
+      data: {
+        organizationId: orgId,
+        userId: userId
+      }
+    });
+
+  } catch (error) {
+    await client.query('ROLLBACK');
+    logger.error('Errore registrazione organizzazione:', error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Errore durante la registrazione'
+    });
+  } finally {
+    client.release();
   }
 };
