@@ -264,8 +264,8 @@ export const logout = (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT id, email, name, role, company, phone, address, city, postal_code, country,
-              created_at, email_verified
+      `SELECT id, email, name, role, company, phone, active,
+              created_at, email_verified, last_login
        FROM users WHERE id = $1`,
       [req.user.id]
     );
