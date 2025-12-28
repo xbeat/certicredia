@@ -16,7 +16,9 @@ const state = {
         products: { page: 1, perPage: 20 },
         orders: { page: 1, perPage: 20 },
         users: { page: 1, perPage: 20 },
-        contacts: { page: 1, perPage: 20 }
+        contacts: { page: 1, perPage: 20 },
+        organizations: { page: 1, perPage: 20 },
+        specialists: { page: 1, perPage: 20 }
     }
 };
 
@@ -82,6 +84,8 @@ function changePage(type, newPage) {
         case 'orders': loadOrders(); break;
         case 'users': loadUsers(); break;
         case 'contacts': loadContacts(); break;
+        case 'organizations': loadOrganizations(); break;
+        case 'specialists': loadSpecialists(); break;
     }
 }
 
@@ -872,35 +876,21 @@ let allOrganizations = [];
 
 async function loadOrganizations() {
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${API_BASE}/api/organizations`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        const { page, perPage } = state.pagination.organizations;
+        const response = await apiCall(`/api/organizations?page=${page}&limit=${perPage}`);
+        if (!response) return;
+
         const data = await response.json();
+        const organizations = data.data.organizations || data.data || [];
 
-        if (data.success) {
-            allOrganizations = data.data.organizations || data.data || [];
-            displayOrganizations(allOrganizations);
-        } else {
-            notify(data.message || 'Errore caricamento organizzazioni', 'error');
+        const tbody = document.getElementById('organizations-table-body');
+
+        if (!organizations || organizations.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center p-8 text-slate-400">Nessuna organizzazione trovata</td></tr>';
+            return;
         }
-    } catch (error) {
-        console.error('Load organizations error:', error);
-        notify('Errore caricamento organizzazioni', 'error');
-    }
-}
 
-function displayOrganizations(organizations) {
-    const tbody = document.getElementById('organizations-table-body');
-
-    if (!organizations || organizations.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center p-8 text-slate-400">Nessuna organizzazione trovata</td></tr>';
-        return;
-    }
-
-    tbody.innerHTML = organizations.map(org => `
+        tbody.innerHTML = organizations.map(org => `
         <tr class="border-t border-slate-700 hover:bg-slate-700/50">
             <td class="p-4">${org.name || '-'}</td>
             <td class="p-4">${getOrgTypeBadge(org.organization_type)}</td>
@@ -924,6 +914,16 @@ function displayOrganizations(organizations) {
             </td>
         </tr>
     `).join('');
+
+        // Render pagination controls if pagination data is available
+        if (data.pagination) {
+            renderPaginationControls('organizations-pagination', 'organizations', data.pagination);
+        }
+
+    } catch (error) {
+        console.error('Load organizations error:', error);
+        notify('Errore caricamento organizzazioni', 'error');
+    }
 }
 
 function filterOrganizations() {
@@ -1086,35 +1086,21 @@ let allSpecialists = [];
 
 async function loadSpecialists() {
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${API_BASE}/api/specialists`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        const { page, perPage } = state.pagination.specialists;
+        const response = await apiCall(`/api/specialists?page=${page}&limit=${perPage}`);
+        if (!response) return;
+
         const data = await response.json();
+        const specialists = data.data.specialists || data.data || [];
 
-        if (data.success) {
-            allSpecialists = data.data.specialists || data.data || [];
-            displaySpecialists(allSpecialists);
-        } else {
-            notify(data.message || 'Errore caricamento specialist', 'error');
+        const tbody = document.getElementById('specialists-table-body');
+
+        if (!specialists || specialists.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center p-8 text-slate-400">Nessuno specialist trovato</td></tr>';
+            return;
         }
-    } catch (error) {
-        console.error('Load specialists error:', error);
-        notify('Errore caricamento specialist', 'error');
-    }
-}
 
-function displaySpecialists(specialists) {
-    const tbody = document.getElementById('specialists-table-body');
-
-    if (!specialists || specialists.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center p-8 text-slate-400">Nessuno specialist trovato</td></tr>';
-        return;
-    }
-
-    tbody.innerHTML = specialists.map(spec => `
+        tbody.innerHTML = specialists.map(spec => `
         <tr class="border-t border-slate-700 hover:bg-slate-700/50">
             <td class="p-4">${spec.name || spec.user_name || '-'}</td>
             <td class="p-4 text-sm">${spec.email || spec.user_email || '-'}</td>
@@ -1138,6 +1124,16 @@ function displaySpecialists(specialists) {
             </td>
         </tr>
     `).join('');
+
+        // Render pagination controls if pagination data is available
+        if (data.pagination) {
+            renderPaginationControls('specialists-pagination', 'specialists', data.pagination);
+        }
+
+    } catch (error) {
+        console.error('Load specialists error:', error);
+        notify('Errore caricamento specialist', 'error');
+    }
 }
 
 function filterSpecialists() {
