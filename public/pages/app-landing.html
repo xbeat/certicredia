@@ -295,10 +295,10 @@
                     const role = data.data.user.role;
 
                     if (role === 'admin') {
-                        window.location.href = '/admin.html';
+                        window.location.href = '/public/pages/admin/index.html';
                     } else if (role === 'specialist') {
                         window.location.href = '/public/pages/specialist/dashboard.html';
-                    } else if (role === 'organization' || role === 'organization_admin') {
+                    } else if (role === 'organization_admin') {
                         window.location.href = '/public/pages/ente/dashboard.html';
                     } else {
                         // Default: ecommerce user
