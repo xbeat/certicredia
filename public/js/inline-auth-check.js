@@ -15,7 +15,7 @@
   const PROTECTED_ROUTES = {
     '/public/pages/ente/dashboard.html': ['organization_admin', 'organization_operator'],
     '/public/pages/specialist/dashboard.html': ['specialist'],
-    '/public/pages/admin/index.html': ['admin']
+    '/admin.html': ['admin']
   };
 
   const currentPath = window.location.pathname;

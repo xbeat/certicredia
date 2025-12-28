@@ -26,7 +26,7 @@
     protectedRoutes: {
       '/public/pages/ente/dashboard.html': ['org_admin', 'org_operative'],
       '/public/pages/specialist/dashboard.html': ['specialist', 'candidate_specialist'],
-      '/public/pages/admin/index.html': ['super_admin', 'admin']
+      '/admin.html': ['super_admin', 'admin']
     },
 
     /**
@@ -95,7 +95,7 @@
       switch (role) {
         case 'super_admin':
         case 'admin':
-          targetPath = '/public/pages/admin/index.html';
+          targetPath = '/admin.html';
           break;
         case 'specialist':
         case 'candidate_specialist':
