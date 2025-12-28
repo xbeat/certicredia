@@ -13,9 +13,9 @@ export const getCart = async (req, res) => {
     // If user is authenticated, use user_id, otherwise use session_id
     if (req.user) {
       query = `
-        SELECT c.*, p.name, p.slug, p.price, p.image_url, p.short_description,
+        SELECT c.*, p.name, p.slug, p.price, p.short_description,
                (c.quantity * p.price) as total_price
-        FROM cart c
+        FROM cart_items c
         JOIN products p ON c.product_id = p.id
         WHERE c.user_id = $1 AND p.active = true
       `;
@@ -35,9 +35,9 @@ export const getCart = async (req, res) => {
       }
 
       query = `
-        SELECT c.*, p.name, p.slug, p.price, p.image_url, p.short_description,
+        SELECT c.*, p.name, p.slug, p.price, p.short_description,
                (c.quantity * p.price) as total_price
-        FROM cart c
+        FROM cart_items c
         JOIN products p ON c.product_id = p.id
         WHERE c.session_id = $1 AND p.active = true
       `;
@@ -78,7 +78,7 @@ export const addToCart = async (req, res) => {
 
     // Check if product exists and is active
     const productResult = await client.query(
-      'SELECT id, name, price, stock FROM products WHERE id = $1 AND active = true',
+      'SELECT id, name, price FROM products WHERE id = $1 AND active = true',
       [product_id]
     );
 
@@ -91,14 +91,6 @@ export const addToCart = async (req, res) => {
 
     const product = productResult.rows[0];
 
-    // Check stock
-    if (product.stock !== -1 && product.stock < quantity) {
-      return res.status(400).json({
-        success: false,
-        message: 'Quantità non disponibile in magazzino'
-      });
-    }
-
     await client.query('BEGIN');
 
     let result;
@@ -107,10 +99,10 @@ export const addToCart = async (req, res) => {
       // For authenticated users - try ON CONFLICT first, fallback if index doesn't exist
       try {
         result = await client.query(
-          `INSERT INTO cart (user_id, product_id, quantity)
+          `INSERT INTO cart_items (user_id, product_id, quantity)
            VALUES ($1, $2, $3)
            ON CONFLICT (user_id, product_id)
-           DO UPDATE SET quantity = cart.quantity + $3, updated_at = CURRENT_TIMESTAMP
+           DO UPDATE SET quantity = cart_items.quantity + $3, updated_at = CURRENT_TIMESTAMP
            RETURNING *`,
           [req.user.id, product_id, quantity]
         );
@@ -121,19 +113,19 @@ export const addToCart = async (req, res) => {
           await client.query('BEGIN');
 
           const existing = await client.query(
-            'SELECT id, quantity FROM cart WHERE user_id = $1 AND product_id = $2',
+            'SELECT id, quantity FROM cart_itemsWHERE user_id = $1 AND product_id = $2',
             [req.user.id, product_id]
           );
 
           if (existing.rows.length > 0) {
             result = await client.query(
-              `UPDATE cart SET quantity = quantity + $1, updated_at = CURRENT_TIMESTAMP
+              `UPDATE cart_items SET quantity = quantity + $1, updated_at = CURRENT_TIMESTAMP
                WHERE user_id = $2 AND product_id = $3 RETURNING *`,
               [quantity, req.user.id, product_id]
             );
           } else {
             result = await client.query(
-              'INSERT INTO cart (user_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *',
+              'INSERT INTO cart_items(user_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *',
               [req.user.id, product_id, quantity]
             );
           }
@@ -156,10 +148,10 @@ export const addToCart = async (req, res) => {
 
       try {
         result = await client.query(
-          `INSERT INTO cart (session_id, product_id, quantity)
+          `INSERT INTO cart_items(session_id, product_id, quantity)
            VALUES ($1, $2, $3)
            ON CONFLICT (session_id, product_id)
-           DO UPDATE SET quantity = cart.quantity + $3, updated_at = CURRENT_TIMESTAMP
+           DO UPDATE SET quantity = cart_items.quantity + $3, updated_at = CURRENT_TIMESTAMP
            RETURNING *`,
           [sessionId, product_id, quantity]
         );
@@ -170,19 +162,19 @@ export const addToCart = async (req, res) => {
           await client.query('BEGIN');
 
           const existing = await client.query(
-            'SELECT id, quantity FROM cart WHERE session_id = $1 AND product_id = $2',
+            'SELECT id, quantity FROM cart_itemsWHERE session_id = $1 AND product_id = $2',
             [sessionId, product_id]
           );
 
           if (existing.rows.length > 0) {
             result = await client.query(
-              `UPDATE cart SET quantity = quantity + $1, updated_at = CURRENT_TIMESTAMP
+              `UPDATE cart_items SET quantity = quantity + $1, updated_at = CURRENT_TIMESTAMP
                WHERE session_id = $2 AND product_id = $3 RETURNING *`,
               [quantity, sessionId, product_id]
             );
           } else {
             result = await client.query(
-              'INSERT INTO cart (session_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *',
+              'INSERT INTO cart_items(session_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *',
               [sessionId, product_id, quantity]
             );
           }
@@ -296,7 +288,7 @@ export const removeFromCart = async (req, res) => {
     let params;
 
     if (req.user) {
-      query = 'DELETE FROM cart WHERE id = $1 AND user_id = $2 RETURNING *';
+      query = 'DELETE FROM cart_itemsWHERE id = $1 AND user_id = $2 RETURNING *';
       params = [id, req.user.id];
     } else {
       const sessionId = req.cookies.cart_session_id;
@@ -308,7 +300,7 @@ export const removeFromCart = async (req, res) => {
         });
       }
 
-      query = 'DELETE FROM cart WHERE id = $1 AND session_id = $2 RETURNING *';
+      query = 'DELETE FROM cart_itemsWHERE id = $1 AND session_id = $2 RETURNING *';
       params = [id, sessionId];
     }
 
@@ -345,7 +337,7 @@ export const clearCart = async (req, res) => {
     let params;
 
     if (req.user) {
-      query = 'DELETE FROM cart WHERE user_id = $1';
+      query = 'DELETE FROM cart_itemsWHERE user_id = $1';
       params = [req.user.id];
     } else {
       const sessionId = req.cookies.cart_session_id;
@@ -357,7 +349,7 @@ export const clearCart = async (req, res) => {
         });
       }
 
-      query = 'DELETE FROM cart WHERE session_id = $1';
+      query = 'DELETE FROM cart_itemsWHERE session_id = $1';
       params = [sessionId];
     }
 
@@ -398,24 +390,24 @@ export const mergeCart = async (req, res) => {
 
     // Get items from guest cart
     const guestCartResult = await client.query(
-      'SELECT product_id, quantity FROM cart WHERE session_id = $1',
+      'SELECT product_id, quantity FROM cart_itemsWHERE session_id = $1',
       [sessionId]
     );
 
     // Merge each item into user cart
     for (const item of guestCartResult.rows) {
       await client.query(
-        `INSERT INTO cart (user_id, product_id, quantity)
+        `INSERT INTO cart_items(user_id, product_id, quantity)
          VALUES ($1, $2, $3)
          ON CONFLICT (user_id, product_id)
-         DO UPDATE SET quantity = cart.quantity + $3, updated_at = CURRENT_TIMESTAMP`,
+         DO UPDATE SET quantity = cart_items.quantity + $3, updated_at = CURRENT_TIMESTAMP`,
         [req.user.id, item.product_id, item.quantity]
       );
     }
 
     // Delete guest cart
     await client.query(
-      'DELETE FROM cart WHERE session_id = $1',
+      'DELETE FROM cart_items WHERE session_id = $1',
       [sessionId]
     );
 
