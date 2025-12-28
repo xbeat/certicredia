@@ -288,7 +288,7 @@ export const removeFromCart = async (req, res) => {
     let params;
 
     if (req.user) {
-      query = 'DELETE FROM cart_itemsWHERE id = $1 AND user_id = $2 RETURNING *';
+      query = 'DELETE FROM cart_items WHERE id = $1 AND user_id = $2 RETURNING *';
       params = [id, req.user.id];
     } else {
       const sessionId = req.cookies.cart_session_id;
@@ -300,7 +300,7 @@ export const removeFromCart = async (req, res) => {
         });
       }
 
-      query = 'DELETE FROM cart_itemsWHERE id = $1 AND session_id = $2 RETURNING *';
+      query = 'DELETE FROM cart_items WHERE id = $1 AND session_id = $2 RETURNING *';
       params = [id, sessionId];
     }
 
@@ -337,7 +337,7 @@ export const clearCart = async (req, res) => {
     let params;
 
     if (req.user) {
-      query = 'DELETE FROM cart_itemsWHERE user_id = $1';
+      query = 'DELETE FROM cart_items WHERE user_id = $1';
       params = [req.user.id];
     } else {
       const sessionId = req.cookies.cart_session_id;
@@ -349,7 +349,7 @@ export const clearCart = async (req, res) => {
         });
       }
 
-      query = 'DELETE FROM cart_itemsWHERE session_id = $1';
+      query = 'DELETE FROM cart_items WHERE session_id = $1';
       params = [sessionId];
     }
 
@@ -390,7 +390,7 @@ export const mergeCart = async (req, res) => {
 
     // Get items from guest cart
     const guestCartResult = await client.query(
-      'SELECT product_id, quantity FROM cart_itemsWHERE session_id = $1',
+      'SELECT product_id, quantity FROM cart_items WHERE session_id = $1',
       [sessionId]
     );
 
