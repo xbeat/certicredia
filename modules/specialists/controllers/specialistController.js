@@ -8,7 +8,7 @@ import {
 } from '../services/specialistService.js';
 import logger from '../../../server/utils/logger.js';
 import bcrypt from 'bcrypt';
-import pool from '../../../server/config/database.js';
+import { pool } from '../../../server/config/database.js';
 
 const SALT_ROUNDS = 10;
 
