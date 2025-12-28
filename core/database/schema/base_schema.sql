@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash VARCHAR(255) NOT NULL,
   name VARCHAR(255) NOT NULL,
   company VARCHAR(255),
+  vat_number VARCHAR(50),
   phone VARCHAR(50),
   address TEXT,
   city VARCHAR(100),

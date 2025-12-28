@@ -264,7 +264,7 @@ export const logout = (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT id, email, name, role, company, phone, address, city, postal_code, country,
+      `SELECT id, email, name, role, company, vat_number, phone, address, city, postal_code, country,
               active, created_at, email_verified, last_login
        FROM users WHERE id = $1`,
       [req.user.id]
@@ -297,22 +297,23 @@ export const getProfile = async (req, res) => {
  */
 export const updateProfile = async (req, res) => {
   try {
-    const { name, company, phone, address, city, postal_code, country } = req.body;
+    const { name, company, vat_number, phone, address, city, postal_code, country } = req.body;
 
     const result = await pool.query(
       `UPDATE users
        SET name = COALESCE($1, name),
            company = COALESCE($2, company),
-           phone = COALESCE($3, phone),
-           address = COALESCE($4, address),
-           city = COALESCE($5, city),
-           postal_code = COALESCE($6, postal_code),
-           country = COALESCE($7, country),
+           vat_number = COALESCE($3, vat_number),
+           phone = COALESCE($4, phone),
+           address = COALESCE($5, address),
+           city = COALESCE($6, city),
+           postal_code = COALESCE($7, postal_code),
+           country = COALESCE($8, country),
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = $8
-       RETURNING id, email, name, role, company, phone, address, city, postal_code, country,
+       WHERE id = $9
+       RETURNING id, email, name, role, company, vat_number, phone, address, city, postal_code, country,
                  active, email_verified, created_at, last_login`,
-      [name, company, phone, address, city, postal_code, country, req.user.id]
+      [name, company, vat_number, phone, address, city, postal_code, country, req.user.id]
     );
 
     logger.info(`✅ Profilo aggiornato: ${req.user.email}`);

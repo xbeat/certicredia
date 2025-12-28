@@ -92,6 +92,18 @@
             >
           </div>
 
+          <!-- VAT Number -->
+          <div>
+            <label for="vat_number" class="block text-sm font-medium text-slate-400 mb-2">Partita IVA</label>
+            <input
+              type="text"
+              id="vat_number"
+              name="vat_number"
+              placeholder="IT12345678901"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors"
+            >
+          </div>
+
           <!-- Phone -->
           <div>
             <label for="phone" class="block text-sm font-medium text-slate-400 mb-2">Telefono</label>
@@ -265,6 +277,7 @@
         document.getElementById('name').value = user.name || '';
         document.getElementById('email').value = user.email || '';
         document.getElementById('company').value = user.company || '';
+        document.getElementById('vat_number').value = user.vat_number || '';
         document.getElementById('phone').value = user.phone || '';
         document.getElementById('address').value = user.address || '';
         document.getElementById('city').value = user.city || '';
@@ -351,6 +364,7 @@
         const formData = {
           name: document.getElementById('name').value,
           company: document.getElementById('company').value,
+          vat_number: document.getElementById('vat_number').value,
           phone: document.getElementById('phone').value,
           address: document.getElementById('address').value,
           city: document.getElementById('city').value,
