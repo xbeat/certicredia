@@ -297,21 +297,17 @@ export const getProfile = async (req, res) => {
  */
 export const updateProfile = async (req, res) => {
   try {
-    const { name, company, phone, address, city, postal_code, country } = req.body;
+    const { name, company, phone } = req.body;
 
     const result = await pool.query(
       `UPDATE users
        SET name = COALESCE($1, name),
            company = COALESCE($2, company),
            phone = COALESCE($3, phone),
-           address = COALESCE($4, address),
-           city = COALESCE($5, city),
-           postal_code = COALESCE($6, postal_code),
-           country = COALESCE($7, country),
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = $8
-       RETURNING id, email, name, role, company, phone, address, city, postal_code, country`,
-      [name, company, phone, address, city, postal_code, country, req.user.id]
+       WHERE id = $4
+       RETURNING id, email, name, role, company, phone, active, email_verified, created_at, last_login`,
+      [name, company, phone, req.user.id]
     );
 
     logger.info(`✅ Profilo aggiornato: ${req.user.email}`);
