@@ -455,7 +455,7 @@ async function seedEnhancedDemoData() {
     // ========================================
     console.log('\n📊 Creating assessments...');
 
-    const assessmentStatuses = ['draft', 'submitted', 'in_review', 'approved'];
+    const assessmentStatuses = ['draft', 'submitted', 'under_review', 'approved'];
     const assessmentCount = 30;
 
     const assessmentIds = [];
@@ -508,19 +508,30 @@ async function seedEnhancedDemoData() {
     for (let i = 0; i < assignmentCount; i++) {
       const randomAssessmentId = assessmentIds[Math.floor(Math.random() * assessmentIds.length)];
       const randomSpecialist = specialists[Math.floor(Math.random() * specialists.length)];
-      const statuses = ['active', 'completed', 'expired'];
+      const statuses = ['pending', 'accepted', 'expired'];
       const status = statuses[Math.floor(Math.random() * statuses.length)];
+
+      // Get organization_id from the assessment
+      const assessmentOrg = await client.query(
+        'SELECT organization_id FROM assessments WHERE id = $1',
+        [randomAssessmentId]
+      );
+
+      const accessToken = `token-${Math.random().toString(36).substring(7)}`;
+      const tokenHash = await hash(accessToken, SALT_ROUNDS);
 
       await client.query(
         `INSERT INTO specialist_assignments (
-          assessment_id, specialist_id, status, access_token, assigned_by, expires_at
-        ) VALUES ($1, $2, $3, $4, $5, NOW() + INTERVAL '30 days')
+          assessment_id, organization_id, specialist_id, status, access_token, token_hash, assigned_by, expires_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW() + INTERVAL '30 days')
         ON CONFLICT DO NOTHING`,
         [
           randomAssessmentId,
+          assessmentOrg.rows[0].organization_id,
           userIds[randomSpecialist],
           status,
-          `token-${Math.random().toString(36).substring(7)}`,
+          accessToken,
+          tokenHash,
           userIds['admin@certicredia.it']
         ]
       );
@@ -547,6 +558,7 @@ async function seedEnhancedDemoData() {
     ];
 
     const severities = ['info', 'warning', 'critical'];
+    const commentStatuses = ['open', 'addressed', 'resolved', 'dismissed'];
     const commentCount = 40;
 
     for (let i = 0; i < commentCount; i++) {
@@ -554,20 +566,19 @@ async function seedEnhancedDemoData() {
       const randomSpecialist = specialists[Math.floor(Math.random() * specialists.length)];
       const text = commentTexts[Math.floor(Math.random() * commentTexts.length)];
       const severity = severities[Math.floor(Math.random() * severities.length)];
-      const resolved = Math.random() > 0.5;
+      const status = commentStatuses[Math.floor(Math.random() * commentStatuses.length)];
 
       await client.query(
         `INSERT INTO review_comments (
-          assessment_id, user_id, section, field_id, comment_text, severity, resolved
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+          assessment_id, specialist_id, question_id, comment, severity, status
+        ) VALUES ($1, $2, $3, $4, $5, $6)`,
         [
           randomAssessmentId,
           userIds[randomSpecialist],
-          `section-${Math.floor(Math.random() * 5)}`,
-          `field-${Math.floor(Math.random() * 20)}`,
+          `question-${Math.floor(Math.random() * 20)}`,
           text,
           severity,
-          resolved
+          status
         ]
       );
     }
