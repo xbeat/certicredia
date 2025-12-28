@@ -304,9 +304,9 @@ async function seedEnhancedDemoData() {
 
       await client.query(
         `INSERT INTO specialist_profiles (
-          user_id, certification_status, exam_score, certification_date, expiry_date, bio
-        ) VALUES ($1, 'certified', $2, NOW() - INTERVAL '6 months', NOW() + INTERVAL '2.5 years', $3)
-        ON CONFLICT (user_id) DO UPDATE SET certification_status = 'certified'`,
+          user_id, status, exam_score, exam_passed, exam_passed_at, bio
+        ) VALUES ($1, 'active', $2, true, NOW() - INTERVAL '6 months', $3)
+        ON CONFLICT (user_id) DO UPDATE SET status = 'active', exam_passed = true`,
         [
           userId,
           examScore,
@@ -320,14 +320,21 @@ async function seedEnhancedDemoData() {
         const activityType = activities[Math.floor(Math.random() * activities.length)];
         const hours = Math.floor(Math.random() * 20) + 4;
 
+        // Get specialist_profile_id
+        const profileResult = await client.query('SELECT id FROM specialist_profiles WHERE user_id = $1', [userId]);
+        const specialistProfileId = profileResult.rows[0].id;
+
         await client.query(
           `INSERT INTO specialist_cpe_records (
-            specialist_id, activity_type, activity_date, hours, description, provider
-          ) VALUES ($1, $2, NOW() - INTERVAL '${Math.floor(Math.random() * 180)} days', $3, $4, $5)`,
+            specialist_profile_id, user_id, activity_type, title, activity_date, hours, credits, description, provider
+          ) VALUES ($1, $2, $3, $4, NOW() - INTERVAL '${Math.floor(Math.random() * 180)} days', $5, $6, $7, $8)`,
           [
+            specialistProfileId,
             userId,
-            activityType,
+            activityType.toLowerCase(),
+            `${activityType} on Cybersecurity`,
             hours,
+            hours * 0.5, // credits = hours * 0.5
             `Partecipazione a ${activityType.toLowerCase()} su tematiche di cybersecurity`,
             'CertiCredia Italia'
           ]
