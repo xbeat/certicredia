@@ -7,10 +7,13 @@ import {
   startExam,
   submitExamHandler,
   addCPE,
-  getDashboard
+  getDashboard,
+  getAllSpecialistsHandler
 } from '../controllers/specialistController.js';
 
 const router = express.Router();
+
+router.get('/', authenticate, getAllSpecialistsHandler);
 
 router.post('/register', authenticate, [
   body('experienceYears').isInt({ min: 0 }).withMessage('Years of experience required'),
