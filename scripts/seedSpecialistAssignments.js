@@ -63,17 +63,27 @@ async function seedSpecialistAssignments() {
 
     const orgIds = [];
     for (const org of organizations) {
-      const result = await client.query(
-        `INSERT INTO organizations (name, organization_type, vat_number, email, city, address, postal_code, country, status)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'active')
-         ON CONFLICT (email) DO UPDATE SET
-           name = EXCLUDED.name,
-           organization_type = EXCLUDED.organization_type
-         RETURNING id`,
-        [org.name, org.type, org.vat, org.email, org.city, 'Via Demo 123', '00100', 'Italia']
+      // Check if organization already exists
+      const existingOrg = await client.query(
+        'SELECT id FROM organizations WHERE email = $1',
+        [org.email]
       );
-      orgIds.push(result.rows[0].id);
-      console.log(`✅ Created/Updated organization: ${org.name} (ID: ${result.rows[0].id})`);
+
+      let orgId;
+      if (existingOrg.rows.length > 0) {
+        orgId = existingOrg.rows[0].id;
+        console.log(`ℹ️  Organization already exists: ${org.name} (ID: ${orgId})`);
+      } else {
+        const result = await client.query(
+          `INSERT INTO organizations (name, organization_type, vat_number, email, city, address, postal_code, country, status)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'active')
+           RETURNING id`,
+          [org.name, org.type, org.vat, org.email, org.city, 'Via Demo 123', '00100', 'Italia']
+        );
+        orgId = result.rows[0].id;
+        console.log(`✅ Created organization: ${org.name} (ID: ${orgId})`);
+      }
+      orgIds.push(orgId);
     }
 
     // Step 2: Create demo specialist users if they don't exist
@@ -113,32 +123,54 @@ async function seedSpecialistAssignments() {
     for (const spec of specialists) {
       const passwordHash = await bcrypt.hash(spec.password, SALT_ROUNDS);
 
-      // Create user
-      const userResult = await client.query(
-        `INSERT INTO users (email, password_hash, name, role, active, email_verified)
-         VALUES ($1, $2, $3, 'specialist', true, true)
-         ON CONFLICT (email) DO UPDATE SET
-           name = EXCLUDED.name,
-           role = 'specialist',
-           active = true
-         RETURNING id`,
-        [spec.email, passwordHash, spec.name]
+      // Check if user already exists
+      const existingUser = await client.query(
+        'SELECT id FROM users WHERE email = $1',
+        [spec.email]
       );
-      const userId = userResult.rows[0].id;
 
-      // Create specialist profile
-      await client.query(
-        `INSERT INTO specialists (user_id, experience_years, bio, certification_status, total_cpe_credits)
-         VALUES ($1, $2, $3, 'certified', $4)
-         ON CONFLICT (user_id) DO UPDATE SET
-           experience_years = EXCLUDED.experience_years,
-           bio = EXCLUDED.bio,
-           certification_status = 'certified'`,
-        [userId, spec.experience, spec.bio, spec.experience * 10]
+      let userId;
+      if (existingUser.rows.length > 0) {
+        userId = existingUser.rows[0].id;
+        // Update existing user
+        await client.query(
+          `UPDATE users SET name = $1, role = 'specialist', active = true, email_verified = true WHERE id = $2`,
+          [spec.name, userId]
+        );
+        console.log(`ℹ️  User already exists, updated: ${spec.name} (User ID: ${userId})`);
+      } else {
+        // Create new user
+        const userResult = await client.query(
+          `INSERT INTO users (email, password_hash, name, role, active, email_verified)
+           VALUES ($1, $2, $3, 'specialist', true, true)
+           RETURNING id`,
+          [spec.email, passwordHash, spec.name]
+        );
+        userId = userResult.rows[0].id;
+        console.log(`✅ Created user: ${spec.name} (User ID: ${userId})`);
+      }
+
+      // Create or update specialist profile
+      const existingSpec = await client.query(
+        'SELECT id FROM specialists WHERE user_id = $1',
+        [userId]
       );
+
+      if (existingSpec.rows.length > 0) {
+        await client.query(
+          `UPDATE specialists SET experience_years = $1, bio = $2, certification_status = 'certified', total_cpe_credits = $3
+           WHERE user_id = $4`,
+          [spec.experience, spec.bio, spec.experience * 10, userId]
+        );
+      } else {
+        await client.query(
+          `INSERT INTO specialists (user_id, experience_years, bio, certification_status, total_cpe_credits)
+           VALUES ($1, $2, $3, 'certified', $4)`,
+          [userId, spec.experience, spec.bio, spec.experience * 10]
+        );
+      }
 
       specialistIds.push(userId);
-      console.log(`✅ Created/Updated specialist: ${spec.name} (User ID: ${userId})`);
     }
 
     // Step 3: Create demo assessments for organizations
@@ -149,29 +181,39 @@ async function seedSpecialistAssignments() {
       const orgId = orgIds[i];
       const orgName = organizations[i].name;
 
-      const assessmentResult = await client.query(
-        `INSERT INTO assessments (
-          organization_id,
-          assessment_type,
-          status,
-          start_date,
-          target_completion_date,
-          scope_description
-         )
-         VALUES ($1, 'full', 'in_progress', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '60 days', $2)
-         ON CONFLICT DO NOTHING
-         RETURNING id`,
-        [orgId, `Assessment cybersecurity completo per ${orgName}`]
+      // Check if assessment already exists for this organization
+      const existingAssessment = await client.query(
+        `SELECT id FROM assessments WHERE organization_id = $1 AND status = 'in_progress' LIMIT 1`,
+        [orgId]
       );
 
-      if (assessmentResult.rows.length > 0) {
-        assessmentIds.push({
-          id: assessmentResult.rows[0].id,
-          orgId: orgId,
-          orgName: orgName
-        });
-        console.log(`✅ Created assessment for ${orgName} (Assessment ID: ${assessmentResult.rows[0].id})`);
+      let assessmentId;
+      if (existingAssessment.rows.length > 0) {
+        assessmentId = existingAssessment.rows[0].id;
+        console.log(`ℹ️  Assessment already exists for ${orgName} (Assessment ID: ${assessmentId})`);
+      } else {
+        const assessmentResult = await client.query(
+          `INSERT INTO assessments (
+            organization_id,
+            assessment_type,
+            status,
+            start_date,
+            target_completion_date,
+            scope_description
+           )
+           VALUES ($1, 'full', 'in_progress', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '60 days', $2)
+           RETURNING id`,
+          [orgId, `Assessment cybersecurity completo per ${orgName}`]
+        );
+        assessmentId = assessmentResult.rows[0].id;
+        console.log(`✅ Created assessment for ${orgName} (Assessment ID: ${assessmentId})`);
       }
+
+      assessmentIds.push({
+        id: assessmentId,
+        orgId: orgId,
+        orgName: orgName
+      });
     }
 
     // Step 4: Create specialist assignments
@@ -190,43 +232,43 @@ async function seedSpecialistAssignments() {
         const accessToken = crypto.randomBytes(16).toString('hex');
         const tokenHash = await bcrypt.hash(accessToken, SALT_ROUNDS);
 
-        // Create assignment
-        try {
-          await client.query(
-            `INSERT INTO specialist_assignments (
-              assessment_id,
-              organization_id,
-              specialist_id,
-              access_token,
-              token_hash,
-              status,
-              expires_at
-            )
-            VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP + INTERVAL '90 days')
-            ON CONFLICT (access_token) DO NOTHING`,
-            [
-              assessment.id,
-              assessment.orgId,
-              specialistId,
-              accessToken,
-              tokenHash,
-              i === 0 ? 'accepted' : 'pending' // First specialist is accepted, others pending
-            ]
-          );
+        // Check if assignment already exists
+        const existingAssignment = await client.query(
+          `SELECT id FROM specialist_assignments
+           WHERE assessment_id = $1 AND specialist_id = $2`,
+          [assessment.id, specialistId]
+        );
 
-          assignmentCount++;
+        if (existingAssignment.rows.length === 0) {
+          try {
+            await client.query(
+              `INSERT INTO specialist_assignments (
+                assessment_id,
+                organization_id,
+                specialist_id,
+                access_token,
+                token_hash,
+                status,
+                expires_at
+              )
+              VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP + INTERVAL '90 days')`,
+              [
+                assessment.id,
+                assessment.orgId,
+                specialistId,
+                accessToken,
+                tokenHash,
+                i === 0 ? 'accepted' : 'pending' // First specialist is accepted, others pending
+              ]
+            );
 
-          const specName = specialists.find(s => {
-            // Find specialist name by matching user ID
-            return true; // Simplified for demo
-          })?.name || 'Specialist';
-
-          console.log(`✅ Assigned specialist #${specialistId} to ${assessment.orgName} (Status: ${i === 0 ? 'accepted' : 'pending'})`);
-        } catch (error) {
-          // Skip if duplicate
-          if (!error.message.includes('duplicate')) {
+            assignmentCount++;
+            console.log(`✅ Assigned specialist #${specialistId} to ${assessment.orgName} (Status: ${i === 0 ? 'accepted' : 'pending'})`);
+          } catch (error) {
             console.warn(`⚠️  Warning assigning specialist to ${assessment.orgName}:`, error.message);
           }
+        } else {
+          console.log(`ℹ️  Specialist #${specialistId} already assigned to ${assessment.orgName}`);
         }
       }
     }
