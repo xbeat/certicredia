@@ -227,7 +227,7 @@ export const updateCartItem = async (req, res) => {
 
     if (req.user) {
       query = `
-        UPDATE cart
+        UPDATE cart_items
         SET quantity = $1, updated_at = CURRENT_TIMESTAMP
         WHERE id = $2 AND user_id = $3
         RETURNING *
@@ -244,7 +244,7 @@ export const updateCartItem = async (req, res) => {
       }
 
       query = `
-        UPDATE cart
+        UPDATE cart_items
         SET quantity = $1, updated_at = CURRENT_TIMESTAMP
         WHERE id = $2 AND session_id = $3
         RETURNING *
