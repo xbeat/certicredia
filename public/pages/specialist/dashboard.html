@@ -267,14 +267,8 @@
     async function loadSpecialistData() {
       try {
         const token = localStorage.getItem('authToken');
-        const user = getCurrentUser();
 
-        if (!user || !user.specialistId) {
-          console.error('No specialist ID found');
-          return;
-        }
-
-        const response = await fetch(`${API_BASE}/api/specialists/${user.specialistId}`, {
+        const response = await fetch(`${API_BASE}/api/specialists/dashboard`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
