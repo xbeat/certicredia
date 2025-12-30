@@ -10,15 +10,16 @@
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
   </style>
+  <script src="/public/js/lang.js"></script>
 </head>
 <body class="bg-slate-900">
 
   <!-- Header -->
   <header class="gradient-bg text-white py-6">
     <div class="max-w-4xl mx-auto px-4">
-      <a href="/public/pages/app-landing.html" class="text-sm text-cyan-100 hover:text-white mb-2 inline-block">← Torna alla Home</a>
-      <h1 class="text-3xl font-bold">Registrazione Specialist</h1>
-      <p class="text-cyan-100 mt-2">Diventa uno specialist certificato per eseguire assessment cybersecurity</p>
+      <a href="/public/pages/app-landing.html" class="text-sm text-cyan-100 hover:text-white mb-2 inline-block" data-i18n="register.spec.back">← Torna alla Home</a>
+      <h1 class="text-3xl font-bold" data-i18n="register.spec.title">Registrazione Specialist</h1>
+      <p class="text-cyan-100 mt-2" data-i18n="register.spec.subtitle">Candidati come Specialist CPF3 certificato per eseguire assessment cybersecurity</p>
     </div>
   </header>
 
@@ -27,7 +28,7 @@
 
     <!-- Registration Form Card -->
     <div class="bg-slate-800 rounded-lg shadow-lg p-8 border border-slate-700">
-      <h2 class="text-2xl font-bold text-white mb-6">Dati Specialist</h2>
+      <h2 class="text-2xl font-bold text-white mb-6" data-i18n="register.spec.section.personal">Dati Personali</h2>
 
       <!-- Error/Success Messages -->
       <div id="messageBox" class="hidden mb-4 p-4 rounded-lg"></div>
@@ -35,12 +36,12 @@
       <!-- Registration Form -->
       <form id="registerForm">
 
-        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2">Informazioni Personali</h3>
+        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2" data-i18n="register.spec.section.personal">Dati Personali</h3>
 
         <!-- Name Fields -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label for="firstName" class="block text-slate-300 font-semibold mb-2">Nome *</label>
+            <label for="firstName" class="block text-slate-300 font-semibold mb-2" data-i18n="register.spec.firstname">Nome *</label>
             <input
               type="text"
               id="firstName"
@@ -51,7 +52,7 @@
             />
           </div>
           <div>
-            <label for="lastName" class="block text-slate-300 font-semibold mb-2">Cognome *</label>
+            <label for="lastName" class="block text-slate-300 font-semibold mb-2" data-i18n="register.spec.lastname">Cognome *</label>
             <input
               type="text"
               id="lastName"
@@ -65,7 +66,7 @@
 
         <!-- Email -->
         <div class="mb-4">
-          <label for="email" class="block text-slate-300 font-semibold mb-2">Email *</label>
+          <label for="email" class="block text-slate-300 font-semibold mb-2" data-i18n="register.spec.email">Email *</label>
           <input
             type="email"
             id="email"
@@ -78,7 +79,7 @@
 
         <!-- Phone -->
         <div class="mb-6">
-          <label for="phone" class="block text-slate-300 font-semibold mb-2">Telefono</label>
+          <label for="phone" class="block text-slate-300 font-semibold mb-2" data-i18n="register.spec.phone">Telefono</label>
           <input
             type="tel"
             id="phone"
@@ -88,11 +89,11 @@
           />
         </div>
 
-        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2">Esperienza Professionale</h3>
+        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2" data-i18n="register.spec.section.professional">Esperienza Professionale</h3>
 
         <!-- Years of Experience -->
         <div class="mb-4">
-          <label for="experienceYears" class="block text-slate-300 font-semibold mb-2">Anni di Esperienza in Cybersecurity *</label>
+          <label for="experienceYears" class="block text-slate-300 font-semibold mb-2" data-i18n="register.spec.experience">Anni di Esperienza *</label>
           <input
             type="number"
             id="experienceYears"
@@ -108,7 +109,7 @@
 
         <!-- Bio / Expertise -->
         <div class="mb-6">
-          <label for="bio" class="block text-slate-300 font-semibold mb-2">Competenze e Certificazioni</label>
+          <label for="bio" class="block text-slate-300 font-semibold mb-2" data-i18n="register.spec.bio">Bio / Competenze</label>
           <textarea
             id="bio"
             name="bio"
@@ -119,11 +120,11 @@
           <p class="text-xs text-slate-500 mt-1">Opzionale, ma consigliato per velocizzare l'approvazione</p>
         </div>
 
-        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2">Credenziali Accesso</h3>
+        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2" data-i18n="register.spec.section.credentials">Credenziali Accesso</h3>
 
         <!-- Password -->
         <div class="mb-4">
-          <label for="password" class="block text-slate-300 font-semibold mb-2">Password *</label>
+          <label for="password" class="block text-slate-300 font-semibold mb-2" data-i18n="register.spec.password">Password *</label>
           <div class="relative">
             <input
               type="password"
@@ -149,7 +150,7 @@
 
         <!-- Confirm Password -->
         <div class="mb-6">
-          <label for="confirmPassword" class="block text-slate-300 font-semibold mb-2">Conferma Password *</label>
+          <label for="confirmPassword" class="block text-slate-300 font-semibold mb-2" data-i18n="register.spec.password.confirm">Conferma Password *</label>
           <input
             type="password"
             id="confirmPassword"

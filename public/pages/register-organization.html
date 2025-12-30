@@ -10,15 +10,16 @@
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
   </style>
+  <script src="/public/js/lang.js"></script>
 </head>
 <body class="bg-slate-900">
 
   <!-- Header -->
   <header class="gradient-bg text-white py-6">
     <div class="max-w-4xl mx-auto px-4">
-      <a href="/public/pages/app-landing.html" class="text-sm text-purple-200 hover:text-white mb-2 inline-block">← Torna alla Home</a>
-      <h1 class="text-3xl font-bold">Registrazione Organizzazione</h1>
-      <p class="text-purple-100 mt-2">Crea il tuo account organizzazione per accedere al sistema di assessment</p>
+      <a href="/public/pages/app-landing.html" class="text-sm text-purple-200 hover:text-white mb-2 inline-block" data-i18n="register.org.back">← Torna alla Home</a>
+      <h1 class="text-3xl font-bold" data-i18n="register.org.title">Registrazione Organizzazione</h1>
+      <p class="text-purple-100 mt-2" data-i18n="register.org.subtitle">Crea il tuo account organizzazione per accedere al sistema di assessment</p>
     </div>
   </header>
 
@@ -27,7 +28,7 @@
 
     <!-- Registration Form Card -->
     <div class="bg-slate-800 rounded-lg shadow-lg p-8 border border-slate-700">
-      <h2 class="text-2xl font-bold text-white mb-6">Dati Organizzazione</h2>
+      <h2 class="text-2xl font-bold text-white mb-6" data-i18n="register.org.section.data">Dati Organizzazione</h2>
 
       <!-- Error/Success Messages -->
       <div id="messageBox" class="hidden mb-4 p-4 rounded-lg"></div>
@@ -37,25 +38,25 @@
 
         <!-- Organization Type -->
         <div class="mb-6 bg-green-900/20 border border-green-700/50 rounded-lg p-4">
-          <label for="organizationType" class="block text-slate-300 font-semibold mb-2">Tipo Organizzazione *</label>
+          <label for="organizationType" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.type">Tipo Organizzazione *</label>
           <select
             id="organizationType"
             name="organizationType"
             required
             class="w-full px-4 py-2 bg-slate-900 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500"
           >
-            <option value="">-- Seleziona --</option>
-            <option value="PUBLIC_ENTITY">Ente Pubblico</option>
-            <option value="PRIVATE_COMPANY">Azienda Privata</option>
-            <option value="NON_PROFIT">Organizzazione No Profit</option>
+            <option value="" data-i18n="register.org.type.select">-- Seleziona --</option>
+            <option value="PUBLIC_ENTITY" data-i18n="register.org.type.public">Ente Pubblico</option>
+            <option value="PRIVATE_COMPANY" data-i18n="register.org.type.private">Azienda Privata</option>
+            <option value="NON_PROFIT" data-i18n="register.org.type.nonprofit">Organizzazione No Profit</option>
           </select>
         </div>
 
-        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2">Informazioni Organizzazione</h3>
+        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2" data-i18n="register.org.section.info">Informazioni Organizzazione</h3>
 
         <!-- Organization Name -->
         <div class="mb-4">
-          <label for="organizationName" class="block text-slate-300 font-semibold mb-2">Nome Organizzazione *</label>
+          <label for="organizationName" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.name">Nome Organizzazione *</label>
           <input
             type="text"
             id="organizationName"
@@ -69,7 +70,7 @@
         <!-- VAT & Fiscal Code -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label for="vatNumber" class="block text-slate-300 font-semibold mb-2">Partita IVA</label>
+            <label for="vatNumber" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.vat">Partita IVA</label>
             <input
               type="text"
               id="vatNumber"
@@ -79,7 +80,7 @@
             />
           </div>
           <div>
-            <label for="fiscalCode" class="block text-slate-300 font-semibold mb-2">Codice Fiscale</label>
+            <label for="fiscalCode" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.fiscal">Codice Fiscale</label>
             <input
               type="text"
               id="fiscalCode"
@@ -92,7 +93,7 @@
 
         <!-- Address -->
         <div class="mb-4">
-          <label for="address" class="block text-slate-300 font-semibold mb-2">Indirizzo *</label>
+          <label for="address" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.address">Indirizzo *</label>
           <input
             type="text"
             id="address"
@@ -106,7 +107,7 @@
         <!-- City & Postal Code -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label for="city" class="block text-slate-300 font-semibold mb-2">Città *</label>
+            <label for="city" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.city">Città *</label>
             <input
               type="text"
               id="city"
@@ -117,7 +118,7 @@
             />
           </div>
           <div>
-            <label for="postalCode" class="block text-slate-300 font-semibold mb-2">CAP *</label>
+            <label for="postalCode" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.postal">CAP *</label>
             <input
               type="text"
               id="postalCode"
@@ -132,7 +133,7 @@
         <!-- Contact Email & Phone -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
-            <label for="email" class="block text-slate-300 font-semibold mb-2">Email Organizzazione *</label>
+            <label for="email" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.email">Email Organizzazione *</label>
             <input
               type="email"
               id="email"
@@ -143,7 +144,7 @@
             />
           </div>
           <div>
-            <label for="phone" class="block text-slate-300 font-semibold mb-2">Telefono</label>
+            <label for="phone" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.phone">Telefono</label>
             <input
               type="tel"
               id="phone"
@@ -154,12 +155,12 @@
           </div>
         </div>
 
-        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2">Responsabile Account</h3>
+        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2" data-i18n="register.org.section.responsible">Responsabile Account</h3>
 
         <!-- Contact Person Name -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label for="contactFirstName" class="block text-slate-300 font-semibold mb-2">Nome Responsabile *</label>
+            <label for="contactFirstName" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.contact.firstname">Nome Responsabile *</label>
             <input
               type="text"
               id="contactFirstName"
@@ -170,7 +171,7 @@
             />
           </div>
           <div>
-            <label for="contactLastName" class="block text-slate-300 font-semibold mb-2">Cognome Responsabile *</label>
+            <label for="contactLastName" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.contact.lastname">Cognome Responsabile *</label>
             <input
               type="text"
               id="contactLastName"
@@ -185,7 +186,7 @@
         <!-- Contact Email & Phone -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label for="contactEmail" class="block text-slate-300 font-semibold mb-2">Email Responsabile *</label>
+            <label for="contactEmail" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.contact.email">Email Responsabile *</label>
             <input
               type="email"
               id="contactEmail"
@@ -196,7 +197,7 @@
             />
           </div>
           <div>
-            <label for="contactPhone" class="block text-slate-300 font-semibold mb-2">Telefono Responsabile</label>
+            <label for="contactPhone" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.contact.phone">Telefono Responsabile</label>
             <input
               type="tel"
               id="contactPhone"
@@ -207,11 +208,11 @@
           </div>
         </div>
 
-        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2">Credenziali Accesso</h3>
+        <h3 class="text-lg font-bold text-slate-300 mb-4 border-b pb-2" data-i18n="register.org.section.credentials">Credenziali Accesso</h3>
 
         <!-- Password -->
         <div class="mb-4">
-          <label for="password" class="block text-slate-300 font-semibold mb-2">Password *</label>
+          <label for="password" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.password">Password *</label>
           <div class="relative">
             <input
               type="password"
@@ -232,12 +233,12 @@
               </svg>
             </button>
           </div>
-          <p class="text-xs text-slate-500 mt-1">Minimo 12 caratteri, lettere maiuscole, minuscole, numeri e simboli</p>
+          <p class="text-xs text-slate-500 mt-1" data-i18n="register.org.password.hint">Minimo 12 caratteri, lettere maiuscole, minuscole, numeri e simboli</p>
         </div>
 
         <!-- Confirm Password -->
         <div class="mb-6">
-          <label for="confirmPassword" class="block text-slate-300 font-semibold mb-2">Conferma Password *</label>
+          <label for="confirmPassword" class="block text-slate-300 font-semibold mb-2" data-i18n="register.org.password.confirm">Conferma Password *</label>
           <input
             type="password"
             id="confirmPassword"
@@ -292,10 +293,10 @@
     <div class="mt-8 bg-cyan-900/20 border border-cyan-700/50 rounded-lg p-4">
       <h3 class="font-bold text-cyan-300 mb-2">Cosa succede dopo la registrazione?</h3>
       <ul class="text-sm text-cyan-400 space-y-1">
-        <li>✓ L'account verrà verificato dal nostro team</li>
-        <li>✓ Riceverai una email di conferma</li>
-        <li>✓ Potrai accedere alla dashboard organizzazione</li>
-        <li>✓ Potrai richiedere un assessment cybersecurity</li>
+        <li data-i18n="register.org.info.1">✓ L'account verrà verificato dal nostro team</li>
+        <li data-i18n="register.org.info.2">✓ Riceverai una email di conferma</li>
+        <li data-i18n="register.org.info.3">✓ Potrai accedere alla dashboard organizzazione</li>
+        <li data-i18n="register.org.info.4">✓ Potrai richiedere un assessment cybersecurity</li>
       </ul>
     </div>
 
