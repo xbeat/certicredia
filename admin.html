@@ -13,7 +13,7 @@
         <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
             <a href="/" class="flex items-center space-x-2">
                 <img src="Logo.svg" alt="CertiCredia Logo" class="w-10 h-10">
-                <span class="text-xl font-bold">CERTI<span class="text-cyan-400">CREDIA</span> <span class="text-xs text-slate-500">ADMIN</span></span>
+                <span class="text-xl font-bold">CERTI<span class="text-cyan-400">CREDIA</span> <span class="text-xs text-slate-500" data-i18n="admin.label">ADMIN</span></span>
             </a>
             <div class="flex gap-3 items-center">
                 <span id="admin-user-name" class="text-sm text-slate-400"></span>
@@ -21,13 +21,13 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
-                    Profilo
+                    <span data-i18n="admin.nav.profile">Profilo</span>
                 </a>
                 <button id="logout-btn" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 px-4 py-2 rounded-lg transition-colors flex items-center gap-2 border border-red-500/30">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                     </svg>
-                    Logout
+                    <span data-i18n="admin.nav.logout">Logout</span>
                 </button>
             </div>
         </div>
@@ -121,13 +121,13 @@
         <main class="flex-1 p-8">
             <!-- Dashboard Section -->
             <section id="section-dashboard" class="section-content">
-                <h1 class="text-3xl font-bold mb-8">Dashboard</h1>
+                <h1 class="text-3xl font-bold mb-8" data-i18n="admin.dashboard.title">Dashboard</h1>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-slate-400">Prodotti Totali</p>
+                                <p class="text-sm text-slate-400" data-i18n="admin.dashboard.stats.products">Prodotti Totali</p>
                                 <p class="text-3xl font-bold mt-2" id="stats-products">0</p>
                             </div>
                             <div class="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center">
@@ -141,7 +141,7 @@
                     <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-slate-400">Ordini Totali</p>
+                                <p class="text-sm text-slate-400" data-i18n="admin.dashboard.stats.orders">Ordini Totali</p>
                                 <p class="text-3xl font-bold mt-2" id="stats-orders">0</p>
                             </div>
                             <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -155,7 +155,7 @@
                     <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-slate-400">Utenti Registrati</p>
+                                <p class="text-sm text-slate-400" data-i18n="admin.dashboard.stats.users">Utenti Registrati</p>
                                 <p class="text-3xl font-bold mt-2" id="stats-users">0</p>
                             </div>
                             <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
@@ -169,7 +169,7 @@
                     <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-slate-400">Contatti Ricevuti</p>
+                                <p class="text-sm text-slate-400" data-i18n="admin.dashboard.stats.contacts">Contatti Ricevuti</p>
                                 <p class="text-3xl font-bold mt-2" id="stats-contacts">0</p>
                             </div>
                             <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
@@ -182,7 +182,7 @@
                 </div>
 
                 <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
-                    <h2 class="text-xl font-bold mb-4">Ultimi Ordini</h2>
+                    <h2 class="text-xl font-bold mb-4" data-i18n="admin.dashboard.recent.orders">Ultimi Ordini</h2>
                     <div id="recent-orders" class="space-y-3"></div>
                 </div>
             </section>
@@ -190,7 +190,7 @@
             <!-- Products Section -->
             <section id="section-products" class="section-content hidden">
                 <div class="flex justify-between items-center mb-8">
-                    <h1 class="text-3xl font-bold">Gestione Prodotti</h1>
+                    <h1 class="text-3xl font-bold" data-i18n="admin.products.title">Gestione Prodotti</h1>
                     <button onclick="showProductForm()" class="bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold px-6 py-3 rounded-lg transition-colors">
                         + Nuovo Prodotto
                     </button>
@@ -202,14 +202,14 @@
                         <input
                             type="text"
                             id="product-filter-name"
-                            placeholder="Cerca per nome..."
+                            placeholder="Cerca per nome..." data-i18n-placeholder="admin.organizations.filter.name" data-i18n-placeholder="admin.products.filter.name"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                             oninput="filterProducts()"
                         >
                         <input
                             type="text"
                             id="product-filter-category"
-                            placeholder="Categoria..."
+                            placeholder="Categoria..." data-i18n-placeholder="admin.products.filter.category"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                             oninput="filterProducts()"
                         >
@@ -218,9 +218,9 @@
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                             onchange="filterProducts()"
                         >
-                            <option value="">Tutti gli stati</option>
-                            <option value="true">Attivo</option>
-                            <option value="false">Inattivo</option>
+                            <option value="" data-i18n="admin.products.filter.status">Tutti gli stati</option>
+                            <option value="true" data-i18n="admin.products.filter.status.active">Attivo</option>
+                            <option value="false" data-i18n="admin.products.filter.status.inactive">Inattivo</option>
                         </select>
                         <button
                             onclick="resetProductFilters()"
@@ -232,48 +232,48 @@
                 </div>
 
                 <div id="product-form" class="hidden bg-slate-800 rounded-xl p-6 border border-slate-700 mb-6">
-                    <h3 class="text-xl font-bold mb-4" id="product-form-title">Nuovo Prodotto</h3>
+                    <h3 class="text-xl font-bold mb-4" id="product-form-title" data-i18n="admin.products.form.title.new">Nuovo Prodotto</h3>
                     <form id="product-edit-form" class="space-y-4">
                         <input type="hidden" id="product-id">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm text-slate-400 mb-2">Nome</label>
+                                <label class="block text-sm text-slate-400 mb-2" data-i18n="admin.products.form.name">Nome</label>
                                 <input type="text" id="product-name" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white">
                             </div>
                             <div>
-                                <label class="block text-sm text-slate-400 mb-2">Slug</label>
+                                <label class="block text-sm text-slate-400 mb-2" data-i18n="admin.products.form.slug">Slug</label>
                                 <input type="text" id="product-slug" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-sm text-slate-400 mb-2">Descrizione Breve</label>
+                            <label class="block text-sm text-slate-400 mb-2" data-i18n="admin.products.form.shortdesc">Descrizione Breve</label>
                             <input type="text" id="product-short-desc" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white">
                         </div>
 
                         <div>
-                            <label class="block text-sm text-slate-400 mb-2">Descrizione Completa</label>
+                            <label class="block text-sm text-slate-400 mb-2" data-i18n="admin.products.form.description">Descrizione Completa</label>
                             <textarea id="product-description" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white"></textarea>
                         </div>
 
                         <div class="grid grid-cols-3 gap-4">
                             <div>
-                                <label class="block text-sm text-slate-400 mb-2">Prezzo (€)</label>
+                                <label class="block text-sm text-slate-400 mb-2" data-i18n="admin.products.form.price">Prezzo (€)</label>
                                 <input type="number" step="0.01" id="product-price" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white">
                             </div>
                             <div>
-                                <label class="block text-sm text-slate-400 mb-2">Categoria</label>
+                                <label class="block text-sm text-slate-400 mb-2" data-i18n="admin.products.form.category">Categoria</label>
                                 <input type="text" id="product-category" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white">
                             </div>
                             <div>
-                                <label class="block text-sm text-slate-400 mb-2">Durata (mesi)</label>
+                                <label class="block text-sm text-slate-400 mb-2" data-i18n="admin.products.form.duration">Durata (mesi)</label>
                                 <input type="number" id="product-duration" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white">
                             </div>
                         </div>
 
                         <div class="flex gap-4">
-                            <button type="submit" class="bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold px-6 py-2 rounded-lg">Salva</button>
-                            <button type="button" onclick="hideProductForm()" class="bg-slate-700 hover:bg-slate-600 px-6 py-2 rounded-lg">Annulla</button>
+                            <button type="submit" class="bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold px-6 py-2 rounded-lg" data-i18n="admin.products.form.save">Salva</button>
+                            <button type="button" onclick="hideProductForm()" class="bg-slate-700 hover:bg-slate-600 px-6 py-2 rounded-lg" data-i18n="admin.products.form.cancel">Annulla</button>
                         </div>
                     </form>
                 </div>
@@ -282,11 +282,11 @@
                     <table class="w-full">
                         <thead class="bg-slate-900">
                             <tr>
-                                <th class="text-left p-4 text-slate-400 font-medium">Nome</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Categoria</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Prezzo</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Stato</th>
-                                <th class="text-right p-4 text-slate-400 font-medium">Azioni</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.products.table.name">Nome</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.products.table.category">Categoria</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.products.table.price">Prezzo</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.products.table.status">Stato</th>
+                                <th class="text-right p-4 text-slate-400 font-medium" data-i18n="admin.products.table.actions">Azioni</th>
                             </tr>
                         </thead>
                         <tbody id="products-table-body">
@@ -299,7 +299,7 @@
 
             <!-- Orders Section -->
             <section id="section-orders" class="section-content hidden">
-                <h1 class="text-3xl font-bold mb-8">Gestione Ordini</h1>
+                <h1 class="text-3xl font-bold mb-8" data-i18n="admin.orders.title">Gestione Ordini</h1>
 
                 <!-- Filters -->
                 <div class="bg-slate-800 rounded-lg p-4 mb-6 border border-slate-700">
@@ -307,14 +307,14 @@
                         <input
                             type="text"
                             id="order-filter-number"
-                            placeholder="Cerca per numero ordine..."
+                            placeholder="Cerca per numero ordine..." data-i18n-placeholder="admin.orders.filter.number"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                             oninput="filterOrders()"
                         >
                         <input
                             type="text"
                             id="order-filter-customer"
-                            placeholder="Cliente..."
+                            placeholder="Cliente..." data-i18n-placeholder="admin.orders.filter.customer"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                             oninput="filterOrders()"
                         >
@@ -323,12 +323,12 @@
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                             onchange="filterOrders()"
                         >
-                            <option value="">Tutti gli stati</option>
-                            <option value="pending">In Attesa</option>
-                            <option value="confirmed">Confermato</option>
-                            <option value="processing">In Lavorazione</option>
-                            <option value="completed">Completato</option>
-                            <option value="cancelled">Annullato</option>
+                            <option value="" data-i18n="admin.products.filter.status">Tutti gli stati</option>
+                            <option value="pending" data-i18n="admin.orders.filter.status.pending">In Attesa</option>
+                            <option value="confirmed" data-i18n="admin.orders.filter.status.confirmed">Confermato</option>
+                            <option value="processing" data-i18n="admin.orders.filter.status.processing">In Lavorazione</option>
+                            <option value="completed" data-i18n="admin.orders.filter.status.completed">Completato</option>
+                            <option value="cancelled" data-i18n="admin.orders.filter.status.cancelled">Annullato</option>
                         </select>
                         <button
                             onclick="resetOrderFilters()"
@@ -343,12 +343,12 @@
                     <table class="w-full">
                         <thead class="bg-slate-900">
                             <tr>
-                                <th class="text-left p-4 text-slate-400 font-medium">N. Ordine</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Cliente</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Totale</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Stato</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Data</th>
-                                <th class="text-right p-4 text-slate-400 font-medium">Azioni</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.orders.table.number">N. Ordine</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.orders.table.customer">Cliente</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.orders.table.total">Totale</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.products.table.status">Stato</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.orders.table.date">Data</th>
+                                <th class="text-right p-4 text-slate-400 font-medium" data-i18n="admin.products.table.actions">Azioni</th>
                             </tr>
                         </thead>
                         <tbody id="orders-table-body">
@@ -361,7 +361,7 @@
 
             <!-- Users Section -->
             <section id="section-users" class="section-content hidden">
-                <h1 class="text-3xl font-bold mb-8">Gestione Utenti</h1>
+                <h1 class="text-3xl font-bold mb-8" data-i18n="admin.users.title">Gestione Utenti</h1>
 
                 <!-- Filters -->
                 <div class="bg-slate-800 rounded-lg p-4 mb-6 border border-slate-700">
@@ -369,7 +369,7 @@
                         <input
                             type="text"
                             id="user-filter-name"
-                            placeholder="Cerca per nome o email..."
+                            placeholder="Cerca per nome o email..." data-i18n-placeholder="admin.users.filter.name"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                             oninput="filterUsers()"
                         >
@@ -378,20 +378,20 @@
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                             onchange="filterUsers()"
                         >
-                            <option value="">Tutti i ruoli</option>
-                            <option value="admin">Admin</option>
-                            <option value="user">Utente</option>
-                            <option value="specialist">Specialist</option>
-                            <option value="organization_admin">Org. Admin</option>
+                            <option value="" data-i18n="admin.users.filter.role">Tutti i ruoli</option>
+                            <option value="admin" data-i18n="admin.users.filter.role.admin">Admin</option>
+                            <option value="user" data-i18n="admin.users.filter.role.user">Utente</option>
+                            <option value="specialist" data-i18n="admin.users.filter.role.specialist">Specialist</option>
+                            <option value="organization_admin" data-i18n="admin.users.filter.role.orgadmin">Org. Admin</option>
                         </select>
                         <select
                             id="user-filter-status"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                             onchange="filterUsers()"
                         >
-                            <option value="">Tutti gli stati</option>
-                            <option value="true">Attivo</option>
-                            <option value="false">Inattivo</option>
+                            <option value="" data-i18n="admin.products.filter.status">Tutti gli stati</option>
+                            <option value="true" data-i18n="admin.products.filter.status.active">Attivo</option>
+                            <option value="false" data-i18n="admin.products.filter.status.inactive">Inattivo</option>
                         </select>
                         <button
                             onclick="resetUserFilters()"
@@ -406,12 +406,12 @@
                     <table class="w-full">
                         <thead class="bg-slate-900">
                             <tr>
-                                <th class="text-left p-4 text-slate-400 font-medium">Nome</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Email</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Ruolo</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Registrato</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Stato</th>
-                                <th class="text-right p-4 text-slate-400 font-medium">Azioni</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.products.table.name">Nome</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.users.table.email">Email</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.users.table.role">Ruolo</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.users.table.registered">Registrato</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.products.table.status">Stato</th>
+                                <th class="text-right p-4 text-slate-400 font-medium" data-i18n="admin.products.table.actions">Azioni</th>
                             </tr>
                         </thead>
                         <tbody id="users-table-body">
@@ -424,7 +424,7 @@
 
             <!-- Contacts Section -->
             <section id="section-contacts" class="section-content hidden">
-                <h1 class="text-3xl font-bold mb-8">Contatti Ricevuti</h1>
+                <h1 class="text-3xl font-bold mb-8" data-i18n="admin.contacts.title">Contatti Ricevuti</h1>
 
                 <!-- Filters -->
                 <div class="bg-slate-800 rounded-lg p-4 mb-6 border border-slate-700">
@@ -432,7 +432,7 @@
                         <input
                             type="text"
                             id="contact-filter-name"
-                            placeholder="Cerca per nome o email..."
+                            placeholder="Cerca per nome o email..." data-i18n-placeholder="admin.users.filter.name"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                             oninput="filterContacts()"
                         >
@@ -441,19 +441,19 @@
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                             onchange="filterContacts()"
                         >
-                            <option value="">Tutti i tipi</option>
-                            <option value="COMPANY">Azienda</option>
-                            <option value="SPECIALIST">Specialist</option>
+                            <option value="" data-i18n="admin.contacts.filter.type">Tutti i tipi</option>
+                            <option value="COMPANY" data-i18n="admin.contacts.filter.type.company">Azienda</option>
+                            <option value="SPECIALIST" data-i18n="admin.contacts.filter.type.specialist">Specialist</option>
                         </select>
                         <select
                             id="contact-filter-status"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                             onchange="filterContacts()"
                         >
-                            <option value="">Tutti gli stati</option>
-                            <option value="new">Nuovo</option>
-                            <option value="contacted">Contattato</option>
-                            <option value="closed">Chiuso</option>
+                            <option value="" data-i18n="admin.products.filter.status">Tutti gli stati</option>
+                            <option value="new" data-i18n="admin.contacts.filter.status.new">Nuovo</option>
+                            <option value="contacted" data-i18n="admin.contacts.filter.status.contacted">Contattato</option>
+                            <option value="closed" data-i18n="admin.contacts.filter.status.closed">Chiuso</option>
                         </select>
                         <button
                             onclick="resetContactFilters()"
@@ -468,13 +468,13 @@
                     <table class="w-full">
                         <thead class="bg-slate-900">
                             <tr>
-                                <th class="text-left p-4 text-slate-400 font-medium">Nome</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Email</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Tipo</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Messaggio</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Data</th>
-                                <th class="text-left p-4 text-slate-400 font-medium">Stato</th>
-                                <th class="text-right p-4 text-slate-400 font-medium">Azioni</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.products.table.name">Nome</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.users.table.email">Email</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.contacts.table.type">Tipo</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.contacts.table.message">Messaggio</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.orders.table.date">Data</th>
+                                <th class="text-left p-4 text-slate-400 font-medium" data-i18n="admin.products.table.status">Stato</th>
+                                <th class="text-right p-4 text-slate-400 font-medium" data-i18n="admin.products.table.actions">Azioni</th>
                             </tr>
                         </thead>
                         <tbody id="contacts-table-body">
@@ -488,7 +488,7 @@
             <!-- Organizations Section -->
             <section id="section-organizations" class="section-content hidden">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold">Gestione Organizzazioni</h2>
+                    <h2 class="text-2xl font-bold" data-i18n="admin.organizations.title">Gestione Organizzazioni</h2>
                     <button onclick="openOrganizationModal()" class="bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold py-2 px-4 rounded-lg transition-colors">
                         <span class="flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -505,7 +505,7 @@
                         <input
                             type="text"
                             id="org-filter-name"
-                            placeholder="Cerca per nome..."
+                            placeholder="Cerca per nome..." data-i18n-placeholder="admin.organizations.filter.name" data-i18n-placeholder="admin.products.filter.name"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                             oninput="filterOrganizations()"
                         >
@@ -514,21 +514,21 @@
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                             onchange="filterOrganizations()"
                         >
-                            <option value="">Tutti i tipi</option>
-                            <option value="PUBLIC_ENTITY">Ente Pubblico</option>
-                            <option value="PRIVATE_COMPANY">Azienda Privata</option>
-                            <option value="NON_PROFIT">No Profit</option>
+                            <option value="" data-i18n="admin.contacts.filter.type">Tutti i tipi</option>
+                            <option value="PUBLIC_ENTITY" data-i18n="admin.organizations.filter.type.public">Ente Pubblico</option>
+                            <option value="PRIVATE_COMPANY" data-i18n="admin.organizations.filter.type.private">Azienda Privata</option>
+                            <option value="NON_PROFIT" data-i18n="admin.organizations.filter.type.nonprofit">No Profit</option>
                         </select>
                         <select
                             id="org-filter-status"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                             onchange="filterOrganizations()"
                         >
-                            <option value="">Tutti gli stati</option>
-                            <option value="pending">In attesa</option>
-                            <option value="active">Attivo</option>
-                            <option value="suspended">Sospeso</option>
-                            <option value="inactive">Inattivo</option>
+                            <option value="" data-i18n="admin.products.filter.status">Tutti gli stati</option>
+                            <option value="pending" data-i18n="admin.organizations.filter.status.pending">In attesa</option>
+                            <option value="active" data-i18n="admin.organizations.filter.status.active">Attivo</option>
+                            <option value="suspended" data-i18n="admin.organizations.filter.status.suspended">Sospeso</option>
+                            <option value="inactive" data-i18n="admin.organizations.filter.status.inactive">Inattivo</option>
                         </select>
                         <button
                             onclick="resetOrganizationFilters()"
@@ -545,11 +545,11 @@
                         <thead class="bg-slate-700">
                             <tr>
                                 <th class="text-left p-4 font-semibold">Nome</th>
-                                <th class="text-left p-4 font-semibold">Tipo</th>
-                                <th class="text-left p-4 font-semibold">P.IVA</th>
-                                <th class="text-left p-4 font-semibold">Città</th>
+                                <th class="text-left p-4 font-semibold" data-i18n="admin.organizations.table.type">Tipo</th>
+                                <th class="text-left p-4 font-semibold" data-i18n="admin.organizations.table.vat">P.IVA</th>
+                                <th class="text-left p-4 font-semibold" data-i18n="admin.organizations.table.city">Città</th>
                                 <th class="text-left p-4 font-semibold">Stato</th>
-                                <th class="text-left p-4 font-semibold">Creata</th>
+                                <th class="text-left p-4 font-semibold" data-i18n="admin.organizations.table.created">Creata</th>
                                 <th class="text-left p-4 font-semibold">Azioni</th>
                             </tr>
                         </thead>
@@ -564,7 +564,7 @@
             <!-- Specialists Section -->
             <section id="section-specialists" class="section-content hidden">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold">Gestione Specialist</h2>
+                    <h2 class="text-2xl font-bold" data-i18n="admin.specialists.title">Gestione Specialist</h2>
                     <button onclick="openSpecialistModal()" class="bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold py-2 px-4 rounded-lg transition-colors">
                         <span class="flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -581,7 +581,7 @@
                         <input
                             type="text"
                             id="spec-filter-name"
-                            placeholder="Cerca per nome o email..."
+                            placeholder="Cerca per nome o email..." data-i18n-placeholder="admin.users.filter.name"
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                             oninput="filterSpecialists()"
                         >
@@ -590,11 +590,11 @@
                             class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                             onchange="filterSpecialists()"
                         >
-                            <option value="">Tutti gli stati</option>
-                            <option value="pending">Candidato</option>
-                            <option value="certified">Certificato</option>
-                            <option value="suspended">Sospeso</option>
-                            <option value="expired">Scaduto</option>
+                            <option value="" data-i18n="admin.products.filter.status">Tutti gli stati</option>
+                            <option value="pending" data-i18n="admin.specialists.filter.status.pending">Candidato</option>
+                            <option value="certified" data-i18n="admin.specialists.filter.status.certified">Certificato</option>
+                            <option value="suspended" data-i18n="admin.organizations.filter.status.suspended">Sospeso</option>
+                            <option value="expired" data-i18n="admin.specialists.filter.status.expired">Scaduto</option>
                         </select>
                         <button
                             onclick="resetSpecialistFilters()"
@@ -612,10 +612,10 @@
                             <tr>
                                 <th class="text-left p-4 font-semibold">Nome</th>
                                 <th class="text-left p-4 font-semibold">Email</th>
-                                <th class="text-left p-4 font-semibold">Esperienza</th>
-                                <th class="text-left p-4 font-semibold">CPE</th>
+                                <th class="text-left p-4 font-semibold" data-i18n="admin.specialists.table.experience">Esperienza</th>
+                                <th class="text-left p-4 font-semibold" data-i18n="admin.specialists.table.cpe">CPE</th>
                                 <th class="text-left p-4 font-semibold">Stato</th>
-                                <th class="text-left p-4 font-semibold">Certificato</th>
+                                <th class="text-left p-4 font-semibold" data-i18n="admin.specialists.table.certified">Certificato</th>
                                 <th class="text-left p-4 font-semibold">Azioni</th>
                             </tr>
                         </thead>
@@ -630,8 +630,8 @@
             <!-- Assessments Section -->
             <section id="section-assessments" class="section-content hidden">
                 <div class="mb-6">
-                    <h2 class="text-2xl font-bold mb-2">Gestione Assessments</h2>
-                    <p class="text-slate-400">Dashboard assessments disponibile su dominio esterno</p>
+                    <h2 class="text-2xl font-bold mb-2" data-i18n="admin.assessments.title">Gestione Assessments</h2>
+                    <p class="text-slate-400" data-i18n="admin.assessments.description">Dashboard assessments disponibile su dominio esterno</p>
                 </div>
 
                 <!-- Assessment Info Card -->
@@ -642,8 +642,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Assessment Cybersecurity</h3>
-                        <p class="text-slate-400 mb-6">Il sistema di assessment è gestito su una piattaforma dedicata</p>
+                        <h3 class="text-xl font-bold mb-2" data-i18n="admin.assessments.card.title">Assessment Cybersecurity</h3>
+                        <p class="text-slate-400 mb-6" data-i18n="admin.assessments.card.description">Il sistema di assessment è gestito su una piattaforma dedicata</p>
                     </div>
 
                     <a
@@ -651,7 +651,7 @@
                         target="_blank"
                         class="inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold py-3 px-6 rounded-lg transition-colors"
                     >
-                        <span>Apri Dashboard Assessment</span>
+                        <span data-i18n="admin.assessments.card.button">Apri Dashboard Assessment</span>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                         </svg>
@@ -661,15 +661,15 @@
                     <div class="mt-8 pt-8 border-t border-slate-700">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="bg-slate-900 rounded-lg p-4">
-                                <p class="text-slate-400 text-sm mb-1">Assessments Totali</p>
+                                <p class="text-slate-400 text-sm mb-1" data-i18n="admin.assessments.stats.total">Assessments Totali</p>
                                 <p class="text-2xl font-bold text-cyan-400">--</p>
                             </div>
                             <div class="bg-slate-900 rounded-lg p-4">
-                                <p class="text-slate-400 text-sm mb-1">In Corso</p>
+                                <p class="text-slate-400 text-sm mb-1" data-i18n="admin.assessments.stats.inprogress">In Corso</p>
                                 <p class="text-2xl font-bold text-yellow-400">--</p>
                             </div>
                             <div class="bg-slate-900 rounded-lg p-4">
-                                <p class="text-slate-400 text-sm mb-1">Completati</p>
+                                <p class="text-slate-400 text-sm mb-1" data-i18n="admin.assessments.stats.completed">Completati</p>
                                 <p class="text-2xl font-bold text-green-400">--</p>
                             </div>
                         </div>
@@ -683,7 +683,7 @@
     <div id="order-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div class="bg-slate-800 rounded-xl p-8 max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-slate-700">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Dettagli Ordine</h2>
+                <h2 class="text-2xl font-bold" data-i18n="admin.orders.modal.title">Dettagli Ordine</h2>
                 <button onclick="closeOrderModal()" class="text-slate-400 hover:text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -698,7 +698,7 @@
     <div id="organization-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div class="bg-slate-800 rounded-xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-slate-700">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold" id="org-modal-title">Nuova Organizzazione</h2>
+                <h2 class="text-2xl font-bold" id="org-modal-title" data-i18n="admin.organizations.modal.title.new">Nuova Organizzazione</h2>
                 <button onclick="closeOrganizationModal()" class="text-slate-400 hover:text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -710,64 +710,64 @@
                 <div class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Nome Organizzazione *</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.name">Nome Organizzazione *</label>
                             <input type="text" id="org-name" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Tipo *</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.type">Tipo *</label>
                             <select id="org-type" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
-                                <option value="">Seleziona tipo</option>
-                                <option value="PUBLIC_ENTITY">Ente Pubblico</option>
-                                <option value="PRIVATE_COMPANY">Azienda Privata</option>
-                                <option value="NON_PROFIT">No Profit</option>
+                                <option value="" data-i18n="admin.organizations.form.type.select">Seleziona tipo</option>
+                                <option value="PUBLIC_ENTITY" data-i18n="admin.organizations.filter.type.public">Ente Pubblico</option>
+                                <option value="PRIVATE_COMPANY" data-i18n="admin.organizations.filter.type.private">Azienda Privata</option>
+                                <option value="NON_PROFIT" data-i18n="admin.organizations.filter.type.nonprofit">No Profit</option>
                             </select>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Email *</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.email">Email *</label>
                             <input type="email" id="org-email" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Telefono</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.phone">Telefono</label>
                             <input type="tel" id="org-phone" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">P.IVA</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.vat">P.IVA</label>
                             <input type="text" id="org-vat" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Codice Fiscale</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.fiscal">Codice Fiscale</label>
                             <input type="text" id="org-fiscal" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-400 mb-2">Indirizzo</label>
+                        <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.address">Indirizzo</label>
                         <input type="text" id="org-address" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Città</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.city">Città</label>
                             <input type="text" id="org-city" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Provincia</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.province">Provincia</label>
                             <input type="text" id="org-province" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">CAP</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.postal">CAP</label>
                             <input type="text" id="org-postal" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-400 mb-2">Stato</label>
                         <select id="org-status" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
-                            <option value="pending">In attesa</option>
-                            <option value="active">Attivo</option>
-                            <option value="suspended">Sospeso</option>
-                            <option value="inactive">Inattivo</option>
+                            <option value="pending" data-i18n="admin.organizations.filter.status.pending">In attesa</option>
+                            <option value="active" data-i18n="admin.organizations.filter.status.active">Attivo</option>
+                            <option value="suspended" data-i18n="admin.organizations.filter.status.suspended">Sospeso</option>
+                            <option value="inactive" data-i18n="admin.organizations.filter.status.inactive">Inattivo</option>
                         </select>
                     </div>
                 </div>
@@ -787,7 +787,7 @@
     <div id="specialist-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div class="bg-slate-800 rounded-xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-slate-700">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold" id="spec-modal-title">Nuovo Specialist</h2>
+                <h2 class="text-2xl font-bold" id="spec-modal-title" data-i18n="admin.specialists.modal.title.new">Nuovo Specialist</h2>
                 <button onclick="closeSpecialistModal()" class="text-slate-400 hover:text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -799,40 +799,40 @@
                 <div class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Nome *</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.specialists.form.name">Nome *</label>
                             <input type="text" id="spec-name" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Email *</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.organizations.form.email">Email *</label>
                             <input type="email" id="spec-email" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Anni di Esperienza *</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.specialists.form.experience">Anni di Esperienza *</label>
                             <input type="number" id="spec-experience" required min="0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-400 mb-2">Stato</label>
                             <select id="spec-status-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
-                                <option value="pending">Candidato</option>
-                                <option value="certified">Certificato</option>
-                                <option value="suspended">Sospeso</option>
-                                <option value="expired">Scaduto</option>
+                                <option value="pending" data-i18n="admin.specialists.filter.status.pending">Candidato</option>
+                                <option value="certified" data-i18n="admin.specialists.filter.status.certified">Certificato</option>
+                                <option value="suspended" data-i18n="admin.organizations.filter.status.suspended">Sospeso</option>
+                                <option value="expired" data-i18n="admin.specialists.filter.status.expired">Scaduto</option>
                             </select>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-400 mb-2">Bio / Competenze</label>
+                        <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.specialists.form.bio">Bio / Competenze</label>
                         <textarea id="spec-bio" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500"></textarea>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">CPE Totali</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.specialists.form.cpe">CPE Totali</label>
                             <input type="number" id="spec-cpe" min="0" step="0.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Data Certificazione</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2" data-i18n="admin.specialists.form.certdate">Data Certificazione</label>
                             <input type="date" id="spec-cert-date" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                     </div>
@@ -849,6 +849,7 @@
         </div>
     </div>
 
+    <script src="/public/js/lang.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>
