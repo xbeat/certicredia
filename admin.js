@@ -1022,7 +1022,8 @@ let allOrganizations = [];
 async function loadOrganizations() {
     try {
         const { page, perPage } = state.pagination.organizations;
-        const response = await apiCall(`/api/organizations?page=${page}&limit=${perPage}`);
+        const offset = (page - 1) * perPage;
+        const response = await apiCall(`/api/organizations?offset=${offset}&limit=${perPage}`);
         if (!response) return;
 
         const data = await response.json();
@@ -1034,6 +1035,15 @@ async function loadOrganizations() {
         // Render pagination controls if pagination data is available
         if (data.pagination) {
             renderPaginationControls('organizations-pagination', 'organizations', data.pagination);
+        } else if (data.data && data.data.total !== undefined) {
+            // Build pagination from total count
+            const totalPages = Math.ceil(data.data.total / perPage);
+            renderPaginationControls('organizations-pagination', 'organizations', {
+                page,
+                limit: perPage,
+                total: data.data.total,
+                totalPages
+            });
         }
 
     } catch (error) {
@@ -1237,7 +1247,8 @@ let allSpecialists = [];
 async function loadSpecialists() {
     try {
         const { page, perPage } = state.pagination.specialists;
-        const response = await apiCall(`/api/specialists?page=${page}&limit=${perPage}`);
+        const offset = (page - 1) * perPage;
+        const response = await apiCall(`/api/specialists?offset=${offset}&limit=${perPage}`);
         if (!response) return;
 
         const data = await response.json();
@@ -1249,6 +1260,15 @@ async function loadSpecialists() {
         // Render pagination controls if pagination data is available
         if (data.pagination) {
             renderPaginationControls('specialists-pagination', 'specialists', data.pagination);
+        } else if (data.data && data.data.total !== undefined) {
+            // Build pagination from total count
+            const totalPages = Math.ceil(data.data.total / perPage);
+            renderPaginationControls('specialists-pagination', 'specialists', {
+                page,
+                limit: perPage,
+                total: data.data.total,
+                totalPages
+            });
         }
 
     } catch (error) {
