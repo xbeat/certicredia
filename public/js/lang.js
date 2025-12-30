@@ -620,6 +620,38 @@ const translations = {
         'register.spec.hasaccount': 'Hai già un account?',
         'register.spec.organization': 'Sei un\'organizzazione?',
         'register.spec.organization.link': 'Registrati come Organizzazione',
+
+        // App Landing
+        'app.back': '← Torna alla Home',
+        'app.title': 'Area Gestionale',
+        'app.subtitle': 'Accedi alla piattaforma CertiCredia',
+        'app.demo.toggle': '📋 Credenziali Demo (clicca per mostrare/nascondere)',
+        'app.demo.superadmin': 'SUPER ADMIN',
+        'app.demo.ecommerce': 'ECOMMERCE USER',
+        'app.demo.organization': 'ORGANIZATION',
+        'app.demo.specialist': 'SPECIALIST',
+        'app.demo.email': 'Email:',
+        'app.demo.password': 'Password:',
+        'app.login.title': 'Accedi',
+        'app.login.email': 'Email',
+        'app.login.email.placeholder': 'tuo@email.com',
+        'app.login.password': 'Password',
+        'app.login.password.toggle': 'Mostra/Nascondi password',
+        'app.login.submit': 'Accedi',
+        'app.login.forgot': 'Password dimenticata?',
+        'app.register.title': 'Registrati',
+        'app.register.choose': 'Scegli la tipologia di account da creare:',
+        'app.register.org': 'Organizzazione',
+        'app.register.org.desc': 'Enti pubblici, aziende, no-profit',
+        'app.register.spec': 'Specialist',
+        'app.register.spec.desc': 'Professionisti cybersecurity',
+        'app.register.ecommerce': 'Utente Ecommerce',
+        'app.register.ecommerce.btn': 'Registrati per Ecommerce',
+        'app.info.text': 'Accedi per gestire la tua area riservata:',
+        'app.info.superadmin': 'Super Admin',
+        'app.info.ecommerce': 'Ecommerce',
+        'app.info.organizations': 'Organizzazioni',
+        'app.info.specialist': 'Specialist',
     },
     'en-US': {
         // Navbar
@@ -1239,6 +1271,38 @@ const translations = {
         'register.spec.hasaccount': 'Already have an account?',
         'register.spec.organization': 'Are you an organization?',
         'register.spec.organization.link': 'Register as Organization',
+
+        // App Landing
+        'app.back': '← Back to Home',
+        'app.title': 'Management Area',
+        'app.subtitle': 'Access the CertiCredia platform',
+        'app.demo.toggle': '📋 Demo Credentials (click to show/hide)',
+        'app.demo.superadmin': 'SUPER ADMIN',
+        'app.demo.ecommerce': 'ECOMMERCE USER',
+        'app.demo.organization': 'ORGANIZATION',
+        'app.demo.specialist': 'SPECIALIST',
+        'app.demo.email': 'Email:',
+        'app.demo.password': 'Password:',
+        'app.login.title': 'Login',
+        'app.login.email': 'Email',
+        'app.login.email.placeholder': 'your@email.com',
+        'app.login.password': 'Password',
+        'app.login.password.toggle': 'Show/Hide password',
+        'app.login.submit': 'Login',
+        'app.login.forgot': 'Forgot password?',
+        'app.register.title': 'Register',
+        'app.register.choose': 'Choose the type of account to create:',
+        'app.register.org': 'Organization',
+        'app.register.org.desc': 'Public entities, companies, non-profits',
+        'app.register.spec': 'Specialist',
+        'app.register.spec.desc': 'Cybersecurity professionals',
+        'app.register.ecommerce': 'Ecommerce User',
+        'app.register.ecommerce.btn': 'Register for Ecommerce',
+        'app.info.text': 'Login to manage your private area:',
+        'app.info.superadmin': 'Super Admin',
+        'app.info.ecommerce': 'Ecommerce',
+        'app.info.organizations': 'Organizations',
+        'app.info.specialist': 'Specialist',
     }
 };
 
@@ -1327,6 +1391,13 @@ class LanguageManager {
         if (mobileMenu) {
             const mobileSwitcher = this.createLanguageSwitcher(true);
             mobileMenu.appendChild(mobileSwitcher);
+        }
+
+        // Fallback: look for generic lang-switcher container
+        const langContainer = document.querySelector('#lang-switcher');
+        if (langContainer && !navbar && !mobileMenu) {
+            const switcher = this.createLanguageSwitcher();
+            langContainer.appendChild(switcher);
         }
     }
 
