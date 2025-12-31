@@ -23,6 +23,7 @@ import assessmentRoutes from '../modules/assessments/routes/assessmentRoutes.js'
 import evidenceRoutes from '../modules/evidence/routes/evidenceRoutes.js';
 import workflowRoutes from '../modules/workflow/routes/workflowRoutes.js';
 import reportRoutes from '../modules/reports/routes/reportRoutes.js';
+import auditingRoutes from '../modules/auditing/routes/auditingRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -87,6 +88,7 @@ app.use('/api/assessments', assessmentRoutes);
 app.use('/api/evidence', evidenceRoutes);
 app.use('/api/workflow', workflowRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/auditing', auditingRoutes);
 
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
