@@ -45,7 +45,12 @@ async function setupDatabase() {
         password_hash VARCHAR(255) NOT NULL,
         name VARCHAR(255) NOT NULL,
         company VARCHAR(255),
+        vat_number VARCHAR(50),
         phone VARCHAR(50),
+        address TEXT,
+        city VARCHAR(100),
+        postal_code VARCHAR(20),
+        country VARCHAR(100) DEFAULT 'Italia',
         role VARCHAR(50) DEFAULT 'user',
         active BOOLEAN DEFAULT true,
         email_verified BOOLEAN DEFAULT false,
@@ -55,6 +60,8 @@ async function setupDatabase() {
         last_login TIMESTAMP
       );
       CREATE INDEX idx_users_email ON users(email);
+      CREATE INDEX idx_users_role ON users(role);
+      CREATE INDEX idx_users_active ON users(active);
     `);
     console.log('   ✅ users');
 
