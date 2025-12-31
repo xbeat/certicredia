@@ -257,6 +257,13 @@ export const getMyOrganizationHandler = async (req, res) => {
   try {
     const organization = await getOrganizationByUserId(req.user.id);
 
+    if (!organization) {
+      return res.status(404).json({
+        success: false,
+        message: 'Nessuna organizzazione associata a questo utente'
+      });
+    }
+
     res.json({
       success: true,
       data: organization
@@ -265,7 +272,7 @@ export const getMyOrganizationHandler = async (req, res) => {
   } catch (error) {
     logger.error('Errore recupero organizzazione utente:', error);
 
-    const statusCode = error.message.includes('Nessuna organizzazione') ? 404 : 500;
+    const statusCode = 500;
 
     res.status(statusCode).json({
       success: false,

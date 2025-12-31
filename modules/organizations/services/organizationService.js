@@ -437,7 +437,7 @@ export const getOrganizationByUserId = async (userId) => {
     );
 
     if (result.rows.length === 0) {
-      throw new Error('Nessuna organizzazione associata a questo utente');
+      return null; // User has no organization - this is normal, not an error
     }
 
     return result.rows[0];
