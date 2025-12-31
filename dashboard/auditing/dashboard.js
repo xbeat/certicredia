@@ -2837,6 +2837,12 @@ const CATEGORY_MAP = {
     '10': 'convergent'
 };
 
+// Close compile error and reset form
+function closeCompileError() {
+    document.getElementById('compileFormContainer').style.display = 'none';
+    document.getElementById('compileFormContent').innerHTML = '';
+}
+
 // Update indicator preview
 function updateIndicatorPreview() {
     const category = document.getElementById('compile-category-select').value;
@@ -2904,6 +2910,35 @@ async function loadIndicatorForCompile() {
     } catch (error) {
         showAlert(`Failed to load indicator: ${error.message}`, 'error');
         console.error('Load indicator error:', error);
+
+        // Show error message in form container with close button
+        const container = document.getElementById('compileFormContent');
+        container.innerHTML = `
+            <div style="padding: 40px; text-align: center;">
+                <div style="background: #fee2e2; padding: 30px; border-radius: 12px; border: 2px solid var(--danger);">
+                    <div style="font-size: 48px; margin-bottom: 15px;">⚠️</div>
+                    <h3 style="margin: 0 0 15px 0; color: var(--danger);">Field Kit Not Found</h3>
+                    <p style="margin: 0 0 10px 0; color: var(--text); font-size: 16px;">
+                        Unable to load indicator ${indicatorId}
+                    </p>
+                    <p style="margin: 0 0 20px 0; color: var(--text-light); font-size: 14px;">
+                        ${error.message}
+                    </p>
+                    <p style="margin: 0 0 25px 0; padding: 15px; background: rgba(255,255,255,0.8); border-radius: 8px; font-size: 13px; color: var(--text-light);">
+                        💡 <strong>Possible reasons:</strong><br>
+                        • Field Kit files not deployed to server<br>
+                        • Indicator not available in selected language (${language})<br>
+                        • Network or server configuration issue
+                    </p>
+                    <button onclick="closeCompileError()" style="padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                        ✕ Close & Try Another
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Show form container to display error
+        document.getElementById('compileFormContainer').style.display = 'block';
     }
 }
 
