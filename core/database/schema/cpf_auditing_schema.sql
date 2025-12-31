@@ -59,6 +59,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_cpf_auditing_updated_at ON cpf_auditing_assessments;
 CREATE TRIGGER trigger_cpf_auditing_updated_at
   BEFORE UPDATE ON cpf_auditing_assessments
   FOR EACH ROW
