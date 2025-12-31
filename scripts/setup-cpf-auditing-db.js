@@ -60,7 +60,8 @@ async function setupDatabase() {
       port: parseInt(url.port) || 5432,
       database: 'postgres',
       user: url.username,
-      password: url.password
+      password: url.password,
+      ssl: url.searchParams.get('sslmode') === 'require' ? { rejectUnauthorized: false } : false
     };
   } else {
     adminConfig = {
@@ -114,15 +115,27 @@ async function setupDatabase() {
     await adminClient.end();
 
     // Connect to the target database to grant table-level permissions
-    const dbClient = new pg.Client(
-      process.env.DATABASE_URL || {
+    let dbConfig;
+    if (process.env.DATABASE_URL) {
+      const url = new URL(process.env.DATABASE_URL);
+      dbConfig = {
+        host: url.hostname,
+        port: parseInt(url.port) || 5432,
+        database: url.pathname.slice(1), // Remove leading slash
+        user: url.username,
+        password: url.password,
+        ssl: url.searchParams.get('sslmode') === 'require' ? { rejectUnauthorized: false } : false
+      };
+    } else {
+      dbConfig = {
         host: DB_HOST,
         port: DB_PORT,
         database: DB_NAME,
         user: process.env.POSTGRES_USER || 'postgres',
         password: process.env.POSTGRES_PASSWORD || DB_PASSWORD
-      }
-    );
+      };
+    }
+    const dbClient = new pg.Client(dbConfig);
 
     try {
       await dbClient.connect();
@@ -155,15 +168,27 @@ async function setupDatabase() {
  * Create CPF auditing tables
  */
 async function createTables() {
-  const client = new pg.Client(
-    process.env.DATABASE_URL || {
+  let clientConfig;
+  if (process.env.DATABASE_URL) {
+    const url = new URL(process.env.DATABASE_URL);
+    clientConfig = {
+      host: url.hostname,
+      port: parseInt(url.port) || 5432,
+      database: url.pathname.slice(1), // Remove leading slash
+      user: url.username,
+      password: url.password,
+      ssl: url.searchParams.get('sslmode') === 'require' ? { rejectUnauthorized: false } : false
+    };
+  } else {
+    clientConfig = {
       host: DB_HOST,
       port: DB_PORT,
       database: DB_NAME,
       user: DB_USER,
       password: DB_PASSWORD
-    }
-  );
+    };
+  }
+  const client = new pg.Client(clientConfig);
 
   try {
     await client.connect();

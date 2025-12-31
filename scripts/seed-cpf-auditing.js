@@ -9,8 +9,14 @@
 
 import pg from 'pg';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables from root .env file
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const {
   DB_HOST = 'localhost',
@@ -113,13 +119,27 @@ async function seedAssessments() {
   log('\n🌱 CPF Auditing Seed Script', colors.blue);
   log('=' .repeat(50), colors.blue);
 
-  const client = new pg.Client({
-    host: DB_HOST,
-    port: DB_PORT,
-    database: DB_NAME,
-    user: DB_USER,
-    password: DB_PASSWORD
-  });
+  let clientConfig;
+  if (process.env.DATABASE_URL) {
+    const url = new URL(process.env.DATABASE_URL);
+    clientConfig = {
+      host: url.hostname,
+      port: parseInt(url.port) || 5432,
+      database: url.pathname.slice(1), // Remove leading slash
+      user: url.username,
+      password: url.password,
+      ssl: url.searchParams.get('sslmode') === 'require' ? { rejectUnauthorized: false } : false
+    };
+  } else {
+    clientConfig = {
+      host: DB_HOST,
+      port: DB_PORT,
+      database: DB_NAME,
+      user: DB_USER,
+      password: DB_PASSWORD
+    };
+  }
+  const client = new pg.Client(clientConfig);
 
   try {
     await client.connect();
