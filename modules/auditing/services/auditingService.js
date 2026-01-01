@@ -123,8 +123,8 @@ export async function updateAssessment(organizationId, assessmentData, metadata 
   }
 
   // Get organization data for industry
-  const orgResult = await pool.query('SELECT industry, metadata FROM organizations WHERE id = $1', [organizationId]);
-  const industry = orgResult.rows[0]?.industry || orgResult.rows[0]?.metadata?.industry || 'General';
+  const orgResult = await pool.query('SELECT metadata FROM organizations WHERE id = $1', [organizationId]);
+  const industry = orgResult.rows[0]?.metadata?.industry || 'Other';
 
   // Recalculate aggregates (maturity_model, category_stats, etc.)
   const aggregates = calculateAggregates(assessmentsForCalc, industry);
