@@ -183,11 +183,11 @@ function transformAssessmentData(dbAssessment) {
 export async function getAllOrganizationsWithAssessments(req, res) {
   try {
     // Get all organizations
-    const organizations = await organizationService.getAllOrganizations({ limit: 1000 });
+    const result = await organizationService.getAllOrganizations({ limit: 1000 });
 
     // For each organization, get its assessment and transform data
     const organizationsWithAssessments = await Promise.all(
-      organizations.data.map(async (org) => {
+      result.organizations.map(async (org) => {
         const assessment = await auditingService.getAssessmentByOrganization(org.id);
 
         if (assessment) {
