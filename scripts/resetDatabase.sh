@@ -10,7 +10,9 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 # Carica variabili d'ambiente da .env
 if [ -f "$PROJECT_ROOT/.env" ]; then
   echo "📋 Caricamento variabili da .env..."
-  export $(grep -v '^#' "$PROJECT_ROOT/.env" | xargs)
+  set -a
+  source "$PROJECT_ROOT/.env"
+  set +a
 fi
 
 echo "========================================="
