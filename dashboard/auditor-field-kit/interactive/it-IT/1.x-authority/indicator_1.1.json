@@ -1,0 +1,112 @@
+{
+  "indicator": "1.1",
+  "title": "Conformità incondizionata all'autorità apparente",
+  "subtitle": "Valutazione delle vulnerabilità da obbedienza cieca alle figure di autorità",
+  "category": "1. Vulnerabilità Basate sull'Autorità",
+  "description": {
+    "short": "Misura quanto facilmente i dipendenti seguono ordini da presunte figure di autorità senza verifica dell'identità o legittimità",
+    "detailed": "Questo indicatore valuta la suscettibilità dell'organizzazione agli attacchi di social engineering basati sull'autorità. Include la tendenza a eseguire richieste inusuali quando provengono da fonti percepite come autorevoli, senza applicare procedure di verifica standard."
+  },
+  "field_kit": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "I dipendenti eseguono richieste inusuali da parte di presunti dirigenti senza verifica?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Non valutato", "description": "Indicatore non ancora analizzato" },
+          { "value": 1, "label": "Rischio Basso", "description": "Procedure di verifica rigorose sempre applicate" },
+          { "value": 2, "label": "Rischio Medio", "description": "Verifica applicata solo per richieste critiche" },
+          { "value": 3, "label": "Rischio Alto", "description": "Nessuna procedura di verifica, obbedienza automatica" }
+        ]
+      },
+      {
+        "id": "q2",
+        "text": "Esistono procedure formali per verificare l'identità di figure autoritative prima di eseguire richieste sensibili?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Non valutato" },
+          { "value": 1, "label": "Rischio Basso", "description": "Procedure formali documentate e applicate" },
+          { "value": 2, "label": "Rischio Medio", "description": "Procedure esistono ma non sempre applicate" },
+          { "value": 3, "label": "Rischio Alto", "description": "Nessuna procedura formale" }
+        ]
+      },
+      {
+        "id": "q3",
+        "text": "I dipendenti sono stati formati a riconoscere tecniche di impersonificazione di autorità?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Non valutato" },
+          { "value": 1, "label": "Rischio Basso", "description": "Formazione regolare con simulazioni pratiche" },
+          { "value": 2, "label": "Rischio Medio", "description": "Formazione base ma senza aggiornamenti" },
+          { "value": 3, "label": "Rischio Alto", "description": "Nessuna formazione specifica" }
+        ]
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "quick-assessment",
+      "title": "Valutazione Rapida",
+      "description": "Domande essenziali per una valutazione iniziale dell'indicatore",
+      "items": [
+        {
+          "id": "q1",
+          "type": "radio-list",
+          "question": "I dipendenti eseguono richieste inusuali da parte di presunti dirigenti senza verifica?",
+          "help_text": "Valuta se esiste una cultura di verifica dell'identità prima di eseguire ordini inusuali",
+          "options": [
+            { "value": 0, "label": "Non valutato" },
+            { "value": 1, "label": "Rischio Basso" },
+            { "value": 2, "label": "Rischio Medio" },
+            { "value": 3, "label": "Rischio Alto" }
+          ]
+        },
+        {
+          "id": "q2",
+          "type": "radio-list",
+          "question": "Esistono procedure formali per verificare l'identità di figure autoritative prima di eseguire richieste sensibili?",
+          "options": [
+            { "value": 0, "label": "Non valutato" },
+            { "value": 1, "label": "Rischio Basso" },
+            { "value": 2, "label": "Rischio Medio" },
+            { "value": 3, "label": "Rischio Alto" }
+          ]
+        },
+        {
+          "id": "q3",
+          "type": "radio-list",
+          "question": "I dipendenti sono stati formati a riconoscere tecniche di impersonificazione di autorità?",
+          "options": [
+            { "value": 0, "label": "Non valutato" },
+            { "value": 1, "label": "Rischio Basso" },
+            { "value": 2, "label": "Rischio Medio" },
+            { "value": 3, "label": "Rischio Alto" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "evidence",
+      "title": "Raccolta Evidenze",
+      "description": "Documentazione e prove a supporto della valutazione",
+      "items": [
+        {
+          "id": "evidence_notes",
+          "type": "textarea",
+          "question": "Note e osservazioni",
+          "placeholder": "Inserisci osservazioni, esempi concreti, risultati di test di social engineering, ecc."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "category_id": 1,
+    "category_code": "authority",
+    "reference": "Milgram (1974) - Obedience to Authority",
+    "compliance_frameworks": ["ISO 27001", "NIST CSF", "NIS2"],
+    "related_indicators": ["1.2", "1.3", "3.7"],
+    "severity": "high",
+    "tags": ["social-engineering", "awareness", "procedures", "authority"]
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "indicator": "1.1",
+  "title": "Unconditional Compliance to Apparent Authority",
+  "subtitle": "Assessment of vulnerabilities from blind obedience to authority figures",
+  "category": "1. Authority-Based Vulnerabilities",
+  "description": {
+    "short": "Measures how easily employees follow orders from presumed authority figures without verifying identity or legitimacy",
+    "detailed": "This indicator assesses the organization's susceptibility to authority-based social engineering attacks. It includes the tendency to execute unusual requests when they come from sources perceived as authoritative, without applying standard verification procedures."
+  },
+  "field_kit": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "Do employees execute unusual requests from presumed executives without verification?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Not Assessed", "description": "Indicator not yet analyzed" },
+          { "value": 1, "label": "Low Risk", "description": "Rigorous verification procedures always applied" },
+          { "value": 2, "label": "Medium Risk", "description": "Verification applied only for critical requests" },
+          { "value": 3, "label": "High Risk", "description": "No verification procedure, automatic obedience" }
+        ]
+      },
+      {
+        "id": "q2",
+        "text": "Are there formal procedures to verify the identity of authority figures before executing sensitive requests?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Not Assessed" },
+          { "value": 1, "label": "Low Risk", "description": "Formal documented and applied procedures" },
+          { "value": 2, "label": "Medium Risk", "description": "Procedures exist but not always applied" },
+          { "value": 3, "label": "High Risk", "description": "No formal procedure" }
+        ]
+      },
+      {
+        "id": "q3",
+        "text": "Have employees been trained to recognize authority impersonation techniques?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Not Assessed" },
+          { "value": 1, "label": "Low Risk", "description": "Regular training with practical simulations" },
+          { "value": 2, "label": "Medium Risk", "description": "Basic training but no updates" },
+          { "value": 3, "label": "High Risk", "description": "No specific training" }
+        ]
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "quick-assessment",
+      "title": "Quick Assessment",
+      "description": "Essential questions for initial indicator evaluation",
+      "items": [
+        {
+          "id": "q1",
+          "type": "radio-list",
+          "question": "Do employees execute unusual requests from presumed executives without verification?",
+          "help_text": "Assess if there's a culture of verifying identity before executing unusual orders",
+          "options": [
+            { "value": 0, "label": "Not Assessed" },
+            { "value": 1, "label": "Low Risk" },
+            { "value": 2, "label": "Medium Risk" },
+            { "value": 3, "label": "High Risk" }
+          ]
+        },
+        {
+          "id": "q2",
+          "type": "radio-list",
+          "question": "Are there formal procedures to verify the identity of authority figures before executing sensitive requests?",
+          "options": [
+            { "value": 0, "label": "Not Assessed" },
+            { "value": 1, "label": "Low Risk" },
+            { "value": 2, "label": "Medium Risk" },
+            { "value": 3, "label": "High Risk" }
+          ]
+        },
+        {
+          "id": "q3",
+          "type": "radio-list",
+          "question": "Have employees been trained to recognize authority impersonation techniques?",
+          "options": [
+            { "value": 0, "label": "Not Assessed" },
+            { "value": 1, "label": "Low Risk" },
+            { "value": 2, "label": "Medium Risk" },
+            { "value": 3, "label": "High Risk" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "evidence",
+      "title": "Evidence Collection",
+      "description": "Documentation and evidence supporting the assessment",
+      "items": [
+        {
+          "id": "evidence_notes",
+          "type": "textarea",
+          "question": "Notes and observations",
+          "placeholder": "Enter observations, concrete examples, social engineering test results, etc."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "category_id": 1,
+    "category_code": "authority",
+    "reference": "Milgram (1974) - Obedience to Authority",
+    "compliance_frameworks": ["ISO 27001", "NIST CSF", "NIS2"],
+    "related_indicators": ["1.2", "1.3", "3.7"],
+    "severity": "high",
+    "tags": ["social-engineering", "awareness", "procedures", "authority"]
+  }
+}

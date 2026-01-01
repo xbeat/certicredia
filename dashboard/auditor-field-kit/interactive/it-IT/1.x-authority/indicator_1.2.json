@@ -1,0 +1,73 @@
+{
+  "indicator": "1.2",
+  "title": "Diffusione della responsabilità nelle strutture gerarchiche",
+  "subtitle": "Valutazione della tendenza a delegare decisioni di sicurezza verso l'alto",
+  "category": "1. Vulnerabilità Basate sull'Autorità",
+  "description": {
+    "short": "Misura quanto i dipendenti tendono a delegare decisioni di sicurezza ai superiori invece di prendere iniziativa",
+    "detailed": "Questo indicatore valuta se esiste una cultura di responsabilità diffusa che porta i dipendenti a non prendere decisioni di sicurezza autonome, attendendo sempre l'approvazione superiore anche in situazioni urgenti."
+  },
+  "field_kit": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "I dipendenti prendono decisioni di sicurezza autonome quando necessario?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Non valutato" },
+          { "value": 1, "label": "Rischio Basso", "description": "Autonomia decisionale chiara e incoraggiata" },
+          { "value": 2, "label": "Rischio Medio", "description": "Autonomia limitata a situazioni predefinite" },
+          { "value": 3, "label": "Rischio Alto", "description": "Totale dipendenza dalle decisioni superiori" }
+        ]
+      },
+      {
+        "id": "q2",
+        "text": "Esistono linee guida chiare su quando è appropriato escalare vs decidere autonomamente?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Non valutato" },
+          { "value": 1, "label": "Rischio Basso", "description": "Linee guida chiare e comunicate" },
+          { "value": 2, "label": "Rischio Medio", "description": "Linee guida vaghe o poco note" },
+          { "value": 3, "label": "Rischio Alto", "description": "Nessuna linea guida formale" }
+        ]
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "quick-assessment",
+      "title": "Valutazione Rapida",
+      "items": [
+        {
+          "id": "q1",
+          "type": "radio-list",
+          "question": "I dipendenti prendono decisioni di sicurezza autonome quando necessario?",
+          "options": [
+            { "value": 0, "label": "Non valutato" },
+            { "value": 1, "label": "Rischio Basso" },
+            { "value": 2, "label": "Rischio Medio" },
+            { "value": 3, "label": "Rischio Alto" }
+          ]
+        },
+        {
+          "id": "q2",
+          "type": "radio-list",
+          "question": "Esistono linee guida chiare su quando è appropriato escalare vs decidere autonomamente?",
+          "options": [
+            { "value": 0, "label": "Non valutato" },
+            { "value": 1, "label": "Rischio Basso" },
+            { "value": 2, "label": "Rischio Medio" },
+            { "value": 3, "label": "Rischio Alto" }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "category_id": 1,
+    "category_code": "authority",
+    "reference": "Milgram (1974)",
+    "severity": "medium",
+    "tags": ["responsibility", "decision-making", "hierarchy"]
+  }
+}

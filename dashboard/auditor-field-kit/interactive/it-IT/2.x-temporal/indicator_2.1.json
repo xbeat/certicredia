@@ -1,0 +1,107 @@
+{
+  "indicator": "2.1",
+  "title": "Bypass della sicurezza indotto dall'urgenza",
+  "subtitle": "Valutazione della tendenza a saltare procedure di sicurezza sotto pressione temporale",
+  "category": "2. Vulnerabilità Temporali",
+  "description": {
+    "short": "Misura quanto frequentemente le procedure di sicurezza vengono ignorate quando c'è urgenza o scadenze pressanti",
+    "detailed": "Questo indicatore valuta se l'organizzazione mantiene standard di sicurezza rigorosi anche in situazioni di urgenza, o se la pressione temporale porta regolarmente a bypassare controlli importanti."
+  },
+  "field_kit": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "Le procedure di sicurezza vengono mantenute anche in situazioni di urgenza?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Non valutato" },
+          { "value": 1, "label": "Rischio Basso", "description": "Procedure sempre rispettate, urgenza pianificata" },
+          { "value": 2, "label": "Rischio Medio", "description": "Procedure saltate occasionalmente sotto pressione" },
+          { "value": 3, "label": "Rischio Alto", "description": "Bypass frequente quando c'è urgenza" }
+        ]
+      },
+      {
+        "id": "q2",
+        "text": "Esistono procedure accelerate per situazioni urgenti che mantengono controlli di sicurezza?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Non valutato" },
+          { "value": 1, "label": "Rischio Basso", "description": "Procedure fast-track documentate e sicure" },
+          { "value": 2, "label": "Rischio Medio", "description": "Solo linee guida informali" },
+          { "value": 3, "label": "Rischio Alto", "description": "Nessuna procedura per gestire urgenze" }
+        ]
+      },
+      {
+        "id": "q3",
+        "text": "Gli incidenti di sicurezza vengono analizzati per identificare se la pressione temporale è stata un fattore?",
+        "type": "single_choice",
+        "answer_scale": [
+          { "value": 0, "label": "Non valutato" },
+          { "value": 1, "label": "Rischio Basso", "description": "Analisi sistematica dei fattori temporali" },
+          { "value": 2, "label": "Rischio Medio", "description": "Analisi occasionale" },
+          { "value": 3, "label": "Rischio Alto", "description": "Fattore temporale mai considerato" }
+        ]
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "quick-assessment",
+      "title": "Valutazione Rapida",
+      "items": [
+        {
+          "id": "q1",
+          "type": "radio-list",
+          "question": "Le procedure di sicurezza vengono mantenute anche in situazioni di urgenza?",
+          "options": [
+            { "value": 0, "label": "Non valutato" },
+            { "value": 1, "label": "Rischio Basso" },
+            { "value": 2, "label": "Rischio Medio" },
+            { "value": 3, "label": "Rischio Alto" }
+          ]
+        },
+        {
+          "id": "q2",
+          "type": "radio-list",
+          "question": "Esistono procedure accelerate per situazioni urgenti che mantengono controlli di sicurezza?",
+          "options": [
+            { "value": 0, "label": "Non valutato" },
+            { "value": 1, "label": "Rischio Basso" },
+            { "value": 2, "label": "Rischio Medio" },
+            { "value": 3, "label": "Rischio Alto" }
+          ]
+        },
+        {
+          "id": "q3",
+          "type": "radio-list",
+          "question": "Gli incidenti di sicurezza vengono analizzati per identificare se la pressione temporale è stata un fattore?",
+          "options": [
+            { "value": 0, "label": "Non valutato" },
+            { "value": 1, "label": "Rischio Basso" },
+            { "value": 2, "label": "Rischio Medio" },
+            { "value": 3, "label": "Rischio Alto" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "evidence",
+      "title": "Evidenze",
+      "items": [
+        {
+          "id": "evidence_notes",
+          "type": "textarea",
+          "question": "Note e osservazioni",
+          "placeholder": "Esempi di situazioni urgenti, procedure bypass, analisi post-incident..."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "category_id": 2,
+    "category_code": "temporal",
+    "reference": "Kahneman & Tversky (1979)",
+    "severity": "high",
+    "tags": ["urgency", "deadline", "pressure", "procedures"]
+  }
+}
