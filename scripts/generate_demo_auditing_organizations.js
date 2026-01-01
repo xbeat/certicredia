@@ -1,86 +1,19 @@
-#!/usr/bin/env node
+/**
+ * CPF Auditing Data Generator
+ *
+ * Generates realistic CPF assessment data using Field Kit structure.
+ * Used by seed-perfect-cpf-data.js to populate database.
+ */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { calculateAggregates } from '../lib/db_json.js';
 
-// Import calculateAggregates from db_json.js (includes maturity model calculation)
-const { calculateAggregates } = require('../lib/db_json');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const DATA_DIR = path.join(__dirname, '..', 'data');
-const ORGS_DIR = path.join(DATA_DIR, 'organizations');
-const INDEX_FILE = path.join(DATA_DIR, 'organizations_index.json');
-
-// Helper function to normalize organization name for ID
-function normalizeOrgName(name) {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')  // Replace non-alphanumeric with dash
-    .replace(/^-|-$/g, '');        // Remove leading/trailing dashes
-}
-
-const DEMO_ORGANIZATIONS = [
-  {
-    id: 'techcorp-global', // normalized from "TechCorp Global"
-    name: 'TechCorp Global',
-    industry: 'Technology',
-    size: 'enterprise',
-    country: 'US',
-    language: 'en-US',
-    created_by: 'System',
-    notes: 'Large technology company with global operations',
-    sede_sociale: '100 Innovation Drive, San Francisco, CA 94105',
-    partita_iva: 'US12-3456789'
-  },
-  {
-    id: 'financefirst-bank', // normalized from "FinanceFirst Bank"
-    name: 'FinanceFirst Bank',
-    industry: 'Finance',
-    size: 'enterprise',
-    country: 'US',
-    language: 'en-US',
-    created_by: 'System',
-    notes: 'International banking institution',
-    sede_sociale: '250 Wall Street, New York, NY 10005',
-    partita_iva: 'US98-7654321'
-  },
-  {
-    id: 'healthplus-clinic', // normalized from "HealthPlus Clinic"
-    name: 'HealthPlus Clinic',
-    industry: 'Healthcare',
-    size: 'medium',
-    country: 'IT',
-    language: 'it-IT',
-    created_by: 'System',
-    notes: 'Regional healthcare provider',
-    sede_sociale: 'Via della Salute 15, 00185 Roma (RM)',
-    partita_iva: 'IT12345678901'
-  },
-  {
-    id: 'retailmax-store', // normalized from "RetailMax Store"
-    name: 'RetailMax Italia',
-    industry: 'Retail',
-    size: 'small',
-    country: 'IT',
-    language: 'it-IT',
-    created_by: 'System',
-    notes: 'Catena retail con piattaforma e-commerce',
-    sede_sociale: 'Via del Commercio 42, 20121 Milano (MI)',
-    partita_iva: 'IT66778899001'
-  },
-  {
-    id: 'edulearn-academy', // normalized from "EduLearn Academy"
-    name: 'EduLearn Academy USA',
-    industry: 'Education',
-    size: 'medium',
-    country: 'US',
-    language: 'en-US',
-    created_by: 'System',
-    notes: 'Online education platform with nationwide reach',
-    sede_sociale: '1200 Education Boulevard, Boston, MA 02115',
-    partita_iva: 'US55-4433221'
-  }
-];
-
+// Default assessors
 const ASSESSORS = ['Alice Johnson', 'Bob Smith', 'Carlo Rossi', 'Diana Chen', 'Emma Garcia'];
 const CATEGORY_NAMES = {
   '1': 'Authority-Based Vulnerabilities',
@@ -147,7 +80,7 @@ function loadFieldKitForIndicator(indicatorId, language) {
   const categoryMap = {'1':'authority','2':'temporal','3':'social','4':'affective','5':'cognitive','6':'group','7':'stress','8':'unconscious','9':'ai','10':'convergent'};
   const categoryName = categoryMap[categoryNum];
 
-  const fieldKitPath = path.join(__dirname, '..', '..', 'auditor field kit', 'interactive', language, `${categoryNum}.x-${categoryName}`, `indicator_${indicatorId}.json`);
+  const fieldKitPath = path.join(__dirname, '..', 'auditor-field-kit', 'interactive', language, `${categoryNum}.x-${categoryName}`, `indicator_${indicatorId}.json`);
 
   try {
     if (fs.existsSync(fieldKitPath)) {
@@ -163,7 +96,7 @@ function loadFieldKitForIndicator(indicatorId, language) {
     const fallbackCacheKey = `${indicatorId}_en-US`;
     if (fieldKitCache[fallbackCacheKey]) return fieldKitCache[fallbackCacheKey];
 
-    const fallbackPath = path.join(__dirname, '..', '..', 'auditor field kit', 'interactive', 'en-US', `${categoryNum}.x-${categoryName}`, `indicator_${indicatorId}.json`);
+    const fallbackPath = path.join(__dirname, '..', 'auditor-field-kit', 'interactive', 'en-US', `${categoryNum}.x-${categoryName}`, `indicator_${indicatorId}.json`);
 
     try {
       if (fs.existsSync(fallbackPath)) {
@@ -446,121 +379,5 @@ function generateOrganization(orgConfig) {
   return orgData;
 }
 
-function ensureDirectoryExists(dirPath) { if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true }); }
-function writeJsonFile(filePath, data) { fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8'); }
-
-async function generateDemoOrganizations() {
-  const generatedOrgsData = []; // Data to return
-  if (require.main === module) {
-    console.log('\n🌱 CPF Demo Organizations Generator\n');
-    console.log('='.repeat(60));
-    ensureDirectoryExists(DATA_DIR);
-    ensureDirectoryExists(ORGS_DIR);
-  }
-
-  let organizationsIndex;
-  if (fs.existsSync(INDEX_FILE)) {
-    if (require.main === module) console.log('📂 Loading existing organizations index...');
-    const existingData = fs.readFileSync(INDEX_FILE, 'utf8');
-    organizationsIndex = JSON.parse(existingData);
-    if (require.main === module) console.log(`   Found ${organizationsIndex.organizations.length} existing organizations\n`);
-  } else {
-    if (require.main === module) console.log('📂 Creating new organizations index...\n');
-    organizationsIndex = { metadata: { version: '2.0', last_updated: new Date().toISOString(), total_organizations: 0 }, organizations: [] };
-  }
-
-  const existingOrgsMap = new Map(organizationsIndex.organizations.map(org => [org.id, org]));
-  let totalAssessments = 0, addedCount = 0, skippedCount = 0;
-
-  for (const orgConfig of DEMO_ORGANIZATIONS) {
-    if (require.main === module) {
-      console.log(`\n📊 Processing: ${orgConfig.name}`);
-      console.log('-'.repeat(60));
-    }
-
-    if (existingOrgsMap.has(orgConfig.id) && require.main === module) {
-      console.log(`   ⏭️  SKIPPED: Organization "${orgConfig.id}" already exists`);
-      skippedCount++;
-      const orgData = generateOrganization(orgConfig);
-      generatedOrgsData.push(orgData);
-      continue;
-    }
-
-    const orgData = generateOrganization(orgConfig);
-    generatedOrgsData.push(orgData);
-
-    if (require.main === module) {
-      const orgFilePath = path.join(ORGS_DIR, `${orgConfig.id}.json`);
-      writeJsonFile(orgFilePath, orgData);
-      console.log(`   ✓ Saved: ${orgFilePath}`);
-
-      const indexEntry = { id: orgData.id, name: orgData.name, industry: orgData.metadata.industry, size: orgData.metadata.size, country: orgData.metadata.country, language: orgData.metadata.language, created_at: orgData.metadata.created_at, updated_at: orgData.metadata.updated_at, stats: { total_assessments: orgData.aggregates.completion.assessed_indicators, completion_percentage: orgData.aggregates.completion.percentage, overall_risk: orgData.aggregates.overall_risk, avg_confidence: orgData.aggregates.overall_confidence, last_assessment_date: Object.values(orgData.assessments).sort((a, b) => new Date(b.assessment_date) - new Date(a.assessment_date))[0]?.assessment_date } };
-      organizationsIndex.organizations.push(indexEntry);
-      addedCount++;
-      totalAssessments += orgData.aggregates.completion.assessed_indicators;
-
-      console.log(`   📈 Stats:`);
-      console.log(`      - Assessments: ${orgData.aggregates.completion.assessed_indicators} / 100`);
-      console.log(`      - Completion: ${orgData.aggregates.completion.percentage}%`);
-      console.log(`      - Overall Risk: ${orgData.aggregates.overall_risk} (${getRiskLabel(orgData.aggregates.overall_risk)})`);
-      console.log(`      - Avg Confidence: ${orgData.aggregates.overall_confidence}`);
-    }
-  }
-
-  if (require.main === module) {
-    organizationsIndex.metadata.last_updated = new Date().toISOString();
-    organizationsIndex.metadata.total_organizations = organizationsIndex.organizations.length;
-    writeJsonFile(INDEX_FILE, organizationsIndex);
-    console.log(`\n✓ Saved index: ${INDEX_FILE}`);
-
-    console.log('\n' + '='.repeat(60));
-    console.log('\n✅ Generation completed!\n');
-    console.log(`📊 Summary:`);
-    console.log(`   - Organizations added: ${addedCount}`);
-    console.log(`   - Organizations skipped (already exist): ${skippedCount}`);
-    console.log(`   - Total organizations in database: ${organizationsIndex.organizations.length}`);
-    console.log(`   - New assessments generated: ${totalAssessments}`);
-    if (addedCount > 0) console.log(`   - Average assessments per new org: ${Math.round(totalAssessments / addedCount)}`);
-    console.log();
-
-    console.log('📋 Organizations:');
-    console.log('-'.repeat(60));
-    for (const org of organizationsIndex.organizations) {
-      const riskLabel = getRiskLabel(org.stats.overall_risk);
-      console.log(`   ${org.id}: ${org.name}`);
-      console.log(`      ${org.industry} | ${org.size} | ${org.country}`);
-      console.log(`      Risk: ${riskLabel} (${org.stats.overall_risk}) | Completion: ${org.stats.completion_percentage}%`);
-      console.log();
-    }
-    console.log('✅ Files ready in:');
-    console.log(`   ${DATA_DIR}/organizations_index.json`);
-    console.log(`   ${ORGS_DIR}/techcorp-global.json`);
-    console.log(`   ${ORGS_DIR}/financefirst-bank.json`);
-    console.log(`   ${ORGS_DIR}/healthplus-clinic.json`);
-    console.log(`   ${ORGS_DIR}/retailmax-store.json`);
-    console.log(`   ${ORGS_DIR}/edulearn-academy.json`);
-    console.log();
-  }
-
-  return generatedOrgsData;
-}
-
-function getRiskLabel(score) {
-  if (score < 0.3) return '🟢 LOW';
-  if (score < 0.7) return '🟡 MEDIUM';
-  return '🔴 HIGH';
-}
-
-if (require.main === module) {
-  generateDemoOrganizations()
-    .then(() => {
-      console.log('✅ Demo organizations generated successfully!\n');
-      process.exit(0);
-    })
-    .catch((error) => {
-      console.error('❌ Error generating organizations:', error);
-      process.exit(1);
-    });
-}
-
-module.exports = { generateDemoOrganizations, generateOrganization };
+// Export only the core generation function
+export { generateOrganization };

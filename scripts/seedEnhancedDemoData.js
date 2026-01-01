@@ -19,9 +19,11 @@ async function seedEnhancedDemoData() {
     console.log('👤 Creating users...');
 
     const usersData = [
-      // Admins
-      { email: 'admin@certicredia.it', password: 'Admin123', name: 'Marco Bianchi', role: 'admin', company: 'CertiCredia Italia' },
-      { email: 'admin2@certicredia.it', password: 'Admin123', name: 'Laura Verdi', role: 'admin', company: 'CertiCredia Italia' },
+      // Main Demo Accounts - CREDENZIALI FISSE NON MODIFICARE
+      { email: 'admin@certicredia.test', password: 'Admin123!@#', name: 'Admin CertiCredia', role: 'admin', company: 'CertiCredia Italia' },
+      { email: 'user@certicredia.test', password: 'User123!@#', name: 'User Demo', role: 'user', company: 'Demo Company' },
+      { email: 'organization@certicredia.test', password: 'Org123!@#', name: 'Organization Demo', role: 'organization_admin', company: 'Organization Demo' },
+      { email: 'specialist@certicredia.test', password: 'Specialist123!@#', name: 'Specialist Demo', role: 'specialist', company: null },
 
       // Organization Admins
       { email: 'admin@techcorp.it', password: 'Password123', name: 'Giovanni Rossi', role: 'organization_admin', company: 'TechCorp S.p.A.' },
@@ -29,13 +31,6 @@ async function seedEnhancedDemoData() {
       { email: 'admin@healthsys.it', password: 'Password123', name: 'Paolo Gialli', role: 'organization_admin', company: 'HealthSys Italia' },
       { email: 'admin@retailgroup.it', password: 'Password123', name: 'Francesca Blu', role: 'organization_admin', company: 'Retail Group' },
       { email: 'admin@energyplus.it', password: 'Password123', name: 'Andrea Viola', role: 'organization_admin', company: 'Energy Plus' },
-
-      // Specialists
-      { email: 'specialist1@certicredia.it', password: 'Specialist123', name: 'Dr. Roberto Ferrari', role: 'specialist', company: null },
-      { email: 'specialist2@certicredia.it', password: 'Specialist123', name: 'Dr. Elena Russo', role: 'specialist', company: null },
-      { email: 'specialist3@certicredia.it', password: 'Specialist123', name: 'Dr. Luca Romano', role: 'specialist', company: null },
-      { email: 'specialist4@certicredia.it', password: 'Specialist123', name: 'Dr. Chiara Colombo', role: 'specialist', company: null },
-      { email: 'specialist5@certicredia.it', password: 'Specialist123', name: 'Dr. Alessandro Ricci', role: 'specialist', company: null },
 
       // Regular users (clienti vari)
       { email: 'mario.rossi@techcorp.it', password: 'Password123', name: 'Mario Rossi', role: 'user', company: 'TechCorp S.p.A.' },
@@ -291,11 +286,7 @@ async function seedEnhancedDemoData() {
     console.log('\n👨‍🏫 Creating specialist profiles...');
 
     const specialists = [
-      'specialist1@certicredia.it',
-      'specialist2@certicredia.it',
-      'specialist3@certicredia.it',
-      'specialist4@certicredia.it',
-      'specialist5@certicredia.it'
+      'specialist@certicredia.test'
     ];
 
     for (const specialistEmail of specialists) {

@@ -11,10 +11,7 @@ import pg from 'pg';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
-const { generateOrganization } = require('./generate_demo_auditing_organizations.js');
+import { generateOrganization } from './generate_demo_auditing_organizations.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,14 +27,12 @@ const {
   DB_PASSWORD = 'your_secure_password_here'
 } = process.env;
 
-// Demo organizations (matching generate_demo_auditing_organizations.js)
-const DEMO_ORGS = [
-  { id: 'techcorp-global', name: 'TechCorp Global', industry: 'Technology', size: 'enterprise', country: 'US', language: 'en-US' },
-  { id: 'financefirst-bank', name: 'FinanceFirst Bank', industry: 'Finance', size: 'enterprise', country: 'US', language: 'en-US' },
-  { id: 'healthplus-clinic', name: 'HealthPlus Clinic', industry: 'Healthcare', size: 'medium', country: 'IT', language: 'it-IT' },
-  { id: 'retailmax-store', name: 'RetailMax Italia', industry: 'Retail', size: 'small', country: 'IT', language: 'it-IT' },
-  { id: 'edulearn-academy', name: 'EduLearn Academy USA', industry: 'Education', size: 'medium', country: 'US', language: 'en-US' }
-];
+// Mapping organization_type to industry
+const TYPE_TO_INDUSTRY = {
+  'PRIVATE_COMPANY': 'Technology',
+  'PUBLIC_ENTITY': 'Government',
+  'NON_PROFIT': 'Education'
+};
 
 // Colors
 const colors = {
@@ -114,15 +109,41 @@ function getRiskLabel(score) {
 }
 
 /**
- * Find organization ID in database by name
+ * Get all organizations from database
  */
-async function findOrganizationId(client, orgName) {
-  const result = await client.query(
-    'SELECT id FROM organizations WHERE name = $1 LIMIT 1',
-    [orgName]
-  );
+async function getAllOrganizations(client) {
+  const result = await client.query(`
+    SELECT id, name, organization_type, country
+    FROM organizations
+    WHERE status = 'active'
+    ORDER BY id
+  `);
+  return result.rows;
+}
 
-  return result.rows.length > 0 ? result.rows[0].id : null;
+/**
+ * Map DB organization to generateOrganization config format
+ */
+function mapOrgToConfig(dbOrg) {
+  // Determine industry from organization_type
+  const industry = TYPE_TO_INDUSTRY[dbOrg.organization_type] || 'Technology';
+
+  // Determine size (default medium)
+  const size = 'medium';
+
+  // Determine language based on country
+  const language = dbOrg.country === 'IT' ? 'it-IT' : 'en-US';
+
+  return {
+    id: `org-${dbOrg.id}`,
+    name: dbOrg.name,
+    industry: industry,
+    size: size,
+    country: dbOrg.country || 'IT',
+    language: language,
+    created_by: 'System',
+    notes: `Auto-generated CPF assessment data for ${dbOrg.name}`
+  };
 }
 
 /**
@@ -151,25 +172,22 @@ async function seedPerfectCPFData() {
     log('\n🌱 Perfect CPF Data Seeder\n', colors.cyan);
     log('='.repeat(60), colors.cyan);
 
+    // Get all organizations from DB
+    log('\n📋 Fetching organizations from database...', colors.blue);
+    const dbOrganizations = await getAllOrganizations(client);
+    log(`   ✓ Found ${dbOrganizations.length} organizations\n`, colors.green);
+
     let created = 0;
     let updated = 0;
     let skipped = 0;
-    let notFound = 0;
 
-    for (const orgConfig of DEMO_ORGS) {
-      log(`\n📊 Processing: ${orgConfig.name}`, colors.blue);
+    for (const dbOrg of dbOrganizations) {
+      log(`\n📊 Processing: ${dbOrg.name} (ID: ${dbOrg.id})`, colors.blue);
       log('-'.repeat(60));
 
-      // 1. Find organization in DB
-      const orgId = await findOrganizationId(client, orgConfig.name);
-
-      if (!orgId) {
-        log(`   ⚠️  Organization not found in DB - skipping`, colors.yellow);
-        notFound++;
-        continue;
-      }
-
-      log(`   ✓ Found in DB (ID: ${orgId})`, colors.green);
+      // 1. Map DB org to config format
+      const orgConfig = mapOrgToConfig(dbOrg);
+      log(`   ✓ Mapped to config (Industry: ${orgConfig.industry}, Language: ${orgConfig.language})`, colors.green);
 
       // 2. Generate perfect data using Field Kit
       log(`   🔄 Generating Field Kit data...`);
@@ -185,7 +203,7 @@ async function seedPerfectCPFData() {
       // 4. Check if assessment exists
       const existing = await client.query(
         'SELECT id, assessment_data FROM cpf_auditing_assessments WHERE organization_id = $1 AND deleted_at IS NULL',
-        [orgId]
+        [dbOrg.id]
       );
 
       if (existing.rows.length > 0) {
@@ -215,7 +233,7 @@ async function seedPerfectCPFData() {
           INSERT INTO cpf_auditing_assessments
           (organization_id, assessment_data, metadata, last_assessment_date)
           VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
-        `, [orgId, JSON.stringify(dbAssessmentData), JSON.stringify(metadata)]);
+        `, [dbOrg.id, JSON.stringify(dbAssessmentData), JSON.stringify(metadata)]);
 
         log(`   ✓ CREATED (${metadata.completion_percentage}% complete, ${metadata.maturity_level} risk)`, colors.green);
         created++;
@@ -232,15 +250,11 @@ async function seedPerfectCPFData() {
     log('\n' + '='.repeat(60), colors.cyan);
     log('\n✅ Seeding Complete!\n', colors.green);
     log(`📊 Summary:`, colors.cyan);
+    log(`   - Total organizations: ${dbOrganizations.length}`, colors.cyan);
     log(`   - Created: ${created}`, colors.green);
     log(`   - Updated: ${updated}`, colors.yellow);
     log(`   - Skipped (has data): ${skipped}`, colors.yellow);
-    log(`   - Not found in DB: ${notFound}`, colors.red);
     log();
-
-    if (notFound > 0) {
-      log(`⚠️  ${notFound} organization(s) not found. Run seedEnhancedDemoData.js first!`, colors.yellow);
-    }
 
   } catch (error) {
     log(`\n❌ Error: ${error.message}`, colors.red);

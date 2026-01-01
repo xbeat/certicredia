@@ -28,3 +28,6 @@ dist-ssr
 *.sln
 *.sw?
 package-lock.json
+
+# Generated data files
+data/
