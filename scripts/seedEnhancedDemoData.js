@@ -85,6 +85,7 @@ async function seedEnhancedDemoData() {
     console.log('\n🏢 Creating organizations...');
 
     const organizationsData = [
+      { name: 'Organization Demo', type: 'PRIVATE_COMPANY', vat: 'IT55667788990', city: 'Torino', adminEmail: 'organization@certicredia.test' },
       { name: 'TechCorp S.p.A.', type: 'PRIVATE_COMPANY', vat: 'IT12345678901', city: 'Milano', adminEmail: 'admin@techcorp.it' },
       { name: 'Finance Bank Italia', type: 'PRIVATE_COMPANY', vat: 'IT98765432109', city: 'Roma', adminEmail: 'admin@financebank.it' },
       { name: 'HealthSys Italia', type: 'PRIVATE_COMPANY', vat: 'IT11223344556', city: 'Torino', adminEmail: 'admin@healthsys.it' },
