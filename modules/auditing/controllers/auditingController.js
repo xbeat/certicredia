@@ -71,12 +71,18 @@ function transformAssessmentData(dbAssessment) {
   for (const [cat, stats] of Object.entries(categoryStats)) {
     const avgRisk = stats.assessed > 0 ? stats.totalRisk / stats.assessed : 0;
     const completion = stats.total > 0 ? (stats.assessed / stats.total) * 100 : 0;
+    const avgConfidence = stats.assessed > 0 && stats.values.length > 0 ? 0.85 : 0; // Default confidence
 
     byCategory[cat] = {
+      avg_score: avgRisk,
+      completion_percentage: completion,
+      total_assessments: stats.assessed,
+      total: stats.total,
+      avg_confidence: avgConfidence,
+      // Keep legacy names for backward compatibility
       risk: avgRisk,
       completion: completion,
-      assessed: stats.assessed,
-      total: stats.total
+      assessed: stats.assessed
     };
 
     totalAssessed += stats.assessed;
@@ -124,14 +130,19 @@ function transformAssessmentData(dbAssessment) {
     // Use pre-calculated metadata from seed script
     finalMaturityModel = dbAssessment.metadata.maturity_model;
 
-    // Transform category_stats to by_category format
+    // Transform category_stats to by_category format with frontend-expected field names
     finalByCategory = {};
     for (const [cat, stats] of Object.entries(dbAssessment.metadata.category_stats)) {
       finalByCategory[cat] = {
-        risk: stats.risk,
-        completion: stats.completion,
-        assessed: stats.assessed,
-        total: stats.total
+        avg_score: stats.risk || stats.avg_score || 0,
+        completion_percentage: stats.completion || stats.completion_percentage || 0,
+        total_assessments: stats.assessed || stats.total_assessments || 0,
+        total: stats.total || 10,
+        avg_confidence: stats.avg_confidence || 0.85,
+        // Keep legacy names for backward compatibility
+        risk: stats.risk || stats.avg_score || 0,
+        completion: stats.completion || stats.completion_percentage || 0,
+        assessed: stats.assessed || stats.total_assessments || 0
       };
     }
 
