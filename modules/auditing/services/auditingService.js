@@ -1,4 +1,5 @@
 import { pool } from '../../../server/config/database.js';
+import { calculateAggregates } from '../../../lib/db_json.js';
 
 /**
  * CPF Auditing Service
@@ -97,18 +98,57 @@ export async function createAssessment(organizationId, assessmentData = {}, meta
  * @returns {Promise<Object>} Updated assessment
  */
 export async function updateAssessment(organizationId, assessmentData, metadata = null) {
-  let query = `UPDATE cpf_auditing_assessments
-               SET assessment_data = $1, last_assessment_date = CURRENT_TIMESTAMP`;
-  const params = [JSON.stringify(assessmentData)];
-  let paramCount = 2;
+  // Convert assessment_data from DB format ("1-1") to calculation format ("1.1")
+  const assessmentsForCalc = {};
 
-  if (metadata !== null) {
-    query += `, metadata = $${paramCount++}`;
-    params.push(JSON.stringify(metadata));
+  for (const [key, data] of Object.entries(assessmentData)) {
+    const indicatorId = key.replace('-', '.'); // "1-1" -> "1.1"
+
+    // Extract bayesian_score from raw_data if available, otherwise from value
+    let bayesianScore;
+    if (data.raw_data?.client_conversation?.scores?.final_score !== undefined) {
+      bayesianScore = data.raw_data.client_conversation.scores.final_score;
+    } else {
+      const value = data.value || 0;
+      bayesianScore = value === 0 ? 0 : value / 3;
+    }
+
+    // Get confidence from raw_data or use default
+    const confidence = data.raw_data?.client_conversation?.scores?.confidence || 0.85;
+
+    assessmentsForCalc[indicatorId] = {
+      bayesian_score: bayesianScore,
+      confidence: confidence
+    };
   }
 
-  query += ` WHERE organization_id = $${paramCount++} AND deleted_at IS NULL RETURNING *`;
-  params.push(organizationId);
+  // Get organization data for industry
+  const orgResult = await pool.query('SELECT industry, metadata FROM organizations WHERE id = $1', [organizationId]);
+  const industry = orgResult.rows[0]?.industry || orgResult.rows[0]?.metadata?.industry || 'General';
+
+  // Recalculate aggregates (maturity_model, category_stats, etc.)
+  const aggregates = calculateAggregates(assessmentsForCalc, industry);
+
+  // Build metadata object
+  const updatedMetadata = {
+    completion_percentage: aggregates.completion.percentage,
+    assessed_indicators: aggregates.completion.assessed_indicators,
+    total_indicators: 100,
+    overall_risk: aggregates.overall_risk,
+    maturity_level: aggregates.maturity_model.level_name.toLowerCase(),
+    overall_confidence: aggregates.overall_confidence,
+    category_stats: aggregates.by_category,
+    maturity_model: aggregates.maturity_model,
+    generated_at: new Date().toISOString(),
+    generator: 'Auto-calculated on update'
+  };
+
+  // Update with recalculated metadata
+  const query = `UPDATE cpf_auditing_assessments
+                 SET assessment_data = $1, metadata = $2, last_assessment_date = CURRENT_TIMESTAMP
+                 WHERE organization_id = $3 AND deleted_at IS NULL
+                 RETURNING *`;
+  const params = [JSON.stringify(assessmentData), JSON.stringify(updatedMetadata), organizationId];
 
   const result = await pool.query(query, params);
 

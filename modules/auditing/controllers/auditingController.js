@@ -27,16 +27,24 @@ function transformAssessmentData(dbAssessment) {
     const indicatorId = key.replace('-', '.');
     const category = key.split('-')[0];
 
-    // Convert value (0-3) to bayesian_score (0-1)
-    const value = data.value || 0;
-    const bayesianScore = value === 0 ? 0 : value / 3;
-
     // Use raw_data from DB if available, otherwise create minimal structure
     const rawData = data.raw_data || {
       client_conversation: {
         responses: data.notes ? { note: data.notes } : {}
       }
     };
+
+    // Get value for aggregation
+    const value = data.value || 0;
+
+    // Use original bayesian_score from raw_data if available (more accurate)
+    // Otherwise convert value (0-3) to bayesian_score (0-1) as fallback
+    let bayesianScore;
+    if (rawData.client_conversation?.scores?.final_score !== undefined) {
+      bayesianScore = rawData.client_conversation.scores.final_score;
+    } else {
+      bayesianScore = value === 0 ? 0 : value / 3;
+    }
 
     assessments[indicatorId] = {
       bayesian_score: bayesianScore,
