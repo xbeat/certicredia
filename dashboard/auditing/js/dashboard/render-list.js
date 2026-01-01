@@ -7,20 +7,31 @@ export function renderOrganizations() {
     const sidebarCountEl = document.getElementById('sidebarOrgCount');
     const organizations = getOrganizations();
 
+    console.log('🎨 renderOrganizations called');
+    console.log('📋 Organizations to render:', organizations.length);
+    console.log('🔍 orgList element:', orgList);
+
     if (countEl) countEl.textContent = organizations.length;
     if (sidebarCountEl) sidebarCountEl.textContent = organizations.length;
-    if (!orgList) return;
+    if (!orgList) {
+        console.error('❌ org-list element not found!');
+        return;
+    }
 
     orgList.innerHTML = '';
 
     if (!organizations || organizations.length === 0) {
+        console.warn('⚠️ No organizations to render');
         orgList.innerHTML = `<div style="padding:1rem;text-align:center;color:var(--text-light);">No organizations found</div>`;
         return;
     }
 
-    organizations.forEach(org => {
+    console.log('✅ Rendering', organizations.length, 'organization cards');
+    organizations.forEach((org, index) => {
+        console.log(`  ${index + 1}. ${org.name} (ID: ${org.id})`);
         orgList.appendChild(createOrganizationCard(org));
     });
+    console.log('✅ Rendering complete');
 }
 
 export function createOrganizationCard(org) {

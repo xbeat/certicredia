@@ -10,6 +10,7 @@ import { showAlert, closeModal } from '../shared/utils.js';
 // --- Load Data ---
 export async function loadAllData() {
     try {
+        console.log('🔄 Loading organizations from /api/auditing/organizations');
         const response = await fetch('/api/auditing/organizations', {
             cache: 'no-cache',
             headers: {
@@ -18,14 +19,38 @@ export async function loadAllData() {
                 'Expires': '0'
             }
         });
+
+        console.log('📡 Response status:', response.status);
+
+        if (!response.ok) {
+            console.error('❌ HTTP error! status:', response.status);
+            if (response.status === 401 || response.status === 403) {
+                showAlert('Authentication required. Please log in.', 'error');
+                // Redirect to login if needed
+                // window.location.href = '/login';
+                return;
+            }
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
+        console.log('📦 Data received:', data);
+        console.log('📊 Organizations count:', data.organizations?.length || 0);
+
+        if (data.organizations && data.organizations.length > 0) {
+            console.log('✅ First organization:', data.organizations[0]);
+        } else {
+            console.warn('⚠️ No organizations in response!');
+        }
 
         setOrganizations(data.organizations || []);
-        
+        console.log('💾 Organizations saved to state');
+
         // Load auxiliary data
         await loadCategoryDescriptions();
         await loadTrashCount();
 
+        console.log('🎨 Rendering organizations...');
         renderOrganizations();
 
         // Reload selected org if present
@@ -33,7 +58,7 @@ export async function loadAllData() {
             await loadOrganizationDetails(selectedOrgId);
         }
     } catch (error) {
-        console.error('Error loading organizations:', error);
+        console.error('❌ Error loading organizations:', error);
         showAlert('Failed to load organizations: ' + error.message, 'error');
     }
 }
