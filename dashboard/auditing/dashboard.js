@@ -32,13 +32,32 @@ async function initializeDashboard() {
     // Load category descriptions
     await loadCategoryDescriptions();
 
-    // Get organization ID from hash (e.g., #organization/123)
+    // Parse URL hash: #organization/123&indicator=1.1&mode=edit
     const hash = window.location.hash;
     if (hash && hash.startsWith('#organization/')) {
-        const orgId = parseInt(hash.replace('#organization/', ''));
+        const hashParts = hash.substring(1).split('&'); // Remove # and split by &
+        const orgPart = hashParts[0]; // organization/123
+
+        const orgId = parseInt(orgPart.replace('organization/', ''));
         if (orgId && !isNaN(orgId)) {
             selectedOrgId = orgId;
             await loadOrganizationDetails(orgId);
+
+            // Check for indicator and mode parameters
+            const params = {};
+            hashParts.slice(1).forEach(part => {
+                const [key, value] = part.split('=');
+                if (key && value) params[key] = value;
+            });
+
+            // Auto-open indicator editor if specified
+            if (params.indicator && params.mode === 'edit') {
+                console.log(`🎯 Auto-opening editor for indicator ${params.indicator}`);
+                // Wait a bit for data to load, then open editor
+                setTimeout(() => {
+                    openCompileFormForIndicator(params.indicator, orgId);
+                }, 500);
+            }
         } else {
             console.error('Invalid organization ID in URL');
         }
@@ -2836,6 +2855,39 @@ const CATEGORY_MAP = {
     '9': 'ai',
     '10': 'convergent'
 };
+
+// Open compile form for specific indicator (called from URL parameter)
+function openCompileFormForIndicator(indicatorId, orgId) {
+    console.log(`📝 Opening compile form for indicator ${indicatorId}`);
+
+    // Switch to Compile tab
+    const compileTab = document.querySelector('.tab[data-tab="compile"]');
+    if (compileTab) {
+        compileTab.click();
+    }
+
+    // Parse indicator ID (e.g., "1.1" -> category=1, indicator=1)
+    const [category, indicator] = indicatorId.split('.');
+
+    // Set dropdown values
+    const categorySelect = document.getElementById('compile-category-select');
+    const indicatorSelect = document.getElementById('compile-indicator-select');
+    const languageSelect = document.getElementById('compile-language-select');
+
+    if (categorySelect && indicatorSelect) {
+        categorySelect.value = category;
+        indicatorSelect.value = indicator;
+        // Use organization language or default to Italian
+        if (languageSelect) {
+            languageSelect.value = selectedOrgData?.metadata?.language || 'it-IT';
+        }
+
+        // Trigger load
+        setTimeout(() => {
+            loadIndicatorForCompile();
+        }, 300);
+    }
+}
 
 // Close compile error and reset form
 function closeCompileError() {
