@@ -11,7 +11,10 @@ import pg from 'pg';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { generateOrganization } from './generate_demo_auditing_organizations.js';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const { generateOrganization } = require('./generate_demo_auditing_organizations.js');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
