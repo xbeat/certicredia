@@ -11,12 +11,8 @@ import {
   getAllSpecialistsHandler,
   registerSpecialistPublicHandler
 } from '../controllers/specialistController.js';
-import fixProfilesRouter from './fixSpecialistProfiles.js';
 
 const router = express.Router();
-
-// Temporary fix endpoint - DELETE after use!
-router.use(fixProfilesRouter);
 
 router.get('/', authenticate, getAllSpecialistsHandler);
 
