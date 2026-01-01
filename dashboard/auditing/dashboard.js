@@ -2536,6 +2536,12 @@ function switchTab(tabName) {
     } else if (tabName === 'maturity') {
         document.getElementById('maturityTab').classList.add('active');
         renderMaturityTab(); // Render maturity model data
+    } else if (tabName === 'predictive') {
+        document.getElementById('predictiveTab').classList.add('active');
+        renderPredictiveTab(); // Render predictive dynamics
+    } else if (tabName === 'intervention') {
+        document.getElementById('interventionTab').classList.add('active');
+        renderInterventionTab(); // Render intervention CPIF
     } else if (tabName === 'compile') {
         document.getElementById('compileTab').classList.add('active');
     }
@@ -2841,6 +2847,178 @@ function renderMaturityTab() {
 // Global variable to store loaded indicator data
 let currentIndicatorData = null;
 let currentIndicatorId = null;
+
+// ===== PREDICTIVE DYNAMICS TAB =====
+function renderPredictiveTab() {
+    const container = document.getElementById('predictiveTab');
+    if (!container) return;
+
+    if (!selectedOrgData || !selectedOrgData.aggregates) {
+        container.innerHTML = '<div style="padding: 40px; text-align: center;"><h3>⚠️ No assessment data</h3><p>Please complete some assessments first.</p></div>';
+        return;
+    }
+
+    // For now, show a coming soon message with basic stats
+    const mm = selectedOrgData.aggregates.maturity_model;
+    const byCategory = selectedOrgData.aggregates.by_category;
+
+    let highRiskCategories = [];
+    for (const [cat, stats] of Object.entries(byCategory)) {
+        if (stats.risk > 0.66) {
+            highRiskCategories.push({ cat, risk: stats.risk });
+        }
+    }
+
+    container.innerHTML = `
+        <div style="padding: 40px;">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="font-size: 32px; margin-bottom: 15px;">🧠 Predictive Dynamics - Synaptic Connectome</h2>
+                <p style="color: var(--text-light); font-size: 16px;">Bayesian network visualization of risk propagation across 100 CPF indicators</p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1)); padding: 40px; border-radius: 16px; text-align: center; margin-bottom: 30px; border: 2px dashed rgba(59, 130, 246, 0.3);">
+                <div style="font-size: 64px; margin-bottom: 20px;">🚧</div>
+                <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 15px;">Feature Under Development</h3>
+                <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">
+                    The D3.js force-directed graph visualization is currently being implemented.<br>
+                    This feature will show real-time risk propagation simulation across the CPF framework.
+                </p>
+                <div style="display: inline-block; background: rgba(255, 255, 255, 0.1); padding: 15px 25px; border-radius: 8px; margin-top: 10px;">
+                    <strong>Coming Soon:</strong> Interactive network graph • Risk cascade simulation • Node impact analysis
+                </div>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 12px;">
+                <h4 style="margin: 0 0 20px 0; color: var(--primary);">Current High-Risk Categories (>66%)</h4>
+                ${highRiskCategories.length > 0 ? `
+                    <div style="display: grid; gap: 15px;">
+                        ${highRiskCategories.map(({ cat, risk }) => `
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px; background: var(--bg-gray); border-radius: 8px;">
+                                <div>
+                                    <strong>Category ${cat}</strong>
+                                    <div style="font-size: 13px; color: var(--text-light); margin-top: 5px;">High risk propagation potential</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 24px; font-weight: 700; color: var(--danger);">${Math.round(risk * 100)}%</div>
+                                    <div style="font-size: 12px; color: var(--text-light);">Risk Level</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : '<p style="text-align: center; color: var(--text-light);">✅ No high-risk categories detected</p>'}
+            </div>
+        </div>
+    `;
+}
+
+// ===== INTERVENTION TAB (CPIF) =====
+function renderInterventionTab() {
+    const container = document.getElementById('interventionTab');
+    if (!container) return;
+
+    if (!selectedOrgData || !selectedOrgData.aggregates) {
+        container.innerHTML = '<div style="padding: 40px; text-align: center;"><h3>⚠️ No assessment data</h3><p>Please complete some assessments first.</p></div>';
+        return;
+    }
+
+    const mm = selectedOrgData.aggregates.maturity_model;
+    const byCategory = selectedOrgData.aggregates.by_category;
+
+    // Calculate intervention priorities
+    let interventionNeeded = [];
+    for (const [cat, stats] of Object.entries(byCategory)) {
+        if (stats.risk > 0.33) { // Medium or high risk
+            const categoryNames = {
+                '1': 'Authority-Based Vulnerabilities',
+                '2': 'Temporal Vulnerabilities',
+                '3': 'Social Vulnerabilities',
+                '4': 'Affective Vulnerabilities',
+                '5': 'Cognitive Vulnerabilities',
+                '6': 'Group Vulnerabilities',
+                '7': 'Stress Vulnerabilities',
+                '8': 'Unconscious Vulnerabilities',
+                '9': 'AI-Related Vulnerabilities',
+                '10': 'Convergent Risks'
+            };
+
+            interventionNeeded.push({
+                cat,
+                name: categoryNames[cat] || `Category ${cat}`,
+                risk: stats.risk,
+                priority: stats.risk > 0.66 ? 'High' : 'Medium'
+            });
+        }
+    }
+
+    // Sort by risk (highest first)
+    interventionNeeded.sort((a, b) => b.risk - a.risk);
+
+    container.innerHTML = `
+        <div style="padding: 40px;">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="font-size: 32px; margin-bottom: 15px;">🩺 Intervention Framework (CPIF)</h2>
+                <p style="color: var(--text-light); font-size: 16px;">Cognitive Persuasion Intervention Framework - Recommended actions based on risk assessment</p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1)); padding: 40px; border-radius: 16px; text-align: center; margin-bottom: 30px; border: 2px dashed rgba(16, 185, 129, 0.3);">
+                <div style="font-size: 64px; margin-bottom: 20px;">🚧</div>
+                <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 15px;">Feature Under Development</h3>
+                <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">
+                    The full CPIF intervention system is currently being implemented.<br>
+                    This feature will provide detailed intervention strategies, training modules, and action plans.
+                </p>
+                <div style="display: inline-block; background: rgba(255, 255, 255, 0.1); padding: 15px 25px; border-radius: 8px; margin-top: 10px;">
+                    <strong>Coming Soon:</strong> Custom intervention plans • Training recommendations • Progress tracking
+                </div>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 12px;">
+                <h4 style="margin: 0 0 20px 0; color: var(--primary);">Priority Interventions Needed</h4>
+                ${interventionNeeded.length > 0 ? `
+                    <div style="display: grid; gap: 15px;">
+                        ${interventionNeeded.map((item, index) => `
+                            <div style="display: flex; align-items: center; gap: 20px; padding: 20px; background: var(--bg-gray); border-radius: 8px; border-left: 4px solid ${item.priority === 'High' ? 'var(--danger)' : 'var(--warning)'};">
+                                <div style="text-align: center; min-width: 60px;">
+                                    <div style="font-size: 32px; font-weight: 700; color: ${item.priority === 'High' ? 'var(--danger)' : 'var(--warning)'};">${index + 1}</div>
+                                    <div style="font-size: 11px; color: var(--text-light); text-transform: uppercase;">${item.priority}</div>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 16px; margin-bottom: 5px;">${item.name}</div>
+                                    <div style="font-size: 13px; color: var(--text-light);">Category ${item.cat} - Risk Level: ${Math.round(item.risk * 100)}%</div>
+                                </div>
+                                <div style="text-align: right; min-width: 100px;">
+                                    <div style="font-size: 20px; font-weight: 700; color: ${item.priority === 'High' ? 'var(--danger)' : 'var(--warning)'};">${Math.round(item.risk * 100)}%</div>
+                                    <div style="font-size: 12px; color: var(--text-light);">Risk Score</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : '<p style="text-align: center; color: var(--success); font-size: 18px; padding: 40px;">✅ Excellent! No immediate interventions needed. All categories are low risk.</p>'}
+            </div>
+
+            ${mm && mm.cpf_score ? `
+                <div style="background: white; padding: 30px; border-radius: 12px; margin-top: 20px;">
+                    <h4 style="margin: 0 0 20px 0; color: var(--primary);">Overall Security Posture</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div style="text-align: center; padding: 20px; background: var(--bg-gray); border-radius: 8px;">
+                            <div style="font-size: 12px; color: var(--text-light); margin-bottom: 5px;">CPF Score</div>
+                            <div style="font-size: 32px; font-weight: 700; color: ${mm.cpf_score >= 75 ? 'var(--success)' : mm.cpf_score >= 60 ? 'var(--warning)' : 'var(--danger)'};">${mm.cpf_score}/100</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px; background: var(--bg-gray); border-radius: 8px;">
+                            <div style="font-size: 12px; color: var(--text-light); margin-bottom: 5px;">Maturity Level</div>
+                            <div style="font-size: 32px; font-weight: 700; color: var(--primary);">${mm.maturity_level}</div>
+                            <div style="font-size: 13px; color: var(--text-light);">${mm.level_name}</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px; background: var(--bg-gray); border-radius: 8px;">
+                            <div style="font-size: 12px; color: var(--text-light); margin-bottom: 5px;">Convergence Index</div>
+                            <div style="font-size: 32px; font-weight: 700; color: ${mm.convergence_index < 2 ? 'var(--success)' : mm.convergence_index < 5 ? 'var(--warning)' : 'var(--danger)'};">${mm.convergence_index.toFixed(1)}</div>
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
 
 // Category mapping
 const CATEGORY_MAP = {
