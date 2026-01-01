@@ -80,7 +80,7 @@ function loadFieldKitForIndicator(indicatorId, language) {
   const categoryMap = {'1':'authority','2':'temporal','3':'social','4':'affective','5':'cognitive','6':'group','7':'stress','8':'unconscious','9':'ai','10':'convergent'};
   const categoryName = categoryMap[categoryNum];
 
-  const fieldKitPath = path.join(__dirname, '..', '..', 'auditor field kit', 'interactive', language, `${categoryNum}.x-${categoryName}`, `indicator_${indicatorId}.json`);
+  const fieldKitPath = path.join(__dirname, '..', 'auditor-field-kit', 'interactive', language, `${categoryNum}.x-${categoryName}`, `indicator_${indicatorId}.json`);
 
   try {
     if (fs.existsSync(fieldKitPath)) {
@@ -96,7 +96,7 @@ function loadFieldKitForIndicator(indicatorId, language) {
     const fallbackCacheKey = `${indicatorId}_en-US`;
     if (fieldKitCache[fallbackCacheKey]) return fieldKitCache[fallbackCacheKey];
 
-    const fallbackPath = path.join(__dirname, '..', '..', 'auditor field kit', 'interactive', 'en-US', `${categoryNum}.x-${categoryName}`, `indicator_${indicatorId}.json`);
+    const fallbackPath = path.join(__dirname, '..', 'auditor-field-kit', 'interactive', 'en-US', `${categoryNum}.x-${categoryName}`, `indicator_${indicatorId}.json`);
 
     try {
       if (fs.existsSync(fallbackPath)) {
