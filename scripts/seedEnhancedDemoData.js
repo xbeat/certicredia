@@ -19,9 +19,10 @@ async function seedEnhancedDemoData() {
     console.log('👤 Creating users...');
 
     const usersData = [
-      // Main Demo Accounts
+      // Main Demo Accounts - CREDENZIALI FISSE NON MODIFICARE
       { email: 'admin@certicredia.test', password: 'Admin123!@#', name: 'Admin CertiCredia', role: 'admin', company: 'CertiCredia Italia' },
-      { email: 'ente@certicredia.test', password: 'Ente123!@#', name: 'Ente Demo', role: 'organization_admin', company: 'Ente Demo' },
+      { email: 'user@certicredia.test', password: 'User123!@#', name: 'User Demo', role: 'user', company: 'Demo Company' },
+      { email: 'organization@certicredia.test', password: 'Org123!@#', name: 'Organization Demo', role: 'organization_admin', company: 'Organization Demo' },
       { email: 'specialist@certicredia.test', password: 'Specialist123!@#', name: 'Specialist Demo', role: 'specialist', company: null },
 
       // Organization Admins
