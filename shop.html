@@ -11,23 +11,53 @@
 <body class="bg-slate-900 text-white">
     <!-- Navbar (same as index.html) -->
     <nav id="navbar" class="fixed w-full z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 py-4">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <a href="/" class="flex items-center space-x-2">
-                <img src="Logo.svg" alt="CertiCredia Logo" class="w-10 h-10">
-                <span class="text-xl font-bold">CERTI<span class="text-cyan-400">CREDIA</span></span>
-            </a>
-            
-            <div class="flex items-center gap-4">
-                <a href="/" class="text-slate-300 hover:text-white" data-i18n="shop.nav.home">Home</a>
-                <a href="/shop.html" class="text-cyan-400" data-i18n="shop.nav.shop">Shop</a>
-                <a href="/cart.html" class="relative">
-                    <svg class="w-6 h-6 text-slate-300 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
-                    <span id="cart-badge" class="hidden absolute -top-2 -right-2 bg-cyan-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"></span>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="/" class="flex items-center space-x-2">
+                    <img src="Logo.svg" alt="CertiCredia Logo" class="w-10 h-10">
+                    <span class="text-xl font-bold">CERTI<span class="text-cyan-400">CREDIA</span></span>
                 </a>
-                <div id="lang-switcher"></div>
-                <div id="auth-buttons"></div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="/" class="text-slate-300 hover:text-white" data-i18n="shop.nav.home">Home</a>
+                    <a href="/shop.html" class="text-cyan-400" data-i18n="shop.nav.shop">Shop</a>
+                    <a href="/cart.html" class="relative">
+                        <svg class="w-6 h-6 text-slate-300 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <span id="cart-badge" class="hidden absolute -top-2 -right-2 bg-cyan-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"></span>
+                    </a>
+                    <div id="lang-switcher"></div>
+                    <div id="auth-buttons"></div>
+                </div>
+
+                <!-- Mobile Navigation Toggle -->
+                <div class="md:hidden flex items-center gap-3">
+                    <a href="/cart.html" class="relative">
+                        <svg class="w-6 h-6 text-slate-300 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <span id="cart-badge-mobile" class="hidden absolute -top-2 -right-2 bg-cyan-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"></span>
+                    </a>
+                    <button id="mobile-menu-btn" class="text-slate-300 hover:text-white p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t border-slate-800 pt-4">
+                <div class="flex flex-col space-y-3">
+                    <a href="/" class="text-slate-300 hover:text-white py-2" data-i18n="shop.nav.home">Home</a>
+                    <a href="/shop.html" class="text-cyan-400 py-2" data-i18n="shop.nav.shop">Shop</a>
+                    <div class="flex items-center gap-3 py-2">
+                        <div id="lang-switcher-mobile"></div>
+                    </div>
+                    <div id="auth-buttons-mobile" class="py-2"></div>
+                </div>
             </div>
         </div>
     </nav>
@@ -35,13 +65,13 @@
     <main class="pt-24 pb-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Header -->
-            <div class="mb-12">
-                <h1 class="text-4xl font-bold mb-4" data-i18n="shop.title">Certificazioni Cybersecurity</h1>
-                <p class="text-slate-400 text-lg" data-i18n="shop.description">Scegli la certificazione più adatta alle tue esigenze</p>
+            <div class="mb-8 md:mb-12">
+                <h1 class="text-3xl md:text-4xl font-bold mb-3 md:mb-4" data-i18n="shop.title">Certificazioni Cybersecurity</h1>
+                <p class="text-slate-400 text-base md:text-lg" data-i18n="shop.description">Scegli la certificazione più adatta alle tue esigenze</p>
             </div>
 
             <!-- Products Grid -->
-            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 <!-- Products loaded dynamically -->
             </div>
 

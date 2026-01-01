@@ -45,11 +45,22 @@ function price(p) {
     const formatted = parseFloat(p).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     return `€${formatted}`;
 }
-function updateCartBadge(c) { const b = document.getElementById('cart-badge'); if (b) { b.textContent = c; b.classList.toggle('hidden', c === 0); } }
+function updateCartBadge(c) {
+    const badges = ['cart-badge', 'cart-badge-mobile'];
+    badges.forEach(id => {
+        const b = document.getElementById(id);
+        if (b) {
+            b.textContent = c;
+            b.classList.toggle('hidden', c === 0);
+        }
+    });
+}
 function updateAuthUI() {
-    const target = document.getElementById('auth-buttons') || document.getElementById('auth-nav');
-    if (!target) return;
-    target.innerHTML = getToken() && state.user ?
+    const targets = ['auth-buttons', 'auth-buttons-mobile', 'auth-nav'];
+    targets.forEach(targetId => {
+        const target = document.getElementById(targetId);
+        if (!target) return;
+        target.innerHTML = getToken() && state.user ?
         `<div class="relative group">
             <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 transition-all">
                 <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,6 +96,26 @@ function updateAuthUI() {
             </div>
         </div>` :
         `<a href="/public/pages/app-landing.html" class="btn-outline">Accedi</a>`;
+    });
+}
+
+// Mobile menu toggle
+function initMobileMenu() {
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const langSwitcher = document.getElementById('lang-switcher');
+    const langSwitcherMobile = document.getElementById('lang-switcher-mobile');
+
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+
+    // Clone lang switcher to mobile if exists
+    if (langSwitcher && langSwitcherMobile && langSwitcher.innerHTML) {
+        langSwitcherMobile.innerHTML = langSwitcher.innerHTML;
+    }
 }
 
 async function initShop() {
@@ -96,17 +127,17 @@ async function initShop() {
         grid.innerHTML = d.data.map(p => `
             <div class="bg-slate-800 rounded-xl overflow-hidden hover:ring-2 ring-cyan-500 transition">
                 <div class="aspect-video bg-slate-700 flex items-center justify-center">
-                    <svg class="w-16 h-16 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-12 h-12 md:w-16 md:h-16 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                     </svg>
                 </div>
-                <div class="p-6">
-                    <span class="text-xs text-cyan-400 font-semibold">${p.category}</span>
-                    <h3 class="text-xl font-bold my-2">${p.name}</h3>
-                    <p class="text-slate-400 text-sm mb-4">${p.short_description}</p>
-                    <div class="flex justify-between items-center">
-                        <span class="text-2xl font-bold text-cyan-400">${price(p.price)}</span>
-                        <button onclick="handleAddToCart(${p.id})" class="btn-primary">Aggiungi</button>
+                <div class="p-4 md:p-6">
+                    <span class="text-xs text-cyan-400 font-semibold uppercase tracking-wide">${p.category || 'ISO'}</span>
+                    <h3 class="text-lg md:text-xl font-bold my-2">${p.name || 'Certificazione'}</h3>
+                    <p class="text-slate-400 text-sm mb-4 min-h-[40px]">${p.short_description || ''}</p>
+                    <div class="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center">
+                        <span class="text-xl md:text-2xl font-bold text-cyan-400">${price(p.price)}</span>
+                        <button onclick="handleAddToCart(${p.id})" class="btn-primary w-full sm:w-auto">Aggiungi</button>
                     </div>
                 </div>
             </div>
@@ -254,6 +285,7 @@ window.handleLogout = handleLogout;
 async function init() {
     if (getToken()) { try { await getProfile(); } catch { removeToken(); } }
     updateAuthUI();
+    initMobileMenu();
     try { const c = await getCart(); updateCartBadge(c.count); } catch {}
     const p = location.pathname;
     if (p.includes('shop.html') || p === '/shop') await initShop();

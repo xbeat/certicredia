@@ -176,8 +176,59 @@ html {
 @media (max-width: 768px) {
     .btn-primary,
     .btn-outline {
-        width: 100%;
-        text-align: center;
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9375rem;
+    }
+
+    /* Better touch targets for mobile */
+    button, a {
+        min-height: 44px;
+    }
+
+    /* Improved spacing for mobile navigation */
+    nav {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+    }
+
+    /* Mobile menu improvements */
+    #mobile-menu {
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Product grid spacing */
+    #products-grid {
+        gap: 1.5rem !important;
+    }
+
+    /* Better card padding on mobile */
+    .bg-slate-800 {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Improved text sizing for mobile */
+    h1 {
+        font-size: 2rem !important;
+    }
+
+    h3 {
+        font-size: 1.125rem !important;
+    }
+
+    /* Better spacing in product cards */
+    .p-6 {
+        padding: 1.25rem !important;
     }
 }
 
