@@ -184,7 +184,7 @@ async function loadDashboard() {
             <div class="flex justify-between items-center p-3 bg-slate-900 rounded-lg">
                 <div>
                     <p class="font-medium">${order.order_number}</p>
-                    <p class="text-sm text-slate-400">${order.billing_name} - €${parseFloat(order.total_amount).toFixed(2)}</p>
+                    <p class="text-sm text-slate-400">${order.billing_name} - €${parseFloat(order.total_amount).toFixed(0)}</p>
                 </div>
                 <span class="px-3 py-1 rounded-full text-xs ${getStatusColor(order.status)}">${getStatusLabel(order.status)}</span>
             </div>
@@ -290,7 +290,7 @@ function displayProducts(products) {
                 </div>
             </td>
             <td class="p-4 text-slate-300">${product.category || '-'}</td>
-            <td class="p-4 font-medium">€${parseFloat(product.price).toFixed(2)}</td>
+            <td class="p-4 font-medium">€${parseFloat(product.price).toFixed(0)}</td>
             <td class="p-4">
                 <span class="px-3 py-1 rounded-full text-xs ${product.active ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}">
                     ${product.active ? 'Attivo' : 'Inattivo'}
@@ -452,7 +452,7 @@ function displayOrders(orders) {
                     <p class="text-sm text-slate-400">${order.billing_email}</p>
                 </div>
             </td>
-            <td class="p-4 font-medium">€${parseFloat(order.total_amount).toFixed(2)}</td>
+            <td class="p-4 font-medium">€${parseFloat(order.total_amount).toFixed(0)}</td>
             <td class="p-4">
                 <span class="px-3 py-1 rounded-full text-xs ${getStatusColor(order.status)}">
                     ${getStatusLabel(order.status)}
@@ -530,7 +530,7 @@ async function viewOrder(orderId) {
                                     <p class="font-medium">${item.product_name}</p>
                                     <p class="text-sm text-slate-400">Quantità: ${item.quantity}</p>
                                 </div>
-                                <p class="font-medium">€${parseFloat(item.total_price).toFixed(2)}</p>
+                                <p class="font-medium">€${parseFloat(item.total_price).toFixed(0)}</p>
                             </div>
                         `).join('')}
                     </div>
@@ -538,7 +538,7 @@ async function viewOrder(orderId) {
 
                 <div class="flex justify-between items-center pt-4 border-t border-slate-700">
                     <p class="text-lg font-bold">Totale</p>
-                    <p class="text-2xl font-bold text-cyan-400">€${parseFloat(order.total_amount).toFixed(2)}</p>
+                    <p class="text-2xl font-bold text-cyan-400">€${parseFloat(order.total_amount).toFixed(0)}</p>
                 </div>
 
                 <div>

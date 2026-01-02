@@ -53,7 +53,7 @@ export const getCart = async (req, res) => {
     res.json({
       success: true,
       count: result.rows.length,
-      totalAmount: totalAmount.toFixed(2),
+      totalAmount: totalAmount.toFixed(0),
       data: result.rows
     });
 

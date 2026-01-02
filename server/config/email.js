@@ -250,15 +250,15 @@ export const sendOrderConfirmation = async (orderData) => {
           ${items.map(item => `
             <div class="order-item">
               <strong>${item.product_name}</strong><br>
-              <small>Quantità: ${item.quantity} × €${parseFloat(item.unit_price).toFixed(2)}</small><br>
-              <strong>€${parseFloat(item.total_price).toFixed(2)}</strong>
+              <small>Quantità: ${item.quantity} × €${parseFloat(item.unit_price).toFixed(0)}</small><br>
+              <strong>€${parseFloat(item.total_price).toFixed(0)}</strong>
             </div>
           `).join('')}
 
           <div class="total">
             <div style="display: flex; justify-content: space-between; font-size: 24px;">
               <strong>Totale:</strong>
-              <strong>€${parseFloat(order.total_amount).toFixed(2)}</strong>
+              <strong>€${parseFloat(order.total_amount).toFixed(0)}</strong>
             </div>
           </div>
 
@@ -324,12 +324,12 @@ export const sendOrderNotificationToAdmin = async (orderData) => {
           <div class="info-box">
             <strong>Numero Ordine:</strong> ${order.order_number}<br>
             <strong>Cliente:</strong> ${user.name} (${user.email})<br>
-            <strong>Totale:</strong> €${parseFloat(order.total_amount).toFixed(2)}<br>
+            <strong>Totale:</strong> €${parseFloat(order.total_amount).toFixed(0)}<br>
             <strong>Metodo Pagamento:</strong> ${order.payment_method}
           </div>
 
           <h3>Prodotti</h3>
-          ${items.map(item => `<div class="info-box">${item.product_name} x${item.quantity} = €${parseFloat(item.total_price).toFixed(2)}</div>`).join('')}
+          ${items.map(item => `<div class="info-box">${item.product_name} x${item.quantity} = €${parseFloat(item.total_price).toFixed(0)}</div>`).join('')}
 
           <div class="info-box">
             <strong>Indirizzo:</strong><br>

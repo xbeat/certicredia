@@ -42,7 +42,7 @@ function notify(msg, type = 'info') {
 }
 
 function price(p) {
-    const formatted = parseFloat(p).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const formatted = parseFloat(p).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     return `€${formatted}`;
 }
 function updateCartBadge(c) {
