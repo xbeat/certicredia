@@ -162,6 +162,16 @@ const translations = {
         'companies.cpf3.roi': 'ROI +200%',
         'companies.cpf3.roi.subtitle': 'Sull\'investimento in sicurezza',
 
+        // CPF3 Risk View
+        'companies.cpf3.riskview.title': 'CPF3 Risk View',
+        'companies.cpf3.riskview.critical': 'Critical Level',
+        'companies.cpf3.riskview.vulnerability1': 'Vulnerabilità Autorità (Cat 1.x)',
+        'companies.cpf3.riskview.vulnerability2': 'Sovraccarico Cognitivo (Cat 5.x)',
+        'companies.cpf3.riskview.vulnerability3': 'Stress Response (Cat 7.x)',
+        'companies.cpf3.riskview.lastscan': 'Last scan:',
+        'companies.cpf3.riskview.minsago': 'mins ago',
+        'companies.cpf3.riskview.specialist': 'Specialist:',
+
         // Company Real Benefits
         'companies.real.title': 'Non solo burocrazia: Vantaggi Reali',
         'companies.real.legal.title': 'Protezione Legale',
@@ -812,6 +822,16 @@ const translations = {
         'companies.cpf3.new2': '40% incident reduction in the first year',
         'companies.cpf3.roi': 'ROI +200%',
         'companies.cpf3.roi.subtitle': 'On security investment',
+
+        // CPF3 Risk View
+        'companies.cpf3.riskview.title': 'CPF3 Risk View',
+        'companies.cpf3.riskview.critical': 'Critical Level',
+        'companies.cpf3.riskview.vulnerability1': 'Authority Vulnerabilities (Cat 1.x)',
+        'companies.cpf3.riskview.vulnerability2': 'Cognitive Overload (Cat 5.x)',
+        'companies.cpf3.riskview.vulnerability3': 'Stress Response (Cat 7.x)',
+        'companies.cpf3.riskview.lastscan': 'Last scan:',
+        'companies.cpf3.riskview.minsago': 'mins ago',
+        'companies.cpf3.riskview.specialist': 'Specialist:',
 
         // Company Real Benefits
         'companies.real.title': 'Not just bureaucracy: Real Benefits',
