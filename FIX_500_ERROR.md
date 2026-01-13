@@ -1,0 +1,101 @@
+# Fix per Errore 500 sulla Dashboard
+
+## 🔴 Problema
+L'errore 500 sulla chiamata `/api/auditing/organizations/1` è causato dalla **mancanza della tabella `cpf_auditing_assessments`** nel database.
+
+## ✅ Soluzione Rapida
+
+### 1. Verifica il Database
+```bash
+node scripts/check-database-health.js
+```
+
+Questo ti dirà se la tabella `cpf_auditing_assessments` esiste o meno.
+
+### 2. Crea la Tabella Mancante
+Se la tabella non esiste, esegui:
+
+```bash
+node scripts/setup-cpf-auditing-db.js
+```
+
+Questo script:
+- Legge lo schema da `core/database/schema/cpf_auditing_schema.sql`
+- Crea la tabella `cpf_auditing_assessments`
+- Imposta indici e trigger necessari
+
+### 3. (Opzionale) Popola con Dati di Test
+Se vuoi dati di esempio:
+
+```bash
+node scripts/seed-cpf-auditing.js
+```
+
+## 📋 Verifica del Fix
+
+1. Avvia il server:
+```bash
+npm run dev
+```
+
+2. Testa l'endpoint (con un token valido):
+```bash
+curl -X GET http://localhost:3000/api/auditing/organizations/1 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+Dovrebbe restituire:
+- `200 OK` con i dati dell'assessment (se esiste)
+- `200 OK` con dati vuoti (se l'organizzazione esiste ma non ha assessment)
+- `500 Error` solo se l'organizzazione non esiste
+
+## 🔍 Causa Root del Problema
+
+Il controller `getOrganizationAssessment` in:
+- File: `modules/auditing/controllers/auditingController.js`
+- Linea: 318-389
+
+Fa una query sulla tabella `cpf_auditing_assessments`:
+
+```javascript
+const assessment = await auditingService.getAssessmentByOrganization(parseInt(organizationId));
+```
+
+Che esegue:
+```sql
+SELECT a.*, o.name as organization_name, o.organization_type, o.status as organization_status
+FROM cpf_auditing_assessments a
+JOIN organizations o ON a.organization_id = o.id
+WHERE a.organization_id = $1 AND a.deleted_at IS NULL
+```
+
+Se la tabella non esiste, PostgreSQL lancia un errore che viene catturato dal try-catch e restituito come 500.
+
+## 📝 Note per Produzione
+
+Se stai usando un database cloud (Neon, Supabase, ecc.):
+
+1. Assicurati di avere il `DATABASE_URL` configurato in `.env`
+2. Esegui lo script di setup dal tuo ambiente locale:
+   ```bash
+   DATABASE_URL="postgresql://user:pass@host/db?sslmode=require" node scripts/setup-cpf-auditing-db.js
+   ```
+3. Oppure connettiti al database e esegui manualmente lo schema:
+   ```bash
+   psql $DATABASE_URL < core/database/schema/cpf_auditing_schema.sql
+   ```
+
+## 🛠️ Script di Supporto Creati
+
+Per aiutarti, ho creato questi script aggiuntivi:
+
+1. **`scripts/check-database-health.js`** - Verifica lo stato del database
+2. **`core/database/check-and-create-cpf-table.js`** - Crea solo la tabella CPF se manca
+
+## ✅ Checklist Post-Fix
+
+- [ ] La tabella `cpf_auditing_assessments` esiste
+- [ ] Il server si avvia senza errori
+- [ ] La dashboard carica correttamente
+- [ ] Nessun errore 500 nei log del browser
+- [ ] Gli assessment vengono visualizzati (o mostrano dati vuoti se non esistono)
