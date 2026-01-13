@@ -247,6 +247,12 @@ CREATE TABLE IF NOT EXISTS organizations (
   status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'active', 'suspended', 'inactive')),
   verified BOOLEAN DEFAULT false,
 
+  -- Subscription (added 2026-01-10)
+  subscription_active BOOLEAN DEFAULT FALSE,
+  subscription_expires_at TIMESTAMP WITH TIME ZONE,
+  subscription_type VARCHAR(50) DEFAULT 'free',
+  subscription_started_at TIMESTAMP WITH TIME ZONE,
+
   -- Metadata
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -258,6 +264,8 @@ CREATE INDEX IF NOT EXISTS idx_organizations_status ON organizations(status);
 CREATE INDEX IF NOT EXISTS idx_organizations_type ON organizations(organization_type);
 CREATE INDEX IF NOT EXISTS idx_organizations_email ON organizations(email);
 CREATE INDEX IF NOT EXISTS idx_organizations_vat ON organizations(vat_number);
+CREATE INDEX IF NOT EXISTS idx_organizations_subscription_active ON organizations(subscription_active);
+CREATE INDEX IF NOT EXISTS idx_organizations_subscription_expires_at ON organizations(subscription_expires_at);
 
 -- Organization Users (many-to-many with roles)
 CREATE TABLE IF NOT EXISTS organization_users (
