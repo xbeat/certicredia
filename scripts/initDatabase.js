@@ -28,6 +28,14 @@ async function initDatabase() {
     await client.query(accSchema);
     console.log('✅ Accreditation schema executed successfully\n');
 
+    // Read CPF auditing schema
+    const cpfSchemaPath = path.join(__dirname, '../core/database/schema/cpf_auditing_schema.sql');
+    const cpfSchema = await fs.readFile(cpfSchemaPath, 'utf-8');
+
+    console.log('📊 Executing CPF auditing schema...');
+    await client.query(cpfSchema);
+    console.log('✅ CPF auditing schema executed successfully\n');
+
     console.log('🎉 Database initialization completed!\n');
     console.log('Now you can run: node scripts/seedSimpleDemo.js');
 

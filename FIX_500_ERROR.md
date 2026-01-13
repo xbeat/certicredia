@@ -51,6 +51,41 @@ Dovrebbe restituire:
 
 ## 🔍 Causa Root del Problema
 
+### Perché Prima Funzionava e Ora No?
+
+**Commit problematico: `32d478c` (1 gennaio 2026)**
+"refactor: Rimosso sistema migrazioni, uso schema SQL diretto"
+
+Questo commit ha:
+1. ✅ Eliminato le migrazioni JS che creavano `cpf_auditing_assessments`
+2. ✅ Creato `complete_schema.sql` che include la tabella
+3. ❌ **MA NON ha aggiornato `initDatabase.js`** per includere `cpf_auditing_schema.sql`
+
+### Il Bug in `initDatabase.js`
+
+Lo script `scripts/initDatabase.js` eseguiva solo:
+```javascript
+- base_schema.sql       ✅
+- accreditation_schema.sql  ✅
+- cpf_auditing_schema.sql   ❌ MANCAVA!
+```
+
+Quindi chiunque abbia inizializzato il database dopo il 1 gennaio 2026 con `initDatabase.js` **non ha la tabella `cpf_auditing_assessments`**.
+
+### Perché Prima Funzionava
+
+- Il database era stato creato con le vecchie migrazioni JS (pre-refactor)
+- La tabella `cpf_auditing_assessments` esisteva ancora
+- Dopo il refactor, hai continuato a usare lo stesso database
+
+### Perché Ora NON Funziona
+
+- Hai fatto un reset/reinizializzazione del database OPPURE
+- Hai creato un nuovo database con `initDatabase.js`
+- Lo script incompleto non ha creato la tabella
+
+### Stack Trace dell'Errore
+
 Il controller `getOrganizationAssessment` in:
 - File: `modules/auditing/controllers/auditingController.js`
 - Linea: 318-389
@@ -70,6 +105,18 @@ WHERE a.organization_id = $1 AND a.deleted_at IS NULL
 ```
 
 Se la tabella non esiste, PostgreSQL lancia un errore che viene catturato dal try-catch e restituito come 500.
+
+### Fix Applicato
+
+Ho corretto `scripts/initDatabase.js` aggiungendo:
+```javascript
+// Read CPF auditing schema
+const cpfSchemaPath = path.join(__dirname, '../core/database/schema/cpf_auditing_schema.sql');
+const cpfSchema = await fs.readFile(cpfSchemaPath, 'utf-8');
+await client.query(cpfSchema);
+```
+
+Ora `initDatabase.js` crea TUTTE le tabelle necessarie, inclusa `cpf_auditing_assessments`.
 
 ## 📝 Note per Produzione
 
