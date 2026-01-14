@@ -110,11 +110,19 @@ async function seedEnhancedDemoData() {
 
     const orgIds = {};
     for (const org of organizationsData) {
+      // Determine subscription type based on organization type
+      let subscriptionType = 'lifetime';
+      if (org.type === 'PUBLIC_ENTITY') {
+        subscriptionType = 'enterprise';
+      } else if (org.type === 'NON_PROFIT') {
+        subscriptionType = 'premium';
+      }
+
       const result = await client.query(
-        `INSERT INTO organizations (name, organization_type, vat_number, address, city, postal_code, country, status, email)
-         VALUES ($1, $2, $3, $4, $5, $6, 'IT', 'active', $7)
+        `INSERT INTO organizations (name, organization_type, vat_number, address, city, postal_code, country, status, email, subscription_active, subscription_type, subscription_started_at)
+         VALUES ($1, $2, $3, $4, $5, $6, 'IT', 'active', $7, $8, $9, CURRENT_TIMESTAMP)
          RETURNING id`,
-        [org.name, org.type, org.vat, `Via ${org.name} 123`, org.city, '00100', org.adminEmail]
+        [org.name, org.type, org.vat, `Via ${org.name} 123`, org.city, '00100', org.adminEmail, true, subscriptionType]
       );
       orgIds[org.name] = result.rows[0].id;
 
