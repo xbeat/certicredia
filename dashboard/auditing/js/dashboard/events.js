@@ -15,7 +15,8 @@ import {
     closeHistoryModal, revertToVersion, openCreateOrgModal,
     editOrganization, deleteOrganization,
     viewAssessmentDetailsFromEdit, closeAssessmentDetailsModal,
-    deleteAssessmentFromDetails, openHistoryModalFromDetails
+    deleteAssessmentFromDetails, openHistoryModalFromDetails,
+    switchModalLanguage
 } from './modals.js';
 import {
     exportCurrentOrgXLSX, exportCurrentOrgPDF, exportCurrentOrgZIP
@@ -130,6 +131,10 @@ export function setupDashboardEventDelegation() {
             openIntegratedClient(indId, orgId);
         }
         if (action === 'close-indicator-modal') closeIndicatorModal();
+        if (action === 'switch-modal-language') {
+            const lang = target.dataset.lang;
+            if (lang) switchModalLanguage(lang);
+        }
         if (action === 'view-assessment-details-from-edit') {
             viewAssessmentDetailsFromEdit(target.dataset.indicatorId);
         }

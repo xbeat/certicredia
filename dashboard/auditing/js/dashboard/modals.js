@@ -24,7 +24,9 @@ export async function openIntegratedClient(indicatorId, orgId) {
     if(modalContent) modalContent.innerHTML = `<div class="loading-spinner"></div> Loading Indicator ${indicatorId}...`;
 
     // 2. Fetch Indicator JSON
-    const lang = selectedOrgData.metadata?.language || 'en-US';
+    // Check for session language preference first, then org metadata
+    const sessionLang = sessionStorage.getItem('modal-language');
+    const lang = sessionLang || selectedOrgData.metadata?.language || 'en-US';
     const [catNum] = indicatorId.split('.');
     const catName = CATEGORY_MAP[catNum];
     const url = `/auditor-field-kit/interactive/${lang}/${catNum}.x-${catName}/indicator_${indicatorId}.json`;
@@ -51,6 +53,11 @@ export async function openIntegratedClient(indicatorId, orgId) {
                                 <button class="btn btn-warning" data-action="open-history-modal-from-details">📜 History</button>
                             </div>
                             <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                                <!-- Language Switcher -->
+                                <div class="lang-switcher-modal" style="display: flex; gap: 5px; padding: 4px; background: rgba(0,0,0,0.05); border-radius: 6px;">
+                                    <button class="lang-btn-modal" data-lang="en" data-action="switch-modal-language" style="padding: 6px 14px; border: 1px solid rgba(0,0,0,0.2); background: rgba(255,255,255,0.8); color: var(--text); border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 12px; transition: all 0.2s;">EN</button>
+                                    <button class="lang-btn-modal" data-lang="it" data-action="switch-modal-language" style="padding: 6px 14px; border: 1px solid rgba(0,0,0,0.2); background: rgba(255,255,255,0.8); color: var(--text); border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 12px; transition: all 0.2s;">IT</button>
+                                </div>
                                 <button class="btn btn-secondary" data-action="save-data">💾 Save</button>
                                 <button class="btn btn-success" data-action="export-data">💾 Export Data</button>
                                 <button class="btn btn-primary" data-action="generate-report">📊 Report</button>
@@ -110,9 +117,85 @@ export async function openIntegratedClient(indicatorId, orgId) {
         // 6. Render Client
         renderFieldKit(indicatorData);
 
+        // 7. Update Language Switcher Active State
+        updateModalLanguageSwitcher(lang);
+
     } catch (error) {
         console.error(error);
         if(modalContent) modalContent.innerHTML = `<div style="padding:20px;color:red">Error: ${error.message}</div><button class="btn btn-secondary" data-action="close-indicator-modal">Close</button>`;
+    }
+}
+
+// Helper: Update modal language switcher active state
+function updateModalLanguageSwitcher(isoLang) {
+    const shortLang = isoLang.split('-')[0]; // Convert 'en-US' -> 'en'
+    document.querySelectorAll('.lang-btn-modal').forEach(btn => {
+        const btnLang = btn.getAttribute('data-lang');
+        if (btnLang === shortLang) {
+            btn.style.background = 'var(--primary)';
+            btn.style.color = 'white';
+            btn.style.borderColor = 'var(--primary)';
+        } else {
+            btn.style.background = 'rgba(255,255,255,0.8)';
+            btn.style.color = 'var(--text)';
+            btn.style.borderColor = 'rgba(0,0,0,0.2)';
+        }
+    });
+}
+
+// Handle language switch in modal
+export async function switchModalLanguage(shortLang) {
+    if (!selectedOrgData) return;
+
+    // Convert short lang to ISO format
+    const isoLang = shortLang === 'it' ? 'it-IT' : 'en-US';
+
+    // Get current indicator ID from fieldKit
+    const indicatorId = currentData?.fieldKit?.indicator;
+    if (!indicatorId) {
+        console.error('No indicator loaded');
+        return;
+    }
+
+    // Save language preference for this session
+    sessionStorage.setItem('modal-language', isoLang);
+
+    // Update organization context
+    organizationContext.language = isoLang;
+
+    // Reload the indicator with new language
+    try {
+        const [catNum] = indicatorId.split('.');
+        const catName = CATEGORY_MAP[catNum];
+        const url = `/auditor-field-kit/interactive/${isoLang}/${catNum}.x-${catName}/indicator_${indicatorId}.json`;
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Field Kit JSON not found for this language');
+        const indicatorData = await response.json();
+
+        // Preserve current responses before reloading
+        const preservedResponses = { ...currentData.responses };
+        const preservedMetadata = { ...currentData.metadata };
+        const preservedScore = currentData.score;
+
+        // Update fieldKit
+        currentData.fieldKit = indicatorData;
+
+        // Restore responses and metadata
+        currentData.responses = preservedResponses;
+        currentData.metadata = preservedMetadata;
+        currentData.score = preservedScore;
+
+        // Re-render with new language
+        renderFieldKit(indicatorData);
+
+        // Update language switcher
+        updateModalLanguageSwitcher(isoLang);
+
+        console.log(`✅ Language switched to ${isoLang}`);
+    } catch (error) {
+        console.error('Error switching language:', error);
+        alert(`Failed to load indicator in ${isoLang}: ${error.message}`);
     }
 }
 
